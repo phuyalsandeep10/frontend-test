@@ -1,6 +1,6 @@
 'use client';
-import { z } from 'zod';
 
+import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -12,33 +12,33 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { userRoutes } from '@/routes/userRoutes';
 import Link from 'next/link';
 import { baseURL } from '@/apiConfigs/axiosInstance';
 import { useEffect } from 'react';
 import { useLoginUser } from '../../../../hooks/auth/useLoginUser';
 import { useForm } from 'react-hook-form';
-import { formSchema } from './loginHelper';
+import { loginFormSchema } from './loginHelper';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 const LoginForm = () => {
   const router = useRouter();
-  const urlParams = new URLSearchParams(window.location.search);
-  const accessToken = urlParams.get('access_token');
-  const refreshToken = urlParams.get('refresh_token');
+  const searchParams = useSearchParams();
+  const accessToken = searchParams.get('access_token');
+  const refreshToken = searchParams.get('refresh_token');
 
   const { mutate: login, isPending } = useLoginUser();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof loginFormSchema>>({
+    resolver: zodResolver(loginFormSchema),
     defaultValues: {
       email: 'user@example.com',
       password: 'Pass@123',
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof loginFormSchema>) {
     login(values);
   }
 

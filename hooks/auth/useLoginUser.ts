@@ -1,11 +1,10 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { userRoutes } from '@/routes/userRoutes';
 import { AuthService } from '@/services/auth/auth';
 
 export const useLoginUser = () => {
-  const queryClient = useQueryClient();
   const router = useRouter();
 
   return useMutation({
@@ -16,8 +15,7 @@ export const useLoginUser = () => {
         refreshToken: data.refresh_token,
       };
       AuthService.setAuthTokens(authToken);
-      queryClient.invalidateQueries({ queryKey: ['authUser'] });
-      toast.success('Logged in successfully');
+      toast.success(data?.message || 'Logged in successfully');
       router.replace(userRoutes.DASHBOARD);
     },
     onError: (error: any) => {
