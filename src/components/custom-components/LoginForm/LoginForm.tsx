@@ -21,6 +21,7 @@ import { useLoginUser } from '../../../../hooks/auth/useLoginUser';
 import { useForm } from 'react-hook-form';
 import { loginFormSchema } from './loginHelper';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { AuthService } from '@/services/auth/auth';
 
 const LoginForm = () => {
   const router = useRouter();
@@ -44,13 +45,11 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (accessToken && refreshToken) {
-      localStorage.setItem(
-        'authTokens',
-        JSON.stringify({
-          accessToken,
-          refreshToken,
-        }),
-      );
+      const authTokens = {
+        accessToken,
+        refreshToken,
+      };
+      AuthService.setAuthTokens(authTokens);
       router.replace(userRoutes.DASHBOARD);
     }
   }, [accessToken, refreshToken, router]);
