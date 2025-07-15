@@ -1,10 +1,14 @@
 import React from 'react';
-import { IconData } from './icon-data';
+
 import { useCopyToClipboard } from '../../../../hooks/utils/useCopyToClipboard';
 import { Button } from '@/components/ui/button';
 import { Check, Copy } from 'lucide-react';
 import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+
+interface IconData {
+  name: string;
+  component: any;
+}
 
 export default function IconShowcase({
   iconInfo,
@@ -49,9 +53,6 @@ export default function IconShowcase({
           <h5 className="text-theme-text-dark font-mono font-medium">
             {iconInfo.name}
           </h5>
-          <Badge variant="outline" className="text-xs">
-            {iconInfo.source}
-          </Badge>
         </div>
         <Button
           size="sm"

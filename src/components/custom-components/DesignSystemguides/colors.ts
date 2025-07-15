@@ -4,6 +4,7 @@ export interface ColorData {
   cssVar: string;
   bgClass: string;
   category: 'brand' | 'text' | 'gray' | 'status';
+  usage: string[];
 }
 
 export const colorData: ColorData[] = [
@@ -14,6 +15,7 @@ export const colorData: ColorData[] = [
     cssVar: '--color-brand-primary',
     bgClass: 'bg-brand-primary',
     category: 'brand',
+    usage: ['bg-brand-primary', 'text-brand-primary', 'border-brand-primary'],
   },
   {
     name: 'Dark',
@@ -21,6 +23,7 @@ export const colorData: ColorData[] = [
     cssVar: '--color-brand-dark',
     bgClass: 'bg-brand-dark',
     category: 'brand',
+    usage: ['bg-brand-dark', 'text-brand-dark', 'border-brand-dark'],
   },
   {
     name: 'Light',
@@ -28,6 +31,7 @@ export const colorData: ColorData[] = [
     cssVar: '--color-brand-light',
     bgClass: 'bg-brand-light',
     category: 'brand',
+    usage: ['bg-brand-light', 'text-brand-light', 'border-brand-light'],
   },
   // Text Colors
   {
@@ -36,6 +40,11 @@ export const colorData: ColorData[] = [
     cssVar: '--color-theme-text-primary',
     bgClass: 'bg-theme-text-primary',
     category: 'text',
+    usage: [
+      'bg-theme-text-primary',
+      'text-theme-text-primary',
+      'border-theme-text-primary',
+    ],
   },
   {
     name: 'Dark Text',
@@ -43,6 +52,11 @@ export const colorData: ColorData[] = [
     cssVar: '--color-theme-text-dark',
     bgClass: 'bg-theme-text-dark',
     category: 'text',
+    usage: [
+      'bg-theme-text-dark',
+      'text-theme-text-dark',
+      'border-theme-text-dark',
+    ],
   },
   {
     name: 'Light Text',
@@ -50,6 +64,11 @@ export const colorData: ColorData[] = [
     cssVar: '--color-theme-text-light',
     bgClass: 'bg-theme-text-light',
     category: 'text',
+    usage: [
+      'bg-theme-text-light',
+      'text-theme-text-light',
+      'border-theme-text-light',
+    ],
   },
   // Gray Colors
   {
@@ -58,6 +77,7 @@ export const colorData: ColorData[] = [
     cssVar: '--color-gray-primary',
     bgClass: 'bg-gray-primary',
     category: 'gray',
+    usage: ['bg-gray-primary', 'text-gray-primary', 'border-gray-primary'],
   },
   {
     name: 'Dark Gray',
@@ -65,6 +85,7 @@ export const colorData: ColorData[] = [
     cssVar: '--color-gray-dark',
     bgClass: 'bg-gray-dark',
     category: 'gray',
+    usage: ['bg-gray-dark', 'text-gray-dark', 'border-gray-dark'],
   },
   {
     name: 'Light Gray',
@@ -72,6 +93,7 @@ export const colorData: ColorData[] = [
     cssVar: '--color-gray-light',
     bgClass: 'bg-gray-light',
     category: 'gray',
+    usage: ['bg-gray-light', 'text-gray-light', 'border-gray-light'],
   },
   // Status Colors
   {
@@ -80,6 +102,7 @@ export const colorData: ColorData[] = [
     cssVar: '--color-error',
     bgClass: 'bg-error',
     category: 'status',
+    usage: ['bg-error', 'text-error', 'border-error'],
   },
   {
     name: 'Error Light',
@@ -87,6 +110,7 @@ export const colorData: ColorData[] = [
     cssVar: '--color-error-light',
     bgClass: 'bg-error-light',
     category: 'status',
+    usage: ['bg-error-light', 'text-error-light', 'border-error-light'],
   },
   {
     name: 'Success',
@@ -94,6 +118,7 @@ export const colorData: ColorData[] = [
     cssVar: '--color-success',
     bgClass: 'bg-success',
     category: 'status',
+    usage: ['bg-success', 'text-success', 'border-success'],
   },
   {
     name: 'Success Light',
@@ -101,6 +126,7 @@ export const colorData: ColorData[] = [
     cssVar: '--color-success-light',
     bgClass: 'bg-success-light',
     category: 'status',
+    usage: ['bg-success-light', 'text-success-light', 'border-success-light'],
   },
   {
     name: 'Warning',
@@ -108,6 +134,7 @@ export const colorData: ColorData[] = [
     cssVar: '--color-warning',
     bgClass: 'bg-warning',
     category: 'status',
+    usage: ['bg-warning', 'text-warning', 'border-warning'],
   },
   {
     name: 'Warning Light',
@@ -115,6 +142,7 @@ export const colorData: ColorData[] = [
     cssVar: '--color-warning-light',
     bgClass: 'bg-warning-light',
     category: 'status',
+    usage: ['bg-warning-light', 'text-warning-light', 'border-warning-light'],
   },
   {
     name: 'Info',
@@ -122,6 +150,7 @@ export const colorData: ColorData[] = [
     cssVar: '--color-info',
     bgClass: 'bg-info',
     category: 'status',
+    usage: ['bg-info', 'text-info', 'border-info'],
   },
   {
     name: 'Info Light',
@@ -129,6 +158,7 @@ export const colorData: ColorData[] = [
     cssVar: '--color-info-light',
     bgClass: 'bg-info-light',
     category: 'status',
+    usage: ['bg-info-light', 'text-info-light', 'border-info-light'],
   },
 ];
 
