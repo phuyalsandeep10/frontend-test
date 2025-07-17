@@ -7,6 +7,7 @@ import {
   RegisterPayload,
   ResetPasswordpayload,
   User,
+  verify2FaPayload,
   VerifyEmailpayload,
 } from './types';
 
@@ -126,6 +127,24 @@ export class AuthService {
   static async generate2FAOtp() {
     try {
       const response = await axiosInstance.post('/auth/2fa-otp/generate');
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+  // Verify 2fa otp
+  static async verify2FAOtp(payload: verify2FaPayload) {
+    try {
+      const response = await axiosInstance.post('/auth/2fa-verfiy', payload);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+  // Disable 2fa
+  static async disable2Fa() {
+    try {
+      const response = await axiosInstance.post('/auth/2fa-disabled');
       return response.data;
     } catch (error) {
       throw error;

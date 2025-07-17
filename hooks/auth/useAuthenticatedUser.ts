@@ -27,7 +27,7 @@ export const useAuthenticatedUser = () => {
       const res = await axiosInstance.get('/auth/me');
       return res.data;
     },
-    refetchInterval: 30000,
-    refetchIntervalInBackground: true,
+    // refetchInterval: 30000,
+    // refetchIntervalInBackground: true,
   });
 };
