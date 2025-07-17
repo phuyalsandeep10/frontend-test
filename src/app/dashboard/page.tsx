@@ -5,9 +5,12 @@ import { useLogout } from '../../../hooks/auth/useLogout';
 import { useAuthenticatedUser } from '../../../hooks/auth/useAuthenticatedUser';
 import { Card, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
+import { useGenerateTwoFaOtp } from '../../../hooks/auth/useGenerateTwoFaOtp';
 
 const DashboardPage = () => {
   const { mutate: logout, isPending } = useLogout();
+  const { mutate: generate2FaOtp, isPending: generate2faOtpLoading } =
+    useGenerateTwoFaOtp();
   const { data } = useAuthenticatedUser();
   console.log(data);
   return (
@@ -35,6 +38,14 @@ const DashboardPage = () => {
         className="w-fit cursor-pointer"
       >
         {isPending ? 'Logging out' : 'Logout'}
+      </Button>
+      <Button
+        onClick={() => generate2FaOtp()}
+        type="button"
+        variant={'secondary'}
+        className="w-fit cursor-pointer"
+      >
+        {generate2faOtpLoading ? 'Enabaling....' : 'Enable 2 FA'}
       </Button>
     </div>
   );

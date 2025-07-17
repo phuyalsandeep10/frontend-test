@@ -122,6 +122,16 @@ export class AuthService {
     return access_token;
   }
 
+  // generate 2fa otp
+  static async generate2FAOtp() {
+    try {
+      const response = await axiosInstance.post('/auth/2fa-otp/generate');
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   // Get Invitations
   static async getInvitations() {
     try {
