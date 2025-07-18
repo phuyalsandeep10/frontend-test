@@ -16,7 +16,7 @@ import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import Link from 'next/link';
 import { forgotPasswordFormSchema } from './forgotPasswordHelper';
-import { useForgotPassword } from '../../../../hooks/auth/useForgotPassword';
+import { useForgotPassword } from '../../../../../hooks/auth/useForgotPassword';
 
 const ForgotPasswordForm = () => {
   const { mutate: forgotPass, isPending } = useForgotPassword();

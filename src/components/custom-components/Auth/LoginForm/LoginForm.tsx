@@ -17,7 +17,7 @@ import { userRoutes } from '@/routes/userRoutes';
 import Link from 'next/link';
 import { baseURL } from '@/apiConfigs/axiosInstance';
 import { useEffect } from 'react';
-import { useLoginUser } from '../../../../hooks/auth/useLoginUser';
+import { useLoginUser } from '../../../../../hooks/auth/useLoginUser';
 import { useForm } from 'react-hook-form';
 import { loginFormSchema } from './loginHelper';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -35,7 +35,7 @@ const LoginForm = () => {
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
       email: 'user@example.com',
-      password: 'Pass@123',
+      password: 'Pass@1234',
     },
   });
 

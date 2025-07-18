@@ -16,7 +16,7 @@ import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import Link from 'next/link';
 import { registerFormSchema } from './registerHelper';
-import { useRegisterUser } from '../../../../hooks/auth/useRegisterUser';
+import { useRegisterUser } from '../../../../../hooks/auth/useRegisterUser';
 
 const RegisterForm = () => {
   const { mutate: register, isPending } = useRegisterUser();

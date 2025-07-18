@@ -19,7 +19,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
 import Image from 'next/image';
-import { useVerifyTwoFaOtp } from '../../../../hooks/auth/useVerifyTwoFaOtp';
+import { useVerifyTwoFaOtp } from '../../../../../../hooks/auth/useVerifyTwoFaOtp';
+import { usePathname, useRouter } from 'next/navigation';
+import { userRoutes } from '@/routes/userRoutes';
 
 const twoFactorAuthSchema = object({
   token: string().min(1, 'Authentication code is required'),
@@ -41,23 +43,30 @@ const TwoFactorAuthenticationDialog: React.FC<TwoFactorAuthProps> = ({
 }) => {
   const [qrcodeUrl, setQrCodeUrl] = useState('');
 
+  const pathname = usePathname();
+  const router = useRouter();
   const {
     handleSubmit,
     register,
     formState: { errors },
     setFocus,
+    setValue,
   } = useForm<TwoFactorAuthInput>({
     resolver: zodResolver(twoFactorAuthSchema),
   });
 
-  const { mutate: verify2faOtp, isPending, isSuccess } = useVerifyTwoFaOtp();
+  const { mutate: verify2faOtp, isPending } = useVerifyTwoFaOtp();
 
   const onSubmitHandler: SubmitHandler<TwoFactorAuthInput> = (values) => {
     verify2faOtp({
       token: values.token,
     });
-    if (isSuccess) {
+    if (!isPending) {
       closeModal();
+      setValue('token', '');
+      if (pathname !== userRoutes.DASHBOARD) {
+        router.replace(userRoutes.DASHBOARD);
+      }
     }
   };
 
@@ -74,7 +83,10 @@ const TwoFactorAuthenticationDialog: React.FC<TwoFactorAuthProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={closeModal}>
-      <DialogContent>
+      <DialogContent
+        onInteractOutside={(e) => e.preventDefault()}
+        onEscapeKeyDown={(e) => e.preventDefault()}
+      >
         <DialogHeader>
           <DialogTitle>Two-Factor Authentication (2FA)</DialogTitle>
           <DialogDescription>

@@ -1,5 +1,5 @@
 'use client';
-import RegisterForm from '@/components/custom-components/RegisterForm/RegisterForm';
+import RegisterForm from '@/components/custom-components/Auth/RegisterForm/RegisterForm';
 import React from 'react';
 
 const RegisterPage = () => {

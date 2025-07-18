@@ -1,6 +1,6 @@
 'use client';
 
-import EmailVerifyForm from '@/components/custom-components/EmailVerifyForm/EmailVerifyForm';
+import EmailVerifyForm from '@/components/custom-components/Auth/EmailVerifyForm/EmailVerifyForm';
 
 const VerifyEmailPage = () => {
   return (

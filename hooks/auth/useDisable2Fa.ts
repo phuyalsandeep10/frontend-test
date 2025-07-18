@@ -1,6 +1,7 @@
 import { AuthService } from '@/services/auth/auth';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
+import { queryClient } from '../../providers/query-provider';
 
 export const useDisable2Fa = () => {
   return useMutation({
@@ -8,8 +9,9 @@ export const useDisable2Fa = () => {
     onSuccess: (data) => {
       console.log(data);
       toast.success(
-        data?.message || '2 Factor authentication disabled successfully',
+        data?.message || 'Two Factor authentication disabled successfully',
       );
+      queryClient.invalidateQueries({ queryKey: ['authUser'] });
     },
     onError: (error: any) => {
       toast.error(
