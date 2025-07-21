@@ -11,8 +11,8 @@ export const useLoginUser = () => {
     mutationFn: AuthService.loginUser,
     onSuccess: (data) => {
       const authToken = {
-        accessToken: data.access_token,
-        refreshToken: data.refresh_token,
+        accessToken: data?.data?.access_token,
+        refreshToken: data?.data?.refresh_token,
       };
       AuthService.setAuthTokens(authToken);
       toast.success(data?.message || 'Logged in successfully');

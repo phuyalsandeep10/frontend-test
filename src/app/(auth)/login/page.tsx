@@ -1,5 +1,5 @@
 'use client';
-import LoginForm from '@/components/custom-components/LoginForm/LoginForm';
+import LoginForm from '@/components/custom-components/Auth/LoginForm/LoginForm';
 import React, { Suspense } from 'react';
 
 const LoginPage = () => {

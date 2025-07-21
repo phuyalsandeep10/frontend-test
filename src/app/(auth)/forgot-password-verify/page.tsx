@@ -1,5 +1,5 @@
 'use client';
-import ForgotPasswordVerifyForm from '@/components/custom-components/ForgotPasswordVerifyForm/ForgotPasswordverifyForm';
+import ForgotPasswordVerifyForm from '@/components/custom-components/Auth/ForgotPasswordVerifyForm/ForgotPasswordverifyForm';
 
 const ForgotPasswordFormVerifyPage = () => {
   return (

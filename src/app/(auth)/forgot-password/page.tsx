@@ -1,5 +1,5 @@
 'use client';
-import ForgotPasswordForm from '@/components/custom-components/ForgotPasswordForm/ForgotPasswordForm';
+import ForgotPasswordForm from '@/components/custom-components/Auth/ForgotPasswordForm/ForgotPasswordForm';
 
 const ForgotPasswordPage = () => {
   return (

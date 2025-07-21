@@ -24,6 +24,9 @@ export interface ForgotPasswordVerifyPayload {
   email: string;
   new_password: string;
 }
+export interface verify2FaPayload {
+  token: string;
+}
 export type AuthTokens = {
   accessToken: string;
   refreshToken: string;

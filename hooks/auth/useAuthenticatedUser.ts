@@ -3,18 +3,29 @@ import axiosInstance from '@/apiConfigs/axiosInstance';
 import { AuthService } from '@/services/auth/auth';
 
 interface User {
-  id: number;
-  name: string;
-  email: string;
-  mobile: string | null;
-  email_verified_at: string | null;
-  is_staff: boolean;
-  is_superuser: boolean;
-  is_active: boolean;
-  image: string | null;
-  attributes: any | null;
-  created_at: string;
-  updated_at: string;
+  data: {
+    user: {
+      id: number;
+      name: string;
+      email: string;
+      mobile: string | null;
+      email_verified_at: string | null;
+      is_staff: boolean;
+      is_superuser: boolean;
+      is_active: boolean;
+      image: string | null;
+      attributes: any | null;
+      two_fa_secret: string;
+      two_fa_auth_url: string;
+      two_fa_enabled: boolean;
+      is_2fa_verified: boolean;
+      created_at: string;
+      updated_at: string;
+    };
+    is_2fa_verified: boolean;
+  };
+  success: boolean;
+  message: string;
 }
 
 export const useAuthenticatedUser = () => {
@@ -27,7 +38,9 @@ export const useAuthenticatedUser = () => {
       const res = await axiosInstance.get('/auth/me');
       return res.data;
     },
-    refetchInterval: 30000,
-    refetchIntervalInBackground: true,
+    // refetchInterval:5000,
+    // refetchIntervalInBackground: true,
+    refetchOnWindowFocus: false,
+    refetchOnMount: true,
   });
 };

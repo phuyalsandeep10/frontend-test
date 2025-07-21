@@ -15,7 +15,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { resetPasswordFormSchema } from './resetPasswordHelper';
-import { useResetPassword } from '../../../../hooks/auth/useResetPassword';
+import { useResetPassword } from '../../../../../hooks/auth/useResetPassword';
 import Link from 'next/link';
 
 const ResetPasswordForm = () => {
