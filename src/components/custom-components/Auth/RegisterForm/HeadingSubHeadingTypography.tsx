@@ -1,7 +1,8 @@
 import React from 'react';
+import { ReactNode } from 'react';
 
 interface HeadingSubHeadingTypographyProps {
-  heading: string;
+  heading: ReactNode;
   subHeading: string;
 }
 const HeadingSubHeadingTypography = ({

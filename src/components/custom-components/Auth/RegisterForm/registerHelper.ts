@@ -7,4 +7,13 @@ export const registerFormSchema = z.object({
   name: z
     .string()
     .min(3, { message: 'Username must be at least 3 characters long' }),
+  otp: z
+    .string()
+    .length(6, { message: 'OTP must be exactly 6 digits' })
+    .regex(/^\d{6}$/, { message: 'OTP must contain only digits' }),
+  businessName: z.string().optional(),
+  businessDomain: z
+    .string()
+    .email({ message: 'Invalid business domain address' }),
+  selectedPlan: z.string().optional(),
 });
