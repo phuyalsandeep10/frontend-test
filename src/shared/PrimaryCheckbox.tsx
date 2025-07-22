@@ -9,12 +9,14 @@ interface PrimaryCheckboxProps {
   setIsAreed: React.Dispatch<SetStateAction<boolean>>;
   redirectLink: string;
   redirectLinkText: string;
+  labelText: string;
 }
 const PrimaryCheckbox = ({
   isAgreed,
   setIsAreed,
   redirectLink,
   redirectLinkText,
+  labelText,
 }: PrimaryCheckboxProps) => {
   return (
     <div className="flex items-center gap-2">
@@ -30,7 +32,7 @@ const PrimaryCheckbox = ({
         )}
       />
       <Label className="text-sm font-normal text-black" htmlFor="isAgreed">
-        I have read and I accept Chatboq’s terms and use.{' '}
+        {labelText}{' '}
         {redirectLink && (
           <Link href="" className="text-brand-primary underline">
             {redirectLinkText}

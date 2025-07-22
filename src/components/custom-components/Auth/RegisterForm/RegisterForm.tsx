@@ -106,6 +106,7 @@ const RegisterForm = () => {
                 isAgreed={isAgreed}
                 setIsAreed={setIsAreed}
                 redirectLink="/"
+                labelText="I have read and I accept Chatboq’s terms and use."
                 redirectLinkText="Read Terms"
               />
             </form>
