@@ -1,5 +1,10 @@
 import { ArrowDown, ArrowUp, Settings } from 'lucide-react';
-import { RiEye2Line, RiEyeOffLine } from '@remixicon/react';
+import {
+  RiCheckLine,
+  RiEarthLine,
+  RiEye2Line,
+  RiEyeOffLine,
+} from '@remixicon/react';
 
 // register your icons here as your requirements
 export const Icons = {
@@ -8,4 +13,6 @@ export const Icons = {
   eye: RiEye2Line,
   eye_off: RiEyeOffLine,
   setting: Settings,
+  earth: RiEarthLine,
+  check: RiCheckLine,
 };

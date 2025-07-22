@@ -1,10 +1,10 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useAuthenticatedUser } from '../../../hooks/auth/useAuthenticatedUser';
 import { useEffect } from 'react';
 import { userRoutes } from '@/routes/userRoutes';
 import { AuthService } from '@/services/auth/auth';
+import { useAuthenticatedUser } from '@/hooks/auth/useAuthenticatedUser';
 
 export default function ProtectedDashboardLayout({
   children,

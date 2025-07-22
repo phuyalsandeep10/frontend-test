@@ -1,9 +1,9 @@
 'use client';
 import dynamic from 'next/dynamic';
 import React, { useEffect, useState } from 'react';
-import { useAuthenticatedUser } from '../../../../../../hooks/auth/useAuthenticatedUser';
 import { useRouter } from 'next/navigation';
 import { userRoutes } from '@/routes/userRoutes';
+import { useAuthenticatedUser } from '@/hooks/auth/useAuthenticatedUser';
 const TwoFactorAuthenticationDialog = dynamic(
   () =>
     import(

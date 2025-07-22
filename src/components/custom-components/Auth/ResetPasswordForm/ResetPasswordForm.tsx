@@ -15,8 +15,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { resetPasswordFormSchema } from './resetPasswordHelper';
-import { useResetPassword } from '../../../../../hooks/auth/useResetPassword';
 import Link from 'next/link';
+import { useResetPassword } from '@/hooks/auth/useResetPassword';
 
 const ResetPasswordForm = () => {
   const { mutate: resetPassword, isPending, isSuccess } = useResetPassword();

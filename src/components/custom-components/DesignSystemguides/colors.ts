@@ -33,6 +33,14 @@ export const colorData: ColorData[] = [
     category: 'brand',
     usage: ['bg-brand-light', 'text-brand-light', 'border-brand-light'],
   },
+  {
+    name: 'Brand Disable',
+    value: '#E8DFFF',
+    cssVar: '--color-brand-disable',
+    bgClass: 'bg-brand-disable',
+    category: 'brand',
+    usage: ['bg-brand-disable', 'text-brand-disable', 'border-brand-disable'],
+  },
   // Text Colors
   {
     name: 'Primary Text',

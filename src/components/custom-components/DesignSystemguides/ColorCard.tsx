@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { useCopyToClipboard } from '@/hooks/utils/useCopyToClipboard';
 import { Check, Copy } from 'lucide-react';
 import React from 'react';
-import { useCopyToClipboard } from '../../../../hooks/utils/useCopyToClipboard';
 
 const ColorCard = ({
   name,

@@ -2,23 +2,19 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-
-import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Card } from '@/components/ui/card';
+import { Form } from '@/components/ui/form';
 import Link from 'next/link';
 import { registerFormSchema } from './registerHelper';
-import { useRegisterUser } from '../../../../../hooks/auth/useRegisterUser';
+import { useRegisterUser } from '@/hooks/auth/useRegisterUser';
+import HeadingSubHeadingTypography from './HeadingSubHeadingTypography';
+import Stepper from './Stepper';
+import { useState } from 'react';
+
+import PrimaryCheckbox from '@/shared/PrimaryCheckbox';
 
 const RegisterForm = () => {
+  const [currentStep, setCurrentStep] = useState(2);
+  const [isAgreed, setIsAreed] = useState(false);
   const { mutate: register, isPending } = useRegisterUser();
 
   const form = useForm<z.infer<typeof registerFormSchema>>({
@@ -33,8 +29,10 @@ const RegisterForm = () => {
   async function onSubmit(values: z.infer<typeof registerFormSchema>) {
     register(values);
   }
+  console.log(isAgreed);
   return (
-    <div className="flex h-screen items-center justify-center">
+    <>
+      {/* <div className="flex h-screen items-center justify-center">
       <Card className="w-full max-w-sm">
         <Form {...form}>
           <form
@@ -93,7 +91,38 @@ const RegisterForm = () => {
           </form>
         </Form>
       </Card>
-    </div>
+    </div> */}
+
+      <div>
+        <HeadingSubHeadingTypography
+          heading="Join Us"
+          subHeading="Create your free Chatboq account and continue."
+        />
+        <Stepper step={currentStep} />
+        <div className="w-[516px]">
+          <Form {...form}>
+            <form>
+              <PrimaryCheckbox
+                isAgreed={isAgreed}
+                setIsAreed={setIsAreed}
+                redirectLink="/"
+                redirectLinkText="Read Terms"
+              />
+            </form>
+            <p className="lead mt-8 text-right text-lg font-normal text-black">
+              Already have an account?
+              <Link
+                href={'/login'}
+                className="text-brand-primary cursor-pointer"
+              >
+                {' '}
+                Login
+              </Link>
+            </p>
+          </Form>
+        </div>
+      </div>
+    </>
   );
 };
 
