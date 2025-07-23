@@ -4,7 +4,10 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
 import Link from 'next/link';
-import { registerFormSchema } from './registerHelper';
+import {
+  headingAndSubHeadingHelper,
+  registerFormSchema,
+} from './registerHelper';
 import { useRegisterUser } from '@/hooks/auth/useRegisterUser';
 import HeadingSubHeadingTypography from './HeadingSubHeadingTypography';
 import Stepper from './Stepper';
@@ -14,101 +17,49 @@ import { Icons } from '@/components/ui/Icons';
 import PrimaryCheckbox from '@/shared/PrimaryCheckbox';
 import { InputField } from '@/components/common/hook-form/InputField';
 import Button from '@/components/common/hook-form/Button';
-import OTP from '@/components/common/hook-form/OTP';
 import Image from 'next/image';
 import { baseURL } from '@/apiConfigs/axiosInstance';
-import SelectableCardGroup from '@/components/common/hook-form/SelectableCard';
+
+import VerifyEmailViaOtpForm from './VerifyEmailViaOtp/VerifyEmailViaOtpForm';
+import BusinessRegisterForm from './BusinessRegisterForm/BusinessRegisterForm';
 
 const RegisterForm = () => {
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState<number>(0);
   const [isAgreed, setIsAreed] = useState(false);
-  const { mutate: register, isPending } = useRegisterUser();
-
+  const [email, setEmail] = useState('');
+  const { mutate: register, isPending, data: registerData } = useRegisterUser();
   const form = useForm<z.infer<typeof registerFormSchema>>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
       name: '',
       email: '',
       password: '',
-      otp: '',
-      businessDomain: '',
     },
   });
 
   async function onSubmit(values: z.infer<typeof registerFormSchema>) {
+    console.log(values);
     register(values);
+    if (!isPending) {
+      setCurrentStep(1);
+      setEmail(values.email);
+    }
   }
-  console.log(isAgreed);
+
+  console.log(email);
+
   return (
     <>
-      {/* <div className="flex h-screen items-center justify-center">
-      <Card className="w-full max-w-sm">
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="w-full space-y-2 px-6"
-          >
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter your username" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+      <HeadingSubHeadingTypography
+        heading={headingAndSubHeadingHelper[currentStep as 0 | 1 | 2].heading}
+        subHeading={
+          headingAndSubHeadingHelper[currentStep as 0 | 1 | 2].subHeading
+        }
+      />
+      <Stepper step={currentStep} />
 
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter your email" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter your password" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <Button type="submit">
-              {' '}
-              {isPending ? 'Registering...' : 'Register'}
-            </Button>
-            <Link href={'/login'} className="ml-4 text-indigo-600">
-              Login
-            </Link>
-          </form>
-        </Form>
-      </Card>
-    </div> */}
-
-      <div className="mt-[44px]">
-        <HeadingSubHeadingTypography
-          heading="Join Us"
-          subHeading="Create your free Chatboq account and continue."
-        />
-        <Stepper step={currentStep} />
-        <div className="w-[516px]">
+      {currentStep === 0 && (
+        <div className="mt-[44px]">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
@@ -151,6 +102,7 @@ const RegisterForm = () => {
                 type="submit"
                 size="lg"
                 className="mt-4 w-full"
+                disabled={!isAgreed}
               >
                 Continue
               </Button>
@@ -191,97 +143,13 @@ const RegisterForm = () => {
               </Link>
             </p>
           </Form>
-
-          <div className="mt-[44px] mb-10">
-            <HeadingSubHeadingTypography
-              heading="Welcome! Please confirm your email to finish setup."
-              subHeading="All setup are completed! Have fun with Chatboq."
-            />
-            <Stepper step={currentStep} />
-            <p
-              style={{ color: 'var(--color-theme-text-primary)' }}
-              className="mb-8"
-            >
-              We have sent mail with verification code to *****@gmail.com.
-            </p>
-
-            <div className="w-[516px]">
-              <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className="w-full space-y-4"
-                >
-                  <OTP
-                    label="Enter OTP received in mail."
-                    required
-                    control={form.control}
-                    name="otp"
-                  />
-                  <Button
-                    variant="default"
-                    type="submit"
-                    size="lg"
-                    className="mt-4 w-full"
-                  >
-                    Continue
-                  </Button>
-                </form>
-              </Form>
-            </div>
-
-            <div className="mt-[44px]">
-              <HeadingSubHeadingTypography
-                heading="Say more about yourself."
-                subHeading="Fill in your business information! You are almost there. "
-              />
-              <Stepper step={currentStep} />
-              <div className="w-[516px]">
-                <Form {...form}>
-                  <form
-                    onSubmit={form.handleSubmit(onSubmit)}
-                    className="w-full space-y-5"
-                  >
-                    <InputField
-                      control={form.control}
-                      name="businessName"
-                      label="Enter name of your Business"
-                      placeholder="Workspace/Business Name"
-                    />
-
-                    <InputField
-                      control={form.control}
-                      name="businessDomain"
-                      label="Enter your Business's Domain"
-                      type="email"
-                      placeholder="www.businessname.com"
-                      required
-                    />
-                    <SelectableCardGroup
-                      name="selectedPlan"
-                      control={form.control}
-                      label="Select your Purpose of using Chatboq"
-                      options={[
-                        'Chat with my website visitor, generate leads.',
-                        'Build AI Chatbot',
-                        'I am curious about the product',
-                        'I want to unify my inbox',
-                      ]}
-                    />
-                    <Button
-                      variant="default"
-                      type="submit"
-                      size="lg"
-                      className="mt-4 w-full"
-                    >
-                      Signup with chatboq
-                    </Button>
-                  </form>
-                </Form>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
+      )}
+
+      {currentStep === 1 && (
+        <VerifyEmailViaOtpForm email={email} setCurrentStep={setCurrentStep} />
+      )}
+      {currentStep === 2 && <BusinessRegisterForm />}
     </>
   );
 };
