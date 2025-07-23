@@ -18,6 +18,7 @@ import OTP from '@/components/common/hook-form/OTP';
 import Image from 'next/image';
 import { baseURL } from '@/apiConfigs/axiosInstance';
 import SelectableCardGroup from '@/components/common/hook-form/SelectableCard';
+import googleIcon from '@/assets/images/google.svg';
 
 const RegisterForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -162,7 +163,7 @@ const RegisterForm = () => {
                 className="w-full"
                 leftIcon={
                   <Image
-                    src="/icons/google.svg"
+                    src={googleIcon}
                     alt="Google icon"
                     width={20}
                     height={20}
@@ -170,7 +171,7 @@ const RegisterForm = () => {
                 }
                 onClick={() =>
                   window.open(
-                    `${baseURL}uth/oauth/google`,
+                    `${baseURL}/auth/oauth/google`,
                     'google-auth',
                     'width=620,height=620',
                   )
