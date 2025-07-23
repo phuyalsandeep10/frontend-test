@@ -52,6 +52,8 @@
   --color-brand-disable: #e8dfff;
   --color-disabled-foreground: #71717a;
   --color-secondary-hover: #f6ebff;
+  --color-secondary-pressed: #e3d1ff;
+  --color-secondary-disabled: #d9bfff;
 
   --color-theme-text-primary: #71717a;
   --color-theme-text-dark: #18181b;

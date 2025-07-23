@@ -17,7 +17,7 @@ type ButtonProps = {
 const Button: React.FC<ButtonProps> = ({
   children,
   variant = 'default',
-  size = 'default',
+  size = 'sm',
   leftIcon,
   rightIcon,
   loading = false,
