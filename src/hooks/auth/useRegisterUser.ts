@@ -12,7 +12,7 @@ export const useRegisterUser = () => {
     mutationFn: (payload: RegisterPayload) => AuthService.registerUser(payload),
     onSuccess: (data) => {
       toast.success(data?.message || 'Registration successful!');
-      router.push(userRoutes.LOGIN);
+      // router.push(userRoutes.LOGIN);
     },
     onError: (error: any) => {
       toast.error(error?.response?.data?.detail || 'Registration failed');
