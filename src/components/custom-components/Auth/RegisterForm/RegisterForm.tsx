@@ -27,7 +27,7 @@ const RegisterForm = () => {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [isAgreed, setIsAreed] = useState(false);
   const [email, setEmail] = useState('');
-  const { mutate: register, isPending, data: registerData } = useRegisterUser();
+  const { mutate: register, isPending } = useRegisterUser();
   const form = useForm<z.infer<typeof registerFormSchema>>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
@@ -50,16 +50,18 @@ const RegisterForm = () => {
 
   return (
     <>
-      <HeadingSubHeadingTypography
-        heading={headingAndSubHeadingHelper[currentStep as 0 | 1 | 2].heading}
-        subHeading={
-          headingAndSubHeadingHelper[currentStep as 0 | 1 | 2].subHeading
-        }
-      />
-      <Stepper step={currentStep} />
+      <div
+        className={`${currentStep === 0 && 'mt-11'} ${currentStep === 1 && 'mt-[168px]'} ${currentStep === 2 && 'mt-16'}`}
+      >
+        <HeadingSubHeadingTypography
+          heading={headingAndSubHeadingHelper[currentStep as 0 | 1 | 2].heading}
+          subHeading={
+            headingAndSubHeadingHelper[currentStep as 0 | 1 | 2].subHeading
+          }
+        />
+        <Stepper step={currentStep} />
 
-      {currentStep === 0 && (
-        <div className="mt-[44px]">
+        {currentStep === 0 && (
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
@@ -122,7 +124,7 @@ const RegisterForm = () => {
                 }
                 onClick={() =>
                   window.open(
-                    `${baseURL}uth/oauth/google`,
+                    `${baseURL}/auth/oauth/google`,
                     'google-auth',
                     'width=620,height=620',
                   )
@@ -143,13 +145,16 @@ const RegisterForm = () => {
               </Link>
             </p>
           </Form>
-        </div>
-      )}
+        )}
 
-      {currentStep === 1 && (
-        <VerifyEmailViaOtpForm email={email} setCurrentStep={setCurrentStep} />
-      )}
-      {currentStep === 2 && <BusinessRegisterForm />}
+        {currentStep === 1 && (
+          <VerifyEmailViaOtpForm
+            email={email}
+            setCurrentStep={setCurrentStep}
+          />
+        )}
+        {currentStep === 2 && <BusinessRegisterForm />}
+      </div>
     </>
   );
 };

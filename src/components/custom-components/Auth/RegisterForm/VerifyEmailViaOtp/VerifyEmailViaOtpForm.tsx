@@ -17,11 +17,8 @@ const VerifyEmailViaOtpForm = ({
   email,
   setCurrentStep,
 }: VerifyEmailViaOtpProps) => {
-  const {
-    mutate: verifyEmail,
-    isPending: verifyEmailPending,
-    data: verifyEmailData,
-  } = useVerifyEmail();
+  const { mutate: verifyEmail, isPending: verifyEmailPending } =
+    useVerifyEmail();
   const form = useForm<z.infer<typeof verifyEmailViaOtpFormSchema>>({
     resolver: zodResolver(verifyEmailViaOtpFormSchema),
     defaultValues: {
