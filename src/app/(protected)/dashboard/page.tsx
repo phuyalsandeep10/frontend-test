@@ -1,13 +1,13 @@
 'use client';
-import { Button } from '@/components/ui/button';
 import React, { useEffect, useState } from 'react';
-import { useLogout } from '../../../../hooks/auth/useLogout';
-import { useAuthenticatedUser } from '../../../../hooks/auth/useAuthenticatedUser';
 import { Card, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
-import { useGenerateTwoFaOtp } from '../../../../hooks/auth/useGenerateTwoFaOtp';
 import dynamic from 'next/dynamic';
-import { useDisable2Fa } from '../../../../hooks/auth/useDisable2Fa';
+import { useLogout } from '@/hooks/auth/useLogout';
+import { useGenerateTwoFaOtp } from '@/hooks/auth/useGenerateTwoFaOtp';
+import { useAuthenticatedUser } from '@/hooks/auth/useAuthenticatedUser';
+import { useDisable2Fa } from '@/hooks/auth/useDisable2Fa';
+import { Button } from '@/components/ui/button';
 
 const TwoFactorAuthenticationDialog = dynamic(
   () =>

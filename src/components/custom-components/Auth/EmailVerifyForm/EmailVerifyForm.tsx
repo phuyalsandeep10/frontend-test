@@ -15,7 +15,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { emailVerifyFormSchema } from './emailVerifyFormHelper';
-import { useVerifyEmail } from '../../../../../hooks/auth/useVerifyEmail';
+import { useVerifyEmail } from '@/hooks/auth/useVerifyEmail';
 
 const EmailVerifyForm = () => {
   const { mutate: verifyEmailAddress, isPending } = useVerifyEmail();

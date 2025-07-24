@@ -1,7 +1,7 @@
+import { queryClient } from '@/providers/query-provider';
 import { AuthService } from '@/services/auth/auth';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { queryClient } from '../../providers/query-provider';
 
 export const useDisable2Fa = () => {
   return useMutation({
