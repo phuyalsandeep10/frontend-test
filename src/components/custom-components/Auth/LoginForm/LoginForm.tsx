@@ -56,8 +56,7 @@ const LoginForm = () => {
       <HeadingSubHeadingTypography
         heading={
           <>
-            Login to{' '}
-            <span className="text-[var(--color-brand-primary)]">Chatboq</span>
+            Login to <span className="text-brand-primary">Chatboq</span>
           </>
         }
         subHeading="Login to Chatboq account to access your dashboard."
@@ -89,15 +88,12 @@ const LoginForm = () => {
               <label className="flex items-center space-x-2">
                 <input
                   type="checkbox"
-                  className="h-4 w-4 accent-[var(--color-brand-primary)]"
+                  className="accent-brand-primary h-4 w-4"
                 />
                 <span>Remember Me</span>
               </label>
 
-              <Link
-                href="forgot-password"
-                className="text-[var(--color-brand-primary)]"
-              >
+              <Link href="forgot-password" className="text-brand-primary">
                 Forgot password?
               </Link>
             </div>
@@ -143,7 +139,7 @@ const LoginForm = () => {
             Don’t have an account?
             <Link
               href="/register"
-              className="ml-2 text-[18px] text-[var(--color-brand-primary)] hover:underline"
+              className="text-brand-primary ml-2 text-lg hover:underline"
             >
               Signup
             </Link>

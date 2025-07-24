@@ -1,6 +1,7 @@
 import React from 'react';
 import { Controller } from 'react-hook-form';
 import Label from './Label';
+import ErrorText from './ErrorText';
 
 type SelectableCardGroupProps = {
   name: string;
@@ -39,8 +40,8 @@ const SelectableCardGroup: React.FC<SelectableCardGroupProps> = ({
                   onClick={() => field.onChange(option)}
                   className={`rounded-lg border p-4 text-center font-medium transition ${
                     isSelected
-                      ? 'bg-brand-primary border-transparent text-[16px] font-semibold text-white'
-                      : 'border-gray-light text-brand-dark bg-white text-[16px]'
+                      ? 'bg-brand-primary border-transparent text-base font-semibold text-white'
+                      : 'border-gray-light text-brand-dark bg-white text-base'
                   }`}
                 >
                   {option}
@@ -49,7 +50,7 @@ const SelectableCardGroup: React.FC<SelectableCardGroupProps> = ({
             })}
           </div>
           {fieldState.error && (
-            <p className="text-error text-sm">{fieldState.error.message}</p>
+            <ErrorText error={`${fieldState.error.message}`} />
           )}
         </div>
       )}

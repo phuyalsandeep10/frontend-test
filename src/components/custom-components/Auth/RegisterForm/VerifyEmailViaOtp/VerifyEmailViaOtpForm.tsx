@@ -28,18 +28,22 @@ const VerifyEmailViaOtpForm = ({
 
   const onSubmit = (values: any) => {
     const data = { ...values, email };
-    verifyEmail(data);
-    if (!verifyEmailPending) {
-      setCurrentStep(2);
-    }
+    verifyEmail(data, {
+      onSuccess: () => {
+        setCurrentStep(2);
+      },
+      onError: (error) => {
+        console.log(error);
+      },
+    });
   };
   return (
     <div>
-      <p style={{ color: 'var(--color-theme-text-primary)' }} className="mb-8">
+      <p className="text-theme-text-primary mb-8">
         We have sent mail with verification code to *****@gmail.com.
       </p>
 
-      <div className="w-[516px]">
+      <div className="w-[489px]">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -57,7 +61,7 @@ const VerifyEmailViaOtpForm = ({
               size="lg"
               className="mt-4 w-full"
             >
-              Continue
+              {verifyEmailPending ? 'Verifying...' : 'Continue'}
             </Button>
           </form>
         </Form>

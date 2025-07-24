@@ -12,7 +12,6 @@ import { useRegisterUser } from '@/hooks/auth/useRegisterUser';
 import HeadingSubHeadingTypography from './HeadingSubHeadingTypography';
 import Stepper from './Stepper';
 import { useState } from 'react';
-import { Icons } from '@/components/ui/Icons';
 import googleIcon from '@/assets/images/google.svg';
 
 import PrimaryCheckbox from '@/shared/PrimaryCheckbox';
@@ -23,12 +22,16 @@ import { baseURL } from '@/apiConfigs/axiosInstance';
 
 import VerifyEmailViaOtpForm from './VerifyEmailViaOtp/VerifyEmailViaOtpForm';
 import BusinessRegisterForm from './BusinessRegisterForm/BusinessRegisterForm';
+import { StrongPasswordField } from '@/components/common/hook-form/StrongPasswordField';
+import { ValidEmailInput } from '@/components/common/hook-form/ValidEmailInput';
 
 const RegisterForm = () => {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [isAgreed, setIsAreed] = useState(false);
-  const [email, setEmail] = useState('');
-  const { mutate: register, isPending } = useRegisterUser();
+  const [isEmailValid, setIsEmailValid] = useState(false);
+  const [validEmail, setValidEmail] = useState('');
+
+  const { mutate: register } = useRegisterUser();
   const form = useForm<z.infer<typeof registerFormSchema>>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
@@ -38,21 +41,19 @@ const RegisterForm = () => {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof registerFormSchema>) {
-    console.log(values);
-    register(values);
-    if (!isPending) {
-      setCurrentStep(1);
-      setEmail(values.email);
-    }
-  }
-
-  console.log(email);
-
+  const onSubmit = (values: z.infer<typeof registerFormSchema>) => {
+    register(values, {
+      onSuccess: () => {
+        setCurrentStep(1);
+      },
+      onError: () => {},
+    });
+  };
+  console.log(validEmail);
   return (
     <>
       <div
-        className={`${currentStep === 0 && 'mt-11'} ${currentStep === 1 && 'mt-[168px]'} ${currentStep === 2 && 'mt-16'}`}
+        className={`${currentStep === 0 && 'mt-11'} ${currentStep === 1 && 'mt-[168px]'} ${currentStep === 2 && 'mt-16'} `}
       >
         <HeadingSubHeadingTypography
           heading={headingAndSubHeadingHelper[currentStep as 0 | 1 | 2].heading}
@@ -75,21 +76,20 @@ const RegisterForm = () => {
                 placeholder="Full Name"
               />
 
-              <InputField
-                control={form.control}
+              <ValidEmailInput
+                onValidityChange={(valid, email) => {
+                  setIsEmailValid(valid);
+                  setValidEmail(email);
+                }}
                 name="email"
-                label="Enter your Email"
-                type="email"
-                placeholder="Enter your email address"
+                label="Enter your Email "
                 required
               />
-              <InputField
+              <StrongPasswordField
                 control={form.control}
                 name="password"
                 label="Password"
-                type="password"
                 placeholder="Enter your password"
-                rightIcon={<Icons.eye size={16} />}
                 required
               />
               <PrimaryCheckbox
@@ -105,7 +105,7 @@ const RegisterForm = () => {
                 type="submit"
                 size="lg"
                 className="mt-4 w-full"
-                disabled={!isAgreed}
+                disabled={!isAgreed || !isEmailValid}
               >
                 Continue
               </Button>
@@ -150,7 +150,7 @@ const RegisterForm = () => {
 
         {currentStep === 1 && (
           <VerifyEmailViaOtpForm
-            email={email}
+            email={validEmail}
             setCurrentStep={setCurrentStep}
           />
         )}

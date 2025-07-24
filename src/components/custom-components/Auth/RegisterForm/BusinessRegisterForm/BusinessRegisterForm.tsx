@@ -7,24 +7,34 @@ import z from 'zod';
 import { InputField } from '@/components/common/hook-form/InputField';
 import SelectableCardGroup from '@/components/common/hook-form/SelectableCard';
 import Button from '@/components/common/hook-form/Button';
+import { useCreateOrganizations } from '@/hooks/organizations/useCreateOrganizations';
+import { useRouter } from 'next/navigation';
 
 const BusinessRegisterForm = () => {
+  const router = useRouter();
+  const {
+    mutate: createOrganization,
+    isPending,
+    isError,
+    error,
+  } = useCreateOrganizations();
   const businessRegisterForm = useForm<
     z.infer<typeof businessRegisterFormSchema>
   >({
     resolver: zodResolver(businessRegisterFormSchema),
     defaultValues: {
-      businessName: '',
-      businessDomain: '',
-      selectedPlan: '',
+      name: '',
+      website: '',
+      purpose: '',
     },
   });
+
+  console.log(isError, error);
 
   async function submitRegisterForm(
     values: z.infer<typeof businessRegisterFormSchema>,
   ) {
-    //Api is remaining for business register
-    console.log(values);
+    createOrganization(values);
   }
   return (
     <div className="w-[516px]">
@@ -35,21 +45,21 @@ const BusinessRegisterForm = () => {
         >
           <InputField
             control={businessRegisterForm.control}
-            name="businessName"
+            name="name"
             label="Enter name of your Business"
             placeholder="Workspace/Business Name"
           />
 
           <InputField
             control={businessRegisterForm.control}
-            name="businessDomain"
+            name="website"
             label="Enter your Business's Domain"
-            type="email"
+            type="text"
             placeholder="www.businessname.com"
             required
           />
           <SelectableCardGroup
-            name="selectedPlan"
+            name="purpose"
             control={businessRegisterForm.control}
             label="Select your Purpose of using Chatboq"
             options={[
@@ -65,7 +75,7 @@ const BusinessRegisterForm = () => {
             size="lg"
             className="mt-4 w-full"
           >
-            Signup with chatboq
+            {isPending ? 'Signing...' : 'Signup with chatboq'}
           </Button>
         </form>
       </Form>
