@@ -10,18 +10,19 @@ import {
 
 import UserSidebarFooterMenu from './UserSidebarFooterMenu';
 import UserSidebarHeader from './UserSidebarHeader';
+
+import MainSidebar from '@/components/custom-components/MainSidebar/MainSideBar';
+import { cn } from '@/lib/utils';
 const CustomUserSidebar = () => {
   return (
     <Sidebar>
-      <SidebarHeader className="px-3.5 py-[30px]">
+      <SidebarHeader className={cn('px-3.5 py-[30px]')}>
         <UserSidebarHeader />
       </SidebarHeader>
-      <SidebarContent className="px-3.5">
-        {
-          // Main sidebar menus here
-        }
+      <SidebarContent className={cn('px-3.5')}>
+        <MainSidebar />
       </SidebarContent>
-      <SidebarFooter className="px-3.5">
+      <SidebarFooter className={cn('px-3.5')}>
         <SidebarMenu>
           <SidebarMenuItem>
             <UserSidebarFooterMenu />
