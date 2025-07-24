@@ -12,7 +12,7 @@ export const useVerifyTwoFaOtp = () => {
       queryClient.invalidateQueries({ queryKey: ['authUser'] });
     },
     onError: (error: any) => {
-      toast.error(error?.response?.data?.detail || 'Failed to verify otp');
+      toast.error(error?.response?.data?.message || 'Failed to verify otp');
       console.error('2fa otp verify error:', error);
     },
   });

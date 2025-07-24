@@ -1,17 +1,7 @@
 'use client';
 
 import { z } from 'zod';
-import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Card } from '@/components/ui/card';
+import { Form } from '@/components/ui/form';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { userRoutes } from '@/routes/userRoutes';
 import Link from 'next/link';
@@ -22,6 +12,12 @@ import { loginFormSchema } from './loginHelper';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AuthService } from '@/services/auth/auth';
 import { useLoginUser } from '@/hooks/auth/useLoginUser';
+import HeadingSubHeadingTypography from '../RegisterForm/HeadingSubHeadingTypography';
+import { InputField } from '@/components/common/hook-form/InputField';
+import { Icons } from '@/components/ui/Icons';
+import Button from '@/components/common/hook-form/Button';
+import ReCAPTCHA from 'react-google-recaptcha';
+import Image from 'next/image';
 
 const LoginForm = () => {
   const router = useRouter();
@@ -34,8 +30,8 @@ const LoginForm = () => {
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
-      email: 'user@example.com',
-      password: 'Pass@1234',
+      email: '',
+      password: '',
     },
   });
 
@@ -55,70 +51,104 @@ const LoginForm = () => {
   }, [accessToken, refreshToken, router]);
 
   return (
-    <div className="flex h-screen items-center justify-center">
-      <Card className="w-full max-w-sm">
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="w-full space-y-2 px-6"
-          >
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-teal">Email</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter your email" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter your password" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div>
-              <Link href="forgot-password" className="text-indigo-600">
-                Forgot password
+    <div className="mt-[87px]">
+      <HeadingSubHeadingTypography
+        heading={
+          <>
+            Login to{' '}
+            <span className="text-[var(--color-brand-primary)]">Chatboq</span>
+          </>
+        }
+        subHeading="Login to Chatboq account to access your dashboard."
+      />
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="w-full space-y-4 pt-10"
+        >
+          <InputField
+            control={form.control}
+            name="email"
+            label="Email Address"
+            type="email"
+            placeholder="Enter your email address"
+            required
+          />
+          <InputField
+            control={form.control}
+            name="password"
+            label="Password"
+            type="password"
+            placeholder="Enter your password"
+            rightIcon={<Icons.eye size={16} />}
+            required
+          />
+          <div>
+            <div className="flex items-center justify-between">
+              <label className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  className="h-4 w-4 accent-[var(--color-brand-primary)]"
+                />
+                <span>Remember Me</span>
+              </label>
+
+              <Link
+                href="forgot-password"
+                className="text-[var(--color-brand-primary)]"
+              >
+                Forgot password?
               </Link>
             </div>
-            <Button type="submit" className="cursor-pointer">
-              {' '}
-              {isPending ? 'Logging in...' : 'Login'}
-            </Button>
-            <Link href={'/register'} className="ml-4 text-indigo-600">
-              Register
-            </Link>
-            <div>
-              <Button
-                onClick={() =>
-                  window.open(
-                    `${baseURL}/auth/oauth/google`,
-                    'google-auth',
-                    'width=620,height=620',
-                  )
-                }
-                className="cursor-pointer"
-                type="button"
-                variant={'link'}
-              >
-                Login With Google
-              </Button>
+            {/* Google ReCAPTCHA UI */}
+            <div className="w-full pt-4">
+              <ReCAPTCHA sitekey="site-key-here " />
             </div>
-          </form>
-        </Form>
-      </Card>
+          </div>
+          <Button
+            variant="default"
+            type="submit"
+            size="lg"
+            className="mt-4 w-full"
+          >
+            {isPending ? 'Continuing...' : 'Continue'}
+          </Button>
+          <p className="align-center text-center font-medium">Or</p>
+
+          <Button
+            variant="outline"
+            type="button"
+            size="lg"
+            className="w-full"
+            leftIcon={
+              <Image
+                src="/icons/google.svg"
+                alt="Google icon"
+                width={20}
+                height={20}
+              />
+            }
+            onClick={() =>
+              window.open(
+                `${baseURL}/auth/oauth/google`,
+                'google-auth',
+                'width=620,height=620',
+              )
+            }
+          >
+            Continue With Google
+          </Button>
+          <p>
+            Don’t have an account?
+            <Link
+              href="/register"
+              className="ml-2 text-[18px] text-[var(--color-brand-primary)] hover:underline"
+            >
+              Signup
+            </Link>
+          </p>
+        </form>
+      </Form>
     </div>
   );
 };
