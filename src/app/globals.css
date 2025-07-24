@@ -52,6 +52,8 @@
   --color-brand-disable: #e8dfff;
   --color-disabled-foreground: #71717a;
   --color-secondary-hover: #f6ebff;
+  --color-secondary-pressed: #e3d1ff;
+  --color-secondary-disabled: #d9bfff;
 
   --color-theme-text-primary: #71717a;
   --color-theme-text-dark: #18181b;
@@ -69,6 +71,7 @@
   --color-warning-light: #fef1d2;
   --color-info: #3872b7;
   --color-info-light: #dae8fa;
+  --color-alert-prominent: #f61818;
 
   /* Brand fonts  */
   --font-outfit: var(--font-outfit);

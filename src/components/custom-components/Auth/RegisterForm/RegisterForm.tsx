@@ -116,7 +116,7 @@ const RegisterForm = () => {
                 className="w-full"
                 leftIcon={
                   <Image
-                    src="/icons/google.svg"
+                    src={googleIcon}
                     alt="Google icon"
                     width={20}
                     height={20}

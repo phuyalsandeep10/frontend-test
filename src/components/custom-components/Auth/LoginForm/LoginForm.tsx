@@ -18,6 +18,7 @@ import { Icons } from '@/components/ui/Icons';
 import Button from '@/components/common/hook-form/Button';
 import ReCAPTCHA from 'react-google-recaptcha';
 import Image from 'next/image';
+import googleIcon from '@/assets/images/google.svg';
 
 const LoginForm = () => {
   const router = useRouter();
@@ -122,7 +123,7 @@ const LoginForm = () => {
             className="w-full"
             leftIcon={
               <Image
-                src="/icons/google.svg"
+                src={googleIcon}
                 alt="Google icon"
                 width={20}
                 height={20}
