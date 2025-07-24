@@ -13,6 +13,7 @@ import HeadingSubHeadingTypography from './HeadingSubHeadingTypography';
 import Stepper from './Stepper';
 import { useState } from 'react';
 import { Icons } from '@/components/ui/Icons';
+import googleIcon from '@/assets/images/google.svg';
 
 import PrimaryCheckbox from '@/shared/PrimaryCheckbox';
 import { InputField } from '@/components/common/hook-form/InputField';
