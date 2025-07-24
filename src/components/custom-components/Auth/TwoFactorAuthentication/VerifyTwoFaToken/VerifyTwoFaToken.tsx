@@ -80,7 +80,7 @@ const VerifyTwoFaToken = () => {
 
         {/* Error toast  */}
         {/* <div>
-          <div className="mb-8 flex items-center justify-between rounded-lg border border-[#FFF5F3] bg-[#FAD6D5] p-5">
+          <div className="mb-8 flex items-center justify-between rounded-lg border border-error-border bg-error-bg p-5">
             <div className="flex gap-3.5">
               <svg
                 width="24"
@@ -112,7 +112,7 @@ const VerifyTwoFaToken = () => {
 
         {/* Success toast  */}
         {/* <div>
-          <div className="mb-8 flex items-center justify-between rounded-lg border border-[#009959] bg-[#E5F9DB] p-5">
+          <div className="mb-8 flex items-center justify-between rounded-lg border border-success bg-success-prominent p-5">
             <div className="flex gap-4">
               <svg
                 width="24"

@@ -24,7 +24,7 @@ const Stepper = ({ step }: StepperProps) => {
         ))}
 
         <div className="absolute top-1/2 -z-10 w-full">
-          <div className="h-[2px] w-full bg-[#E8DFFF]">
+          <div className="bg-brand-disable h-[2px] w-full">
             <div
               className={`bg-brand-primary h-full ${
                 step === 0 ? 'w-0' : ''

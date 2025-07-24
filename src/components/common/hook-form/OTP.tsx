@@ -69,15 +69,13 @@ const OTP: React.FC<OTPProps> = ({
                   value={digit}
                   onChange={(e) => handleChange(e.target.value, i)}
                   onKeyDown={(e) => handleKeyDown(e, i)}
-                  className="h-[60px] w-[60px] min-w-0 flex-1 rounded-[8px] border-2 border-[#262626] text-center text-[32px] font-semibold"
+                  className="border-gray-dark h-[60px] w-[60px] min-w-0 flex-1 rounded-[8px] border-2 text-center text-[32px] font-semibold"
                   style={{ maxWidth: `${100 / length}%` }}
                 />
               ))}
             </div>
             {fieldState.error && (
-              <p className="text-sm text-[var(--color-error)]">
-                {fieldState.error.message}
-              </p>
+              <p className="text-error text-sm">{fieldState.error.message}</p>
             )}
           </div>
         );
