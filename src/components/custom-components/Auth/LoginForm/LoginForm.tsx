@@ -1,14 +1,7 @@
 'use client';
 
 import { z } from 'zod';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import { Form } from '@/components/ui/form';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { userRoutes } from '@/routes/userRoutes';
 import Link from 'next/link';
@@ -38,8 +31,8 @@ const LoginForm = () => {
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
-      email: 'user@example.com',
-      password: 'Pass@1234',
+      email: '',
+      password: '',
     },
   });
 
@@ -119,7 +112,7 @@ const LoginForm = () => {
             size="lg"
             className="mt-4 w-full"
           >
-            Continue
+            {isPending ? 'Continuing...' : 'Continue'}
           </Button>
           <p className="align-center text-center font-medium">Or</p>
 
@@ -146,7 +139,6 @@ const LoginForm = () => {
           >
             Continue With Google
           </Button>
-
           <p>
             Don’t have an account?
             <Link
