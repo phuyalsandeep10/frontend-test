@@ -2,9 +2,9 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { ChevronDown, ChevronUp } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { Icons } from '@/components/ui/Icons';
 
 export interface SidebarItem {
   label: string;
@@ -41,16 +41,16 @@ const SidebarSection: React.FC<SidebarSectionProps> = ({
       >
         {title}
         {isOpen ? (
-          <ChevronUp className="h-5 w-5" />
+          <Icons.chevron_up className="h-5 w-5" />
         ) : (
-          <ChevronDown className="h-5 w-5" />
+          <Icons.chevron_down className="h-5 w-5" />
         )}
       </button>
 
       {isOpen && items.length > 0 && (
         <div
           className={cn(
-            'font-outfit mb-[18px] flex flex-col gap-5 text-sm font-normal',
+            'font-outfit mb-4.5 flex flex-col gap-5 text-sm font-normal',
           )}
         >
           {items.map((item) => {

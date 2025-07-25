@@ -6,11 +6,10 @@ import {
   DropdownMenuTrigger,
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
-import { ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import React from 'react';
 import { cn } from '@/lib/utils';
-import ProfileSideIcon from '@/assets/svg/ProfileSideIcon';
+import { Icons } from '@/components/ui/Icons';
 
 const UserSidebarFooterMenu = () => {
   return (
@@ -57,7 +56,7 @@ const UserSidebarFooterMenu = () => {
           </div>
 
           {/* Right arrow */}
-          <ProfileSideIcon />
+          <Icons.chevron_right className="h-6 w-6" />
         </div>
       </DropdownMenuTrigger>
 

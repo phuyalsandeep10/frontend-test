@@ -2,16 +2,16 @@
 
 import React from 'react';
 
-import SpamIcon from '@/assets/svg/SpamIcon';
 import SidebarList from '../SharedSidebar/SideBar';
 import { userRoutes } from '@/routes/userRoutes';
+import { Icons } from '@/components/ui/Icons';
 
-const defaultInboxes = [
-  { label: 'Spam', icon: SpamIcon, route: userRoutes.OTHER_BOXES.SPAM },
+const mainsidebar = [
+  { label: 'Spam', icon: Icons.spam, route: userRoutes.OTHER_BOXES.SPAM },
 ];
 
 const OtherBoxes = () => {
-  return <SidebarList title="Other Boxes" sidebar={defaultInboxes} />;
+  return <SidebarList title="Other Boxes" sidebar={mainsidebar} />;
 };
 
 export default OtherBoxes;

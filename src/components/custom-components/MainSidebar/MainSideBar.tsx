@@ -4,6 +4,7 @@ import TicketResolved from './TicketResolved';
 import InboxSidebar from './InboxSidebar';
 import OtherBoxes from './OtherBoxes';
 import ToolsAndFeatures from './ToolsAndFeatures';
+import { Icons } from '@/components/ui/Icons';
 const MainSidebar = () => {
   return (
     <div className="pl-3">
@@ -13,11 +14,13 @@ const MainSidebar = () => {
         total={40}
         label="Ticket resolved"
         className="pt-10"
+        icon={<Icons.ticketResolved className="h-3 w-3" />}
       />
       <TicketResolved
         resolved={5}
         total={40}
         label="Ticket Unresolved"
+        icon={<Icons.ticketResolved className="h-3 w-3" />}
         className="pt-4"
       />
       <InboxSidebar />
