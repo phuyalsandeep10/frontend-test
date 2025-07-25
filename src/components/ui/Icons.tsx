@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowUp, Settings, ChevronLeft } from 'lucide-react';
+import { ArrowDown, ArrowUp, Settings, ChevronLeft, X } from 'lucide-react';
 import {
   RiCheckboxCircleFill,
   RiCheckLine,
@@ -22,4 +22,5 @@ export const Icons = {
   chevronLeft: ChevronLeft,
   error_warning: RiErrorWarningLine,
   checbox_circle: RiCheckboxCircleFill,
+  x: X,
 };
