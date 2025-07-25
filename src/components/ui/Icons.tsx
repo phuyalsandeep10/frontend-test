@@ -1,4 +1,12 @@
-import { ArrowDown, ArrowUp, Settings, ChevronLeft } from 'lucide-react';
+import {
+  ArrowDown,
+  ArrowUp,
+  Settings,
+  ChevronLeft,
+  Crop,
+  Maximize,
+  Upload,
+} from 'lucide-react';
 import {
   RiCheckLine,
   RiEarthLine,
@@ -18,4 +26,7 @@ export const Icons = {
   check: RiCheckLine,
   google: RiGoogleLine,
   chevronLeft: ChevronLeft,
+  crop: Crop,
+  maximize: Maximize,
+  upload: Upload,
 };
