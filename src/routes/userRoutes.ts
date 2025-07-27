@@ -9,5 +9,28 @@ export const userRoutes = {
   SETTINGS: {
     ACCOUNT_INFORMATION: '/user/settings/account-information',
     NOTIFICATIONS: '/user/settings/notifications',
+    AVAILABILITY: '/user/settings/availability',
+    SECURITY: '/user/settings/security',
+    PERSONALIZATION: '/user/settings/personalization',
+  },
+  YOUR_INBOXES: {
+    MAIN_INBOX: '/inbox/main',
+    SALES: '/inbox/sales',
+    SUPPORT: '/inbox/support',
+  },
+  OTHER_BOXES: {
+    SPAM: '/inbox/spam',
+  },
+  TOOLS_FEATURES: {
+    DASHBOARD: '/tools_features/dashboard',
+    TICKET: '/tools_features/ticket',
+    VISITORS: '/tools_features/visitors',
+    AI_ASSISTANT: '/tools_features/ai_assistant',
+    TRIGGER: '/tools_features/trigger',
+    CLIENT: '/tools_features/client',
+    ENGAGEMENT: '/tools_features/engagement',
+    SUPPORT: '/tools_features/support',
+    PLUGINS: '/tools_features/plugins',
+    HELP: '/tools_features/help',
   },
 };
