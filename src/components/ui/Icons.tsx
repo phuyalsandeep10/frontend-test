@@ -20,10 +20,13 @@ import {
   Crop,
   Maximize,
   Upload,
+  X,
 } from 'lucide-react';
 import {
+  RiCheckboxCircleFill,
   RiCheckLine,
   RiEarthLine,
+  RiErrorWarningLine,
   RiEye2Line,
   RiEyeOffLine,
   RiBox2Line,
@@ -73,6 +76,9 @@ export const Icons = {
   chevron_left: ChevronLeft,
   google: RiGoogleLine,
   chevronLeft: ChevronLeft,
+  error_warning: RiErrorWarningLine,
+  checbox_circle: RiCheckboxCircleFill,
+  x: X,
   crop: Crop,
   maximize: Maximize,
   upload: Upload,

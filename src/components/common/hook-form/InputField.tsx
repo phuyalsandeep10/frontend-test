@@ -2,6 +2,8 @@ import { Controller, Control, FieldValues, Path } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import Label from './Label';
+import { Icons } from '@/components/ui/Icons';
+import ErrorText from './ErrorText';
 
 type InputFieldProps<T extends FieldValues> = {
   control: Control<T>;
@@ -68,9 +70,7 @@ export function InputField<T extends FieldValues>({
             </div>
 
             {fieldState.error && (
-              <p className="text-sm text-[var(--color-error)]">
-                {fieldState.error.message}
-              </p>
+              <ErrorText error={`${fieldState.error.message}`} />
             )}
           </>
         )}

@@ -55,7 +55,7 @@ const buttonVariants = cva(
           text-[12px]`,
         ghost:
           'hover:bg-[var(--color-accent)] hover:text-[var(--color-accent-foreground)] dark:hover:bg-[var(--color-accent)/50]',
-        link: 'text-[var(--color-brand-primary)] underline-offset-4 hover:underline',
+        link: 'text-brand-primary underline-offset-4 hover:underline',
       },
       size: {
         sm: 'h-8 rounded-[8px] w-[130px] h-[36px] gap-1.5 px-[16px] has-[>svg]:px-2.5',

@@ -13,7 +13,11 @@ export const useVerifyEmail = () => {
       AuthService.verifyEmail(payload),
     onSuccess: (data) => {
       toast.success(data?.message || 'Email verified successfully');
-      // router.replace(userRoutes.LOGIN);
+      const authToken = {
+        accessToken: data?.access_token,
+        refreshToken: data?.refresh_token,
+      };
+      AuthService.setAuthTokens(authToken);
       console.log('Verify email success:', data);
     },
     onError: (error: any) => {

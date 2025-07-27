@@ -160,6 +160,17 @@ export class AuthService {
       throw error;
     }
   }
+  // Validate email
+  static async validateEmail(email: string) {
+    try {
+      const response = await axiosInstance.post('/auth/validate-email', {
+        email,
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
 
   // Get Auth Tokens from localStorage
   static getAuthTokens(): AuthTokens | null {
