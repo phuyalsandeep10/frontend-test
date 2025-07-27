@@ -1,8 +1,19 @@
 import { z } from 'zod';
-export const forgotPasswordVerifyFormSchema = z.object({
-  token: z.string({ message: 'Username must be at least 3 characters long' }),
-  email: z.string().email({ message: 'Invalid email address' }),
-  new_password: z
-    .string()
-    .min(6, { message: 'New password must be at least 6 characters long' }),
-});
+export const forgotPasswordVerifyFormSchema = z
+  .object({
+    new_password: z
+      .string()
+      .nonempty({ message: 'New Password is required' })
+      .min(6, { message: 'New Password must be at least 6 characters long' }),
+
+    confirm_password: z
+      .string()
+      .nonempty({ message: 'Confirm Password is required' })
+      .min(6, {
+        message: 'Confirm Password must be at least 6 characters long',
+      }),
+  })
+  .refine((data) => data.new_password === data.confirm_password, {
+    path: ['confirm_password'],
+    message: "Password didn't match",
+  });

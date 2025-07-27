@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Label from './Label';
 import { Controller } from 'react-hook-form';
+import ErrorText from './ErrorText';
 
 type OTPProps = {
   label: string;
@@ -8,6 +9,7 @@ type OTPProps = {
   length?: number;
   name: string;
   control: any;
+  hasError: boolean;
 };
 
 const OTP: React.FC<OTPProps> = ({
@@ -16,6 +18,7 @@ const OTP: React.FC<OTPProps> = ({
   length = 6,
   name,
   control,
+  hasError,
 }) => {
   return (
     <Controller
@@ -69,14 +72,16 @@ const OTP: React.FC<OTPProps> = ({
                   value={digit}
                   onChange={(e) => handleChange(e.target.value, i)}
                   onKeyDown={(e) => handleKeyDown(e, i)}
-                  className="border-gray-dark h-[60px] w-[60px] min-w-0 flex-1 rounded-[8px] border-2 text-center text-[32px] font-semibold"
+                  className={`h-[60px] w-[60px] min-w-0 flex-1 rounded-[8px] border-2 text-center text-[32px] font-semibold ${
+                    hasError
+                      ? 'border-alert-prominent text-grey-light'
+                      : 'border-gray-dark'
+                  } focus:border-brand-primary`}
                   style={{ maxWidth: `${100 / length}%` }}
                 />
               ))}
             </div>
-            {fieldState.error && (
-              <p className="text-error text-sm">{fieldState.error.message}</p>
-            )}
+            {fieldState.error && <ErrorText error={fieldState.error.message} />}
           </div>
         );
       }}

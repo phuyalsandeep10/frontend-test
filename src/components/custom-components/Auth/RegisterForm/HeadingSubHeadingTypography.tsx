@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 
 interface HeadingSubHeadingTypographyProps {
   heading: ReactNode;
-  subHeading: string;
+  subHeading?: string;
 }
 const HeadingSubHeadingTypography = ({
   heading,
