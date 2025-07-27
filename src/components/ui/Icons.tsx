@@ -17,6 +17,9 @@ import {
   ChevronDown,
   ChevronUp,
   ChevronLeft,
+  Crop,
+  Maximize,
+  Upload,
 } from 'lucide-react';
 import {
   RiCheckLine,
@@ -70,4 +73,7 @@ export const Icons = {
   chevron_left: ChevronLeft,
   google: RiGoogleLine,
   chevronLeft: ChevronLeft,
+  crop: Crop,
+  maximize: Maximize,
+  upload: Upload,
 };
