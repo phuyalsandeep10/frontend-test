@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 const AuthLayoutLeftSection = () => {
   return (
-    <div className="bg-[#C9C9F7]">
+    <div className="bg-light">
       <div className="pb-6">
         <div className="flex justify-between ps-10 pt-10 pr-10">
           <Image src={Logo} className="h-[45px] w-[145px]" alt="Logo" />

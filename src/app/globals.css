@@ -45,9 +45,16 @@
   /* Brand theme custom colors   */
   --color-theme-bg: #f8f8f8;
   --color-brand-primary: #9500ff;
+  --color-brand-hover: #a233ff;
+  --color-brand-pressed: #7a00d1;
   --color-brand-dark: #2d004c;
   --color-brand-light: #dfb3ff;
   --color-brand-disable: #e8dfff;
+  --color-disabled-foreground: #71717a;
+  --color-secondary-hover: #f6ebff;
+  --color-secondary-pressed: #e3d1ff;
+  --color-secondary-disabled: #d9bfff;
+  --color-light: #c9c9f7;
   --color-brand-text: #9b5cc7;
   --color-theme-text-primary: #71717a;
   --color-theme-text-dark: #18181b;
@@ -61,12 +68,16 @@
 
   --color-error: #f61819;
   --color-error-light: #fad6d5;
+  --color-error-bg: #fff5f3;
+  --color-error-border: #fad6d5;
   --color-success: #009959;
   --color-success-light: #e5f9dc;
+  --color-success-prominent: #009959;
   --color-warning: #f5ce32;
   --color-warning-light: #fef1d2;
   --color-info: #3872b7;
   --color-info-light: #dae8fa;
+  --color-alert-prominent: #f61818;
 
   /* Brand fonts  */
   --font-outfit: var(--font-outfit);

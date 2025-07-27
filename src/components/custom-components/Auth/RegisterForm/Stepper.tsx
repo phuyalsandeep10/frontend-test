@@ -7,7 +7,7 @@ interface StepperProps {
 
 const Stepper = ({ step }: StepperProps) => {
   return (
-    <div className="mt-10 mb-14">
+    <div className="mt-10 mb-10">
       <div className="relative ml-[22px] box-border flex w-[494px] justify-between">
         {[1, 2, 3].map((s) => (
           <div key={s}>
@@ -24,7 +24,7 @@ const Stepper = ({ step }: StepperProps) => {
         ))}
 
         <div className="absolute top-1/2 -z-10 w-full">
-          <div className="h-[2px] w-full bg-[#E8DFFF]">
+          <div className="bg-brand-disable h-[2px] w-full">
             <div
               className={`bg-brand-primary h-full ${
                 step === 0 ? 'w-0' : ''

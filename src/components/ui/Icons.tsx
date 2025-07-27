@@ -32,6 +32,7 @@ import {
   RiQuestionLine,
   RiMailSendLine,
   RiTicket2Line,
+  RiGoogleLine,
 } from '@remixicon/react';
 
 // register your icons here as your requirements
@@ -67,4 +68,6 @@ export const Icons = {
   arrow_left: ArrowLeft,
   arrow_right: ArrowRight,
   chevron_left: ChevronLeft,
+  google: RiGoogleLine,
+  chevronLeft: ChevronLeft,
 };
