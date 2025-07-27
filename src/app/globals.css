@@ -57,7 +57,7 @@
   --color-secondary-disabled: #d9bfff;
   --color-light-blue: #c9c9f7;
   --color-grey-light: #d4d4d4;
-
+  --color-light: #c9c9f7;
   --color-theme-text-primary: #71717a;
   --color-theme-text-dark: #18181b;
   --color-theme-text-light: #d4d4d8;
@@ -68,8 +68,11 @@
 
   --color-error: #f61819;
   --color-error-light: #fad6d5;
+  --color-error-bg: #fff5f3;
+  --color-error-border: #fad6d5;
   --color-success: #009959;
   --color-success-light: #e5f9dc;
+  --color-success-prominent: #009959;
   --color-warning: #f5ce32;
   --color-warning-light: #fef1d2;
   --color-info: #3872b7;

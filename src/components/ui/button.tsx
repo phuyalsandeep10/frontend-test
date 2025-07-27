@@ -31,7 +31,7 @@ const buttonVariants = cva(
           hover:bg-secondary-hover
           hover:text-accent-foreground
           disabled:bg-brand-disable
-          disabled:text-[#71717A]
+          disabled:text-theme-text-primary
           dark:bg-[var(--color-input)/30]
           dark:border-[var(--color-input)]
           dark:hover:bg-[var(--color-input)/50]

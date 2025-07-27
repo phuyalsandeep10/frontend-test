@@ -39,8 +39,8 @@ const SelectableCardGroup: React.FC<SelectableCardGroupProps> = ({
                   onClick={() => field.onChange(option)}
                   className={`rounded-lg border p-4 text-center font-medium transition ${
                     isSelected
-                      ? 'border-transparent bg-[var(--color-brand-primary)] text-[16px] font-semibold text-white'
-                      : 'border-[#D4D4D4] bg-white text-[16px] text-[#2D004C]'
+                      ? 'bg-brand-primary border-transparent text-[16px] font-semibold text-white'
+                      : 'border-gray-light text-brand-dark bg-white text-[16px]'
                   }`}
                 >
                   {option}
@@ -49,9 +49,7 @@ const SelectableCardGroup: React.FC<SelectableCardGroupProps> = ({
             })}
           </div>
           {fieldState.error && (
-            <p className="text-sm text-[var(--color-error)]">
-              {fieldState.error.message}
-            </p>
+            <p className="text-error text-sm">{fieldState.error.message}</p>
           )}
         </div>
       )}
