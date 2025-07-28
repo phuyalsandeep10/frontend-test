@@ -21,6 +21,7 @@ import {
   Maximize,
   Upload,
   X,
+  Filter,
 } from 'lucide-react';
 import {
   RiCheckboxCircleFill,
@@ -82,4 +83,5 @@ export const Icons = {
   crop: Crop,
   maximize: Maximize,
   upload: Upload,
+  filter: Filter,
 };

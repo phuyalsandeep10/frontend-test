@@ -14,7 +14,7 @@ export const userRoutes = {
     PERSONALIZATION: '/user/settings/personalization',
   },
   YOUR_INBOXES: {
-    MAIN_INBOX: '/inbox/main',
+    MAIN_INBOX: 'user/inbox/',
     SALES: '/inbox/sales',
     SUPPORT: '/inbox/support',
   },
