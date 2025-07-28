@@ -4,19 +4,22 @@ import { ReactNode } from 'react';
 interface HeadingSubHeadingTypographyProps {
   heading: ReactNode;
   subHeading?: string;
+  headingClassName?: string;
+  subHeadingClassName?: string;
+  containerClassName?: string;
 }
+
 const HeadingSubHeadingTypography = ({
   heading,
   subHeading,
+  headingClassName = 'font-outfit text-[40px] leading-10 font-bold text-black',
+  subHeadingClassName = 'text-theme-text-primary text-lg leading-7 font-normal',
+  containerClassName = 'flex flex-col gap-2',
 }: HeadingSubHeadingTypographyProps) => {
   return (
-    <div className="flex flex-col gap-2">
-      <h3 className="font-outfit text-[40px] leading-10 font-bold text-black">
-        {heading}
-      </h3>
-      <p className="text-theme-text-primary text-lg leading-7 font-normal">
-        {subHeading}
-      </p>
+    <div className={containerClassName}>
+      <h3 className={headingClassName}>{heading}</h3>
+      {subHeading && <p className={subHeadingClassName}>{subHeading}</p>}
     </div>
   );
 };
