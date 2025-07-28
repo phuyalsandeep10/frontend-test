@@ -49,7 +49,7 @@ const buttonVariants = cva(
           disabled:text-secondary-disabled
           focus:outline-none focus:ring-0 focus:ring-offset-0
           font-semibold
-          text-[16px]
+          text-[15px]
         `,
         success: `bg-success text-white focus:outline-none focus:ring-0 focus:ring-offset-0 font-semibold
           text-[16px]`,
@@ -58,7 +58,7 @@ const buttonVariants = cva(
         link: 'text-brand-primary underline-offset-4 hover:underline',
       },
       size: {
-        sm: 'h-8 rounded-[8px] w-[130px] h-[36px] gap-1.5 px-[16px] has-[>svg]:px-2.5',
+        sm: 'h-8 rounded-[8px] w-[130px] h-[36px] gap-1.5 px-[16px] has-[>svg]:px-2.5 text-[12px]',
         md: 'h-[48px] w-[207px] rounded-[8px] px-[16px] has-[>svg]:px-2.5',
         lg: 'h-[60px] rounded-[8px] w-[324px] px-[16px] has-[>svg]:px-2.5',
         icon: 'size-9',

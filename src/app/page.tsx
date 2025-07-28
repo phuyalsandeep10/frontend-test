@@ -9,6 +9,9 @@ import Image from 'next/image';
 import Alert from '@/assets/images/Alert.svg';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import ZoomImageModal from '@/components/modal/ZoomImageModal';
+import ChangePasswordModal from '@/components/modal/ChangePassword/ChangePasswordModal';
+import { Button } from '@/components/ui/button';
+import AuthenticatorModal from '@/components/modal/Authenticator/AuthenticatorModal';
 
 export default function Home() {
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<{
@@ -136,7 +139,6 @@ export default function Home() {
         >
           Register
         </Link>
-
         <AlertDialogDemo
           ref={dialogRef}
           icon={
@@ -165,7 +167,6 @@ export default function Home() {
             size: 'sm',
           }}
         />
-
         <ZoomImageModal
           heading="Change Profile Picture"
           subHeading="Crop"
@@ -175,6 +176,28 @@ export default function Home() {
           actionButtonProps={{ variant: 'default', size: 'sm' }}
           onCropComplete={onCropComplete}
           onSave={handleSave}
+        />
+        <ChangePasswordModal
+          heading="Change Password"
+          subHeading="Update password for enhance account security."
+          triggerButton={<Button variant="secondary">Change Password</Button>}
+          cancelButtonText="Cancel"
+          continueButtonText="Continue"
+          continuePendingText="Continuing..."
+          onSubmit={async (values) => {
+            console.log('Password changed:', values);
+          }}
+        />
+        <AuthenticatorModal
+          heading="Authenticator Setup"
+          subHeading="Set authentication via authenticator app"
+          triggerButton={<Button variant="outline">Authenticator</Button>}
+          cancelButtonText="Close"
+          submitButtonText="Verify"
+          submitPendingText="Verifying..."
+          onSubmit={async (values) => {
+            console.log('OTP entered:', values.token);
+          }}
         />
       </div>
     </div>
