@@ -11,11 +11,13 @@ import { useVerifyEmail } from '@/hooks/auth/useVerifyEmail';
 interface VerifyEmailViaOtpProps {
   email: string;
   setCurrentStep: React.Dispatch<SetStateAction<number>>;
+  setOtpError: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const VerifyEmailViaOtpForm = ({
   email,
   setCurrentStep,
+  setOtpError,
 }: VerifyEmailViaOtpProps) => {
   const { mutate: verifyEmail, isPending: verifyEmailPending } =
     useVerifyEmail();
@@ -30,13 +32,21 @@ const VerifyEmailViaOtpForm = ({
     const data = { ...values, email };
     verifyEmail(data, {
       onSuccess: () => {
+        setHasError(false);
         setCurrentStep(2);
       },
       onError: (error) => {
+        setHasError(true);
+        setOtpError(
+          "We couldn't validate the code you provided. Kindly recheck and enter it again.",
+        );
         console.log(error);
       },
     });
   };
+
+  const [hasError, setHasError] = React.useState(false);
+
   return (
     <div>
       <p className="text-theme-text-primary mb-8">
@@ -54,6 +64,7 @@ const VerifyEmailViaOtpForm = ({
               required
               control={form.control}
               name="token"
+              hasError={hasError}
             />
             <Button
               variant="default"

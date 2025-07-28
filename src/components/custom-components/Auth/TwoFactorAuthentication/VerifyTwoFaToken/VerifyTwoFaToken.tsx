@@ -111,6 +111,7 @@ const VerifyTwoFaToken = () => {
                   required
                   control={form.control}
                   name="token"
+                  hasError
                 />
                 <Button
                   variant="default"

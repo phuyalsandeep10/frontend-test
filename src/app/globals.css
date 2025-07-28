@@ -81,6 +81,7 @@
   --color-info: #3872b7;
   --color-info-light: #dae8fa;
   --color-alert-prominent: #f61818;
+  --color-warning-prominent: #f5ce31;
 
   /* Brand fonts  */
   --font-outfit: var(--font-outfit);
