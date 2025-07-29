@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
 import Label from './Label';
 import { Controller } from 'react-hook-form';
+import ErrorText from './ErrorText';
 
 type OTPProps = {
-  label: string;
+  label?: string;
   required?: boolean;
   length?: number;
   name: string;
   control: any;
+  hasError: boolean;
+  width?: string;
+  height?: string;
+  gap?: string;
+  textSize?: string;
 };
 
 const OTP: React.FC<OTPProps> = ({
@@ -16,6 +22,11 @@ const OTP: React.FC<OTPProps> = ({
   length = 6,
   name,
   control,
+  hasError,
+  width,
+  height,
+  gap = '8',
+  textSize = 'text-[32px]',
 }) => {
   return (
     <Controller
@@ -35,7 +46,6 @@ const OTP: React.FC<OTPProps> = ({
           const newValue = newOtp.join('');
           field.onChange(newValue);
 
-          // Auto-focus to next input
           if (value && index < length - 1) {
             const nextInput = document.getElementById(`otp-${index + 1}`);
             nextInput?.focus();
@@ -58,7 +68,7 @@ const OTP: React.FC<OTPProps> = ({
               {label}
             </Label>
 
-            <div className="flex w-full gap-8">
+            <div className={`flex w-full gap-${gap}`}>
               {otp.map((digit: string, i: number) => (
                 <input
                   key={i}
@@ -69,14 +79,16 @@ const OTP: React.FC<OTPProps> = ({
                   value={digit}
                   onChange={(e) => handleChange(e.target.value, i)}
                   onKeyDown={(e) => handleKeyDown(e, i)}
-                  className="border-gray-dark h-[60px] w-[60px] min-w-0 flex-1 rounded-[8px] border-2 text-center text-[32px] font-semibold"
-                  style={{ maxWidth: `${100 / length}%` }}
+                  className={`h-[60px] w-[60px] min-w-0 flex-1 rounded-[8px] border-2 text-center ${textSize} font-semibold ${
+                    hasError
+                      ? 'border-alert-prominent text-grey-light'
+                      : 'border-gray-dark'
+                  } focus:border-brand-primary`}
+                  style={{ maxWidth: `${100 / length}%`, width, height }}
                 />
               ))}
             </div>
-            {fieldState.error && (
-              <p className="text-error text-sm">{fieldState.error.message}</p>
-            )}
+            {fieldState.error && <ErrorText error={fieldState.error.message} />}
           </div>
         );
       }}

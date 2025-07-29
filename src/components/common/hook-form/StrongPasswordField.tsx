@@ -6,6 +6,7 @@ import Label from './Label';
 import { Input } from '@/components/ui/input';
 import { getPasswordValidationStatus } from '@/hooks/utils/validation-utils';
 import { Icons } from '@/components/ui/Icons';
+import ErrorText from './ErrorText';
 
 type PasswordFieldProps<T extends FieldValues> = {
   control: Control<T>;
@@ -14,6 +15,10 @@ type PasswordFieldProps<T extends FieldValues> = {
   required?: boolean;
   placeholder?: string;
   inputClassName?: string;
+  hideChecklist?: boolean;
+  compareWith?: string;
+  showStrengthText?: boolean;
+  validationLines?: boolean;
 };
 
 export function StrongPasswordField<T extends FieldValues>({
@@ -23,17 +28,66 @@ export function StrongPasswordField<T extends FieldValues>({
   required = false,
   placeholder,
   inputClassName,
+  hideChecklist,
+  compareWith,
+  validationLines,
+  showStrengthText = true,
 }: PasswordFieldProps<T>) {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const status = getPasswordValidationStatus(password);
 
+  const getStrengthText = () => {
+    if (compareWith !== undefined) {
+      if (!password) return '';
+      return password === compareWith
+        ? 'Password matched'
+        : "Password didn't match";
+    }
+
+    const conditionsMet = [
+      status.hasUpperCase,
+      status.hasNumber,
+      status.hasMinLength,
+    ].filter(Boolean).length;
+    if (!password) return '';
+    if (conditionsMet === 3) return 'Strong password';
+    return 'Weak password';
+  };
+
+  const strengthText = getStrengthText();
+
+  const strengthColorClass = (() => {
+    if (
+      strengthText === 'Strong password' ||
+      strengthText === 'Password matched'
+    ) {
+      return 'text-success';
+    }
+    if (strengthText === "Password didn't match") {
+      return 'text-alert-prominent';
+    }
+    if (strengthText === 'Weak password') {
+      return 'text-warning-prominent';
+    }
+    return 'text-grey-light';
+  })();
+
   return (
     <div className="space-y-2">
       {label && (
-        <Label htmlFor={name} required={required}>
-          {label}
-        </Label>
+        <div className="flex items-center justify-between">
+          <Label htmlFor={name} required={required}>
+            {label}
+          </Label>
+          {showStrengthText && (
+            <span
+              className={cn('text-[16px] leading-[26px]', strengthColorClass)}
+            >
+              {strengthText}
+            </span>
+          )}
+        </div>
       )}
 
       <Controller
@@ -44,14 +98,15 @@ export function StrongPasswordField<T extends FieldValues>({
           validate: (value) => {
             const { hasUpperCase, hasNumber, hasMinLength } =
               getPasswordValidationStatus(value);
-
-            if (!hasUpperCase) return;
-            if (!hasNumber) return;
-            if (!hasMinLength) return;
+            if (!hideChecklist) {
+              if (!hasUpperCase) return 'Must include an uppercase letter';
+              if (!hasNumber) return 'Must include a number';
+              if (!hasMinLength) return 'Must be at least 8 characters';
+            }
             return true;
           },
         }}
-        render={({ field }) => (
+        render={({ field, fieldState }) => (
           <>
             <div className="relative">
               <Input
@@ -68,7 +123,6 @@ export function StrongPasswordField<T extends FieldValues>({
                 )}
                 placeholder={placeholder}
               />
-
               <span
                 className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer text-black"
                 onClick={() => setShowPassword(!showPassword)}
@@ -76,29 +130,49 @@ export function StrongPasswordField<T extends FieldValues>({
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </span>
             </div>
+
+            {fieldState.error && <ErrorText error={fieldState.error.message} />}
           </>
         )}
       />
-
-      {/* Live password strength indicators */}
-      <div className="mt-2">
-        <p className="text-gray-primary text-xs">Password Must Contain:</p>
-
-        <ul className="mt-1 space-y-1 text-sm">
-          <ValidationItem
-            label="At least 1 uppercase"
-            isValid={status.hasUpperCase}
+      {validationLines && (
+        <div className="mt-2 flex gap-[39px]">
+          <div
+            className={`h-[4px] flex-1 rounded-full transition-all ${
+              status.hasUpperCase ? 'bg-brand-primary' : 'bg-theme-text-primary'
+            }`}
           />
-          <ValidationItem
-            label="At least 1 number"
-            isValid={status.hasNumber}
+          <div
+            className={`h-[4px] flex-1 rounded-full transition-all ${
+              status.hasNumber ? 'bg-brand-primary' : 'bg-theme-text-primary'
+            }`}
           />
-          <ValidationItem
-            label="At least 8 characters"
-            isValid={status.hasMinLength}
+          <div
+            className={`h-[4px] flex-1 rounded-full transition-all ${
+              status.hasMinLength ? 'bg-brand-primary' : 'bg-theme-text-primary'
+            }`}
           />
-        </ul>
-      </div>
+        </div>
+      )}
+      {!hideChecklist && (
+        <div className="mt-2">
+          <p className="text-gray-primary text-xs">Password Must Contain:</p>
+          <ul className="mt-1 space-y-1 text-sm">
+            <ValidationItem
+              label="At least 1 uppercase"
+              isValid={status.hasUpperCase}
+            />
+            <ValidationItem
+              label="At least 1 number"
+              isValid={status.hasNumber}
+            />
+            <ValidationItem
+              label="At least 8 characters"
+              isValid={status.hasMinLength}
+            />
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

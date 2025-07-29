@@ -26,6 +26,7 @@ import {
   Copy,
   ExternalLink,
   UserPlus,
+  Filter,
 } from 'lucide-react';
 import {
   RiCheckboxCircleFill,
@@ -98,4 +99,5 @@ export const Icons = {
   copy: Copy,
   external_link: ExternalLink,
   user_plus: UserPlus,
+  filter: Filter,
 };

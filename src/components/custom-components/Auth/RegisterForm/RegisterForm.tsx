@@ -24,12 +24,14 @@ import VerifyEmailViaOtpForm from './VerifyEmailViaOtp/VerifyEmailViaOtpForm';
 import BusinessRegisterForm from './BusinessRegisterForm/BusinessRegisterForm';
 import { StrongPasswordField } from '@/components/common/hook-form/StrongPasswordField';
 import { ValidEmailInput } from '@/components/common/hook-form/ValidEmailInput';
+import ErrorToast from '@/components/common/toasts/ErrorToast';
 
 const RegisterForm = () => {
-  const [currentStep, setCurrentStep] = useState<number>(0);
+  const [currentStep, setCurrentStep] = useState<number>(1);
   const [isAgreed, setIsAreed] = useState(false);
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [validEmail, setValidEmail] = useState('');
+  const [otpError, setOtpError] = useState<string | null>(null);
 
   const { mutate: register } = useRegisterUser();
   const form = useForm<z.infer<typeof registerFormSchema>>({
@@ -52,6 +54,13 @@ const RegisterForm = () => {
   console.log(validEmail);
   return (
     <>
+      <div className="relative">
+        {otpError && (
+          <div className="absolute top-0 right-0 left-0 z-10 pt-[16px]">
+            <ErrorToast text={otpError} onClick={() => setOtpError(null)} />
+          </div>
+        )}
+      </div>
       <div
         className={`${currentStep === 0 && 'mt-11'} ${currentStep === 1 && 'mt-[168px]'} ${currentStep === 2 && 'mt-16'} `}
       >
@@ -105,7 +114,6 @@ const RegisterForm = () => {
                 type="submit"
                 size="lg"
                 className="mt-4 w-full"
-                disabled={!isAgreed || !isEmailValid}
               >
                 Continue
               </Button>
@@ -152,6 +160,7 @@ const RegisterForm = () => {
           <VerifyEmailViaOtpForm
             email={validEmail}
             setCurrentStep={setCurrentStep}
+            setOtpError={setOtpError}
           />
         )}
         {currentStep === 2 && <BusinessRegisterForm />}

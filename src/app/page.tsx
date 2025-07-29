@@ -9,6 +9,9 @@ import Image from 'next/image';
 import Alert from '@/assets/images/Alert.svg';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import ZoomImageModal from '@/components/modal/ZoomImageModal';
+import ChangePasswordModal from '@/components/modal/ChangePassword/ChangePasswordModal';
+import { Button } from '@/components/ui/button';
+import AuthenticatorModal from '@/components/modal/Authenticator/AuthenticatorModal';
 
 export default function Home() {
   // const [croppedAreaPixels, setCroppedAreaPixels] = useState<{

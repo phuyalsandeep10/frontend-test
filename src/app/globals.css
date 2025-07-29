@@ -82,9 +82,14 @@
   --color-info-light: #dae8fa;
   --color-alert-prominent: #f61818;
   --color-prominent-success: #e5f9db;
+  --color-warning-prominent: #f5ce31;
 
   /* Brand fonts  */
   --font-outfit: var(--font-outfit);
+
+  --leading-21: '21px';
+  --leading-19: '19px';
+  --leading-17: '17px';
 }
 
 :root {

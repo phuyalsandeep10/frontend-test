@@ -45,7 +45,7 @@ export function InputField<T extends FieldValues>({
           <>
             <div className="relative">
               {leftIcon && (
-                <span className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400">
+                <span className="absolute top-1/2 left-3 -translate-y-1/2">
                   {leftIcon}
                 </span>
               )}
@@ -54,16 +54,16 @@ export function InputField<T extends FieldValues>({
                 type={type}
                 placeholder={placeholder}
                 className={cn(
-                  'h-[36px] border-[1px] px-3 placeholder:text-sm focus:outline-none',
-                  leftIcon && 'pl-10',
-                  rightIcon && 'pr-10',
+                  'border-grey-light h-[36px] border-[1px] px-3 placeholder:text-sm focus:outline-none',
+                  leftIcon && 'pl-6',
+                  rightIcon && 'pr-6',
                   fieldState.error && 'border-color-error',
                   inputClassName,
                 )}
                 {...field}
               />
               {rightIcon && (
-                <span className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400">
+                <span className="absolute top-1/2 right-3 -translate-y-1/2">
                   {rightIcon}
                 </span>
               )}
