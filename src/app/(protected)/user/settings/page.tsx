@@ -1,7 +1,7 @@
 import React from 'react';
 
-const SettingsPage = () => {
+const InviteAgents = () => {
   return <div>Settings page</div>;
 };
 
-export default SettingsPage;
+export default InviteAgents;

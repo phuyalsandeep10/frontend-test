@@ -44,7 +44,7 @@ export function SelectField<T extends FieldValues>({
         render={({ field, fieldState }) => (
           <>
             <Select value={field.value} onValueChange={field.onChange}>
-              <SelectTrigger id={name}>
+              <SelectTrigger id={name} className="w-full">
                 <SelectValue placeholder={placeholder} />
               </SelectTrigger>
               <SelectContent>

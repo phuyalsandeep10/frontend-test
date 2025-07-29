@@ -22,6 +22,7 @@ import {
   Upload,
   X,
   Filter,
+  Info,
 } from 'lucide-react';
 import {
   RiCheckboxCircleFill,
@@ -40,6 +41,12 @@ import {
   RiMailSendLine,
   RiTicket2Line,
   RiGoogleLine,
+  RiEdit2Fill,
+  RiEyeFill,
+  RiDeleteBin5Line,
+  RiUserSettingsFill,
+  RiUserFill,
+  RiCalendarLine,
 } from '@remixicon/react';
 
 // register your icons here as your requirements
@@ -84,4 +91,11 @@ export const Icons = {
   maximize: Maximize,
   upload: Upload,
   filter: Filter,
+  info: Info,
+  ri_edit2_fill: RiEdit2Fill,
+  ri_eye_fill: RiEyeFill,
+  ri_delete_bin_5_line: RiDeleteBin5Line,
+  ri_user_settings_fill: RiUserSettingsFill,
+  ri_user_fill: RiUserFill,
+  ri_calendar_line: RiCalendarLine,
 };
