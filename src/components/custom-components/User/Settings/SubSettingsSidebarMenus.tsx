@@ -7,6 +7,7 @@ import SidebarSection, {
 import { userRoutes } from '@/routes/userRoutes';
 import { cn } from '@/lib/utils';
 import { Icons } from '@/components/ui/Icons';
+import { usePathname } from 'next/navigation';
 
 const sidebarSectionsData: {
   title: string;
@@ -53,7 +54,7 @@ const sidebarSectionsData: {
       {
         label: 'Personalization',
         href: userRoutes.SETTINGS.PERSONALIZATION,
-        icon: <Icons.screen className="h-5 w-5" />,
+        icon: <Icons.search_eye className="h-5 w-5" />,
       },
     ],
   },
@@ -61,14 +62,24 @@ const sidebarSectionsData: {
     title: 'Workspace Setting',
     items: [
       {
-        label: 'Security',
-        href: userRoutes.SETTINGS.SECURITY,
-        icon: <Icons.help className="h-5 w-5" />,
+        label: 'Workspace Information',
+        href: userRoutes.SETTINGS.INFORMATION,
+        icon: <Icons.danger className="h-5 w-5" />,
       },
       {
-        label: 'Personalization',
-        href: userRoutes.SETTINGS.PERSONALIZATION,
-        icon: <Icons.screen className="h-5 w-5" />,
+        label: 'Transparency Logs',
+        href: userRoutes.SETTINGS.TRANSPARENCY_LOGS,
+        icon: <Icons.search_eye className="h-5 w-5" />,
+      },
+      {
+        label: 'Operator & Teams',
+        href: userRoutes.SETTINGS.OPERATOR_TEAMS,
+        icon: <Icons.client className="h-5 w-5" />,
+      },
+      {
+        label: 'Advance Configuration',
+        href: userRoutes.SETTINGS.ADVANCE_CONFIGURATION,
+        icon: <Icons.rocket className="h-5 w-5" />,
       },
     ],
   },
@@ -120,8 +131,19 @@ const sidebarSectionsData: {
 ];
 
 const Sidebar = () => {
-  const [openSection, setOpenSection] = useState<string>('Accounts');
-
+  const pathname = usePathname();
+  // Function to find the section that contains the current pathname
+  const findInitialOpenSection = (): string => {
+    for (const section of sidebarSectionsData) {
+      if (section.items.some((item) => item.href === pathname)) {
+        return section.title;
+      }
+    }
+    return ''; // fallback if no match
+  };
+  const [openSection, setOpenSection] = useState<string>(
+    findInitialOpenSection(),
+  );
   const handleToggle = (title: string) => {
     setOpenSection((prev) => (prev === title ? '' : title));
   };

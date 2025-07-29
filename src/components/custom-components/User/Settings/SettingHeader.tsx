@@ -21,7 +21,11 @@ const SettingsHeader = () => {
         'border-b-gray-light flex h-auto w-full items-center justify-between border-b px-24 xl:h-10',
       )}
     >
-      <div className="text-gray-primary flex items-center gap-3 text-base font-semibold">
+      <div
+        className={cn(
+          'text-gray-primary flex items-center gap-3 text-base font-semibold',
+        )}
+      >
         <button onClick={goToPrevious} className="cursor-pointer rounded p-1">
           <Icons.arrow_left className="text-pure-black h-3.5 w-3.5" />
         </button>
@@ -30,7 +34,11 @@ const SettingsHeader = () => {
         </button>
 
         {/* Clean breadcrumb with icon separator */}
-        <div className="font-outfit text-pure-black flex items-center text-xs font-normal">
+        <div
+          className={cn(
+            'font-outfit text-pure-black flex items-center text-xs font-normal',
+          )}
+        >
           {segments.map((segment, index) => (
             <React.Fragment key={index}>
               <span className="capitalize">{segment.replace(/-/g, ' ')}</span>
@@ -42,13 +50,16 @@ const SettingsHeader = () => {
         </div>
       </div>
 
-      <div className="flex items-center space-x-3">
-        <Icons.search size={14} className="text-pure-black" />
-        <input
-          type="text"
-          placeholder="Search..."
-          className="border-gray-primary rounded border px-3 py-1 text-sm focus:ring-2 focus:outline-none"
-        />
+      <div className="flex items-center gap-5">
+        <div className="flex h-8 w-24 items-center gap-2">
+          <Icons.search className="text-gray-primary h-4 w-4" />
+          <span className="text-gray-primary text-sm">Search</span>
+        </div>
+
+        <div className="relative">
+          <Icons.notification className="text-gray-primary h-6 w-6" />
+          <span className="bg-alert-prominent absolute top-0 right-0 block h-2 w-2 rounded-full ring-2 ring-white"></span>
+        </div>
       </div>
     </div>
   );

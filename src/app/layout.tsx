@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Outfit } from 'next/font/google';
 import './globals.css';
 import { Toaster } from '@/components/ui/sonner';
 import { QueryProvider } from '@/providers/query-provider';
+import 'country-flag-icons/react/3x2';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -37,7 +38,8 @@ export default function RootLayout({
       >
         <QueryProvider>
           {children}
-          <Toaster />
+          <Toaster richColors position="top-right" />
+          {/* <Toaster /> */}
         </QueryProvider>
       </body>
     </html>

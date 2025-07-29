@@ -21,6 +21,12 @@ import {
   Maximize,
   Upload,
   X,
+  Check,
+  CircleAlert,
+  Copy,
+  ExternalLink,
+  UserPlus,
+  Filter,
 } from 'lucide-react';
 import {
   RiCheckboxCircleFill,
@@ -39,6 +45,9 @@ import {
   RiMailSendLine,
   RiTicket2Line,
   RiGoogleLine,
+  RiRocketLine,
+  RiSearchEyeLine,
+  RiPencilFill,
 } from '@remixicon/react';
 
 // register your icons here as your requirements
@@ -82,4 +91,13 @@ export const Icons = {
   crop: Crop,
   maximize: Maximize,
   upload: Upload,
+  success_toast: Check,
+  danger: CircleAlert,
+  rocket: RiRocketLine,
+  search_eye: RiSearchEyeLine,
+  pencil: RiPencilFill,
+  copy: Copy,
+  external_link: ExternalLink,
+  user_plus: UserPlus,
+  filter: Filter,
 };
