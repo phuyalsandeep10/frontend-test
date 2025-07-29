@@ -12,7 +12,13 @@ export const userRoutes = {
     AVAILABILITY: '/user/settings/availability',
     SECURITY: '/user/settings/security',
     PERSONALIZATION: '/user/settings/personalization',
+    // Workspace Setting
+    INFORMATION: '/user/settings/workspace/information',
+    TRANSPARENCY_LOGS: '/user/settings/workspace/transparency-logs',
+    OPERATOR_TEAMS: '/user/settings/workspace/operator-teams',
+    ADVANCE_CONFIGURATION: '/user/settings/workspace/advance-configuration',
   },
+
   YOUR_INBOXES: {
     MAIN_INBOX: 'user/inbox/',
     SALES: '/inbox/sales',

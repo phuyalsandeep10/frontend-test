@@ -14,7 +14,7 @@ const Settings = ({ children }: { children: React.ReactNode }) => {
 
       <div className="flex-1">
         <SettingsHeader />
-        <div className="px-24 py-11">{children}</div>
+        <div className="px-24 pt-11">{children}</div>
       </div>
     </div>
   );
