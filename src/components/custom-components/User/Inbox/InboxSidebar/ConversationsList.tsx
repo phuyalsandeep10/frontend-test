@@ -68,7 +68,11 @@ const ConversationsList = () => {
   return (
     <div className="mt-5 max-h-[100vh-]">
       {conversations.map((conversation) => (
-        <Link href={''} key={conversation.id} className="">
+        <Link
+          href={`/user/inbox/${conversation.id}`}
+          key={conversation.id}
+          className=""
+        >
           <div className="flex items-center space-x-3 py-4">
             <Avatar>
               <AvatarImage
