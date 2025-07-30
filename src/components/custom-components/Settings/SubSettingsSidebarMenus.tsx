@@ -6,7 +6,7 @@ import { userRoutes } from '@/routes/userRoutes';
 import { cn } from '@/lib/utils';
 import { Icons } from '@/components/ui/Icons';
 import { usePathname } from 'next/navigation';
-import SidebarSection from '../SharedSidebar/SettingSidebar';
+import SidebarSection, { SidebarItem } from '../SharedSidebar/SettingSidebar';
 
 const sidebarSectionsData: {
   title: string;
