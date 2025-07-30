@@ -3,11 +3,11 @@
 import React from 'react';
 
 import SidebarList from '../SharedSidebar/SideBar';
-import { userRoutes } from '@/routes/userRoutes';
+import { ROUTES } from '@/routes/routes';
 import { Icons } from '@/components/ui/Icons';
 
 const mainsidebar = [
-  { label: 'Spam', icon: Icons.spam, route: userRoutes.OTHER_BOXES.SPAM },
+  { label: 'Spam', icon: Icons.spam, route: ROUTES.OTHER_BOXES.SPAM },
 ];
 
 const OtherBoxes = () => {

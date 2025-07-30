@@ -4,20 +4,20 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import SidebarList from '../SharedSidebar/SideBar';
 import { cn } from '@/lib/utils';
-import { userRoutes } from '@/routes/userRoutes';
+import { ROUTES } from '@/routes/routes';
 import { Icons } from '@/components/ui/Icons';
 
 const MainSidebar = [
   {
     label: 'Main Inbox',
     icon: Icons.mail,
-    route: userRoutes.YOUR_INBOXES.MAIN_INBOX,
+    route: ROUTES.YOUR_INBOXES.MAIN_INBOX,
   },
-  { label: 'Sales', icon: Icons.client, route: userRoutes.YOUR_INBOXES.SALES },
+  { label: 'Sales', icon: Icons.client, route: ROUTES.YOUR_INBOXES.SALES },
   {
     label: 'Support',
     icon: Icons.phone,
-    route: userRoutes.YOUR_INBOXES.SUPPORT,
+    route: ROUTES.YOUR_INBOXES.SUPPORT,
   },
 ];
 

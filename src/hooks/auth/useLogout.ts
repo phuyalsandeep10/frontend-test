@@ -1,4 +1,4 @@
-import { userRoutes } from '@/routes/userRoutes';
+import { ROUTES } from '@/routes/routes';
 import { AuthService } from '@/services/auth/auth';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
@@ -13,7 +13,7 @@ export const useLogout = () => {
       AuthService.clearAuthTokens();
       console.log(data);
       toast.success(data?.message || 'Logged out successfully');
-      router.replace(userRoutes.LOGIN);
+      router.replace(ROUTES.LOGIN);
     },
     onError: (error: any) => {
       toast.error(error?.response?.data?.detail || 'Logout failed');

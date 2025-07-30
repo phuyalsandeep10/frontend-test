@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { userRoutes } from '@/routes/userRoutes';
+import { ROUTES } from '@/routes/routes';
 import { AuthService } from '@/services/auth/auth';
 import { useAuthenticatedUser } from '@/hooks/auth/useAuthenticatedUser';
 import { SidebarProvider } from '@/components/ui/sidebar';
@@ -19,18 +19,18 @@ export default function ProtectedDashboardLayout({
 
   // useEffect(() => {
   //   if (!authTokens) {
-  //     router.replace(userRoutes.LOGIN);
+  //     router.replace(ROUTES.LOGIN);
   //   }
   //   if (!isLoading) {
   //     const user = authData?.data?.user;
   //     const is2FaEnabled = user?.two_fa_enabled;
   //     const is2FaVerified = authData?.data?.is_2fa_verified;
   //     if (!user) {
-  //       router.replace(userRoutes.LOGIN);
+  //       router.replace(ROUTES.LOGIN);
   //     } else if (!is2FaEnabled && !is2FaVerified) {
-  //       router.replace(userRoutes.DASHBOARD);
+  //       router.replace(ROUTES.DASHBOARD);
   //     } else if (is2FaEnabled && !is2FaVerified) {
-  //       router.replace(userRoutes.VERIFY_TWO_FA_TOKEN);
+  //       router.replace(ROUTES.VERIFY_TWO_FA_TOKEN);
   //     }
   //   }
   // }, [authData, isLoading, router, authTokens]);

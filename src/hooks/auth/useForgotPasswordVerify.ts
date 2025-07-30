@@ -1,4 +1,4 @@
-import { userRoutes } from '@/routes/userRoutes';
+import { ROUTES } from '@/routes/routes';
 import { AuthService } from '@/services/auth/auth';
 import { ForgotPasswordVerifyPayload } from '@/services/auth/types';
 import { useMutation } from '@tanstack/react-query';
@@ -12,7 +12,7 @@ export const useForgotPasswordVerify = () => {
       AuthService.forgotPasswordVerify(payload),
     onSuccess: (data) => {
       toast.success(data?.message || 'Password reset verified successfully');
-      router.replace(userRoutes.LOGIN);
+      router.replace(ROUTES.LOGIN);
       console.log('Forgot Password Verify success:', data);
     },
     onError: (error: any) => {

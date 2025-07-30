@@ -1,4 +1,4 @@
-export const userRoutes = {
+export const ROUTES = {
   LOGIN: '/login',
   REGISTER: '/register',
   DASHBOARD: '/dashboard',

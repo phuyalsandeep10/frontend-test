@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 
-import { userRoutes } from '@/routes/userRoutes';
+import { ROUTES } from '@/routes/routes';
 import { cn } from '@/lib/utils';
 import { Icons } from '@/components/ui/Icons';
 import { usePathname } from 'next/navigation';
@@ -17,27 +17,27 @@ const sidebarSectionsData: {
     items: [
       {
         label: 'Account Information',
-        href: userRoutes.SETTINGS.ACCOUNT_INFORMATION,
+        href: ROUTES.SETTINGS.ACCOUNT_INFORMATION,
         icon: <Icons.client className="h-5 w-5" />,
       },
       {
         label: 'Notification',
-        href: userRoutes.SETTINGS.NOTIFICATIONS,
+        href: ROUTES.SETTINGS.NOTIFICATIONS,
         icon: <Icons.notification className="h-5 w-5" />,
       },
       {
         label: 'Availability',
-        href: userRoutes.SETTINGS.AVAILABILITY,
+        href: ROUTES.SETTINGS.AVAILABILITY,
         icon: <Icons.clock className="h-5 w-5" />,
       },
       {
         label: 'Security',
-        href: userRoutes.SETTINGS.SECURITY,
+        href: ROUTES.SETTINGS.SECURITY,
         icon: <Icons.help className="h-5 w-5" />,
       },
       {
         label: 'Personalization',
-        href: userRoutes.SETTINGS.PERSONALIZATION,
+        href: ROUTES.SETTINGS.PERSONALIZATION,
         icon: <Icons.screen className="h-5 w-5" />,
       },
     ],
@@ -47,12 +47,12 @@ const sidebarSectionsData: {
     items: [
       {
         label: 'Security',
-        href: userRoutes.SETTINGS.SECURITY,
+        href: ROUTES.SETTINGS.SECURITY,
         icon: <Icons.help className="h-5 w-5" />,
       },
       {
         label: 'Personalization',
-        href: userRoutes.SETTINGS.PERSONALIZATION,
+        href: ROUTES.SETTINGS.PERSONALIZATION,
         icon: <Icons.search_eye className="h-5 w-5" />,
       },
     ],
@@ -62,22 +62,22 @@ const sidebarSectionsData: {
     items: [
       {
         label: 'Workspace Information',
-        href: userRoutes.SETTINGS.INFORMATION,
+        href: ROUTES.SETTINGS.INFORMATION,
         icon: <Icons.danger className="h-5 w-5" />,
       },
       {
         label: 'Transparency Logs',
-        href: userRoutes.SETTINGS.TRANSPARENCY_LOGS,
+        href: ROUTES.SETTINGS.TRANSPARENCY_LOGS,
         icon: <Icons.search_eye className="h-5 w-5" />,
       },
       {
         label: 'Operator & Teams',
-        href: userRoutes.SETTINGS.OPERATOR_TEAMS,
+        href: ROUTES.SETTINGS.OPERATOR_TEAMS,
         icon: <Icons.client className="h-5 w-5" />,
       },
       {
         label: 'Advance Configuration',
-        href: userRoutes.SETTINGS.ADVANCE_CONFIGURATION,
+        href: ROUTES.SETTINGS.ADVANCE_CONFIGURATION,
         icon: <Icons.rocket className="h-5 w-5" />,
       },
     ],
@@ -87,12 +87,12 @@ const sidebarSectionsData: {
     items: [
       {
         label: 'Security',
-        href: userRoutes.SETTINGS.SECURITY,
+        href: ROUTES.SETTINGS.SECURITY,
         icon: <Icons.help className="h-5 w-5" />,
       },
       {
         label: 'Personalization',
-        href: userRoutes.SETTINGS.PERSONALIZATION,
+        href: ROUTES.SETTINGS.PERSONALIZATION,
         icon: <Icons.screen className="h-5 w-5" />,
       },
     ],
@@ -102,12 +102,12 @@ const sidebarSectionsData: {
     items: [
       {
         label: 'Security',
-        href: userRoutes.SETTINGS.SECURITY,
+        href: ROUTES.SETTINGS.SECURITY,
         icon: <Icons.help className="h-5 w-5" />,
       },
       {
         label: 'Personalization',
-        href: userRoutes.SETTINGS.PERSONALIZATION,
+        href: ROUTES.SETTINGS.PERSONALIZATION,
         icon: <Icons.screen className="h-5 w-5" />,
       },
     ],
@@ -117,12 +117,12 @@ const sidebarSectionsData: {
     items: [
       {
         label: 'Security',
-        href: userRoutes.SETTINGS.SECURITY,
+        href: ROUTES.SETTINGS.SECURITY,
         icon: <Icons.help className="h-5 w-5" />,
       },
       {
         label: 'Personalization',
-        href: userRoutes.SETTINGS.PERSONALIZATION,
+        href: ROUTES.SETTINGS.PERSONALIZATION,
         icon: <Icons.screen className="h-5 w-5" />,
       },
     ],

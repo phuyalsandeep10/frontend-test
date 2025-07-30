@@ -1,4 +1,4 @@
-import { userRoutes } from '@/routes/userRoutes';
+import { ROUTES } from '@/routes/routes';
 import { OrganizationsService } from '@/services/organizations/organizations';
 import { createOrganizationPayload } from '@/services/organizations/types';
 import { useMutation } from '@tanstack/react-query';
@@ -11,7 +11,7 @@ export const useCreateOrganizations = () => {
     mutationFn: (payload: createOrganizationPayload) =>
       OrganizationsService.createOrganizations(payload),
     onSuccess: (data) => {
-      router.push(userRoutes.DASHBOARD);
+      router.push(ROUTES.DASHBOARD);
       console.log('Organization created Successfully', data);
     },
     onError: (error: any) => {

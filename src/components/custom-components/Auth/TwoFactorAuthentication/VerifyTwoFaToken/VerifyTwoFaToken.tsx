@@ -1,7 +1,7 @@
 'use client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { userRoutes } from '@/routes/userRoutes';
+import { ROUTES } from '@/routes/routes';
 import { useAuthenticatedUser } from '@/hooks/auth/useAuthenticatedUser';
 import HeadingSubHeadingTypography from '../../RegisterForm/HeadingSubHeadingTypography';
 import { Icons } from '@/components/ui/Icons';
@@ -52,7 +52,7 @@ const VerifyTwoFaToken = () => {
       data?.data?.user?.two_fa_enabled && data.data?.is_2fa_verified;
 
     if (isVerified) {
-      router.replace(userRoutes.DASHBOARD);
+      router.replace(ROUTES.DASHBOARD);
     } else {
       setShouldRenderForm(true);
     }
@@ -69,7 +69,7 @@ const VerifyTwoFaToken = () => {
     <div>
       <div className="mt-[212px] w-[489px]">
         <Link
-          href={userRoutes.LOGIN}
+          href={ROUTES.LOGIN}
           className="text-theme-text-primary mb-8 flex items-center gap-2"
         >
           <Icons.chevronLeft />
@@ -129,7 +129,7 @@ const VerifyTwoFaToken = () => {
                 type="button"
                 size="lg"
                 className="mt-4 w-full"
-                onClick={() => router.replace(userRoutes.DASHBOARD)}
+                onClick={() => router.replace(ROUTES.DASHBOARD)}
               >
                 Continue
               </Button>

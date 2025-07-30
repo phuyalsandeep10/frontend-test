@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
-import { userRoutes } from '@/routes/userRoutes';
+import { ROUTES } from '@/routes/routes';
 import { AuthService } from '@/services/auth/auth';
 
 export const useLoginUser = () => {
@@ -16,7 +16,7 @@ export const useLoginUser = () => {
       };
       AuthService.setAuthTokens(authToken);
       toast.success(data?.message || 'Logged in successfully');
-      router.replace(userRoutes.DASHBOARD);
+      router.replace(ROUTES.DASHBOARD);
     },
     onError: (error: any) => {
       toast.error(error?.response?.data?.detail || 'Login failed');

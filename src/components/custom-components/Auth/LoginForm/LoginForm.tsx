@@ -3,7 +3,7 @@
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { userRoutes } from '@/routes/userRoutes';
+import { ROUTES } from '@/routes/routes';
 import Link from 'next/link';
 import { baseURL } from '@/apiConfigs/axiosInstance';
 import { useEffect } from 'react';
@@ -47,7 +47,7 @@ const LoginForm = () => {
         refreshToken,
       };
       AuthService.setAuthTokens(authTokens);
-      router.replace(userRoutes.DASHBOARD);
+      router.replace(ROUTES.DASHBOARD);
     }
   }, [accessToken, refreshToken, router]);
 

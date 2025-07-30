@@ -69,7 +69,7 @@ const ConversationsList = () => {
     <div className="mt-5 max-h-[100vh-]">
       {conversations.map((conversation) => (
         <Link
-          href={`/user/inbox/${conversation.id}`}
+          href={`/inbox/${conversation.id}`}
           key={conversation.id}
           className=""
         >
