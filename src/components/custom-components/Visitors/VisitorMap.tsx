@@ -5,7 +5,6 @@ import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import countriesData from '@/data/countries.json';
-import MenProfile from '@/assets/images/MenProfile.svg';
 
 type VisitorMapProps = {
   visitors: { [countryCode: string]: number };
@@ -37,6 +36,12 @@ const VisitorMap: React.FC<VisitorMapProps> = ({ visitors }) => {
     };
   };
 
+  const userFillSvg = `
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="22" fill="#71717A" viewBox="0 0 24 24" class="inline-block">
+    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+  </svg>
+`;
+
   const onEachCountry = (feature: any, layer: L.Layer) => {
     const isoAlpha3 = feature.properties?.['ISO3166-1-Alpha-3'];
     const isoAlpha2 = feature.properties?.['ISO3166-1-Alpha-2'];
@@ -58,7 +63,7 @@ const VisitorMap: React.FC<VisitorMapProps> = ({ visitors }) => {
       <div class="flex gap-[10px] items-center" style="min-width: 150px; max-width: max-content;">
         ${
           flagUrl
-            ? `<div class="border border-[#D4D4D4] p-[2px] rounded-[6px] flex items-center justify-center w-[40px] h-[40px] shrink-0">
+            ? `<div class="border border-grey-light p-[2px] rounded-[6px] flex items-center justify-center w-[40px] h-[40px] shrink-0">
                 <img src="${flagUrl}" alt="${countryName} flag" class="w-[20px] h-[22px] block" />
               </div>`
             : ''
@@ -68,8 +73,8 @@ const VisitorMap: React.FC<VisitorMapProps> = ({ visitors }) => {
             ${countryName}
           </div>
           <div class="font-bold flex items-center gap-[4px] whitespace-nowrap">
-            <img src="${MenProfile.src}" alt="user icon" class="w-[18px] h-[18px] inline-block" />
-            <span class="leading-[29px] font-medium text-[18px] text-[#71717A]">${count}</span>
+               ${userFillSvg}
+            <span class="leading-[29px] font-medium text-[18px] text-theme-text-primary">${count}</span>
           </div>
         </div>
       </div>

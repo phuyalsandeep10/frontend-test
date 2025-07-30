@@ -34,6 +34,7 @@ import {
   UserPlus,
   Filter,
   Info,
+  ArrowUpCircle,
 } from 'lucide-react';
 import {
   RiCheckboxCircleFill,
@@ -70,6 +71,12 @@ import {
   RiUserSettingsFill,
   RiUserFill,
   RiCalendarLine,
+  RiChatAiFill,
+  RiIndeterminateCircleFill,
+  RiMapPinLine,
+  RiAppleLine,
+  RiWindowLine,
+  RiLoginBoxLine,
 } from '@remixicon/react';
 
 // register your icons here as your requirements
@@ -143,4 +150,11 @@ export const Icons = {
   ri_user_settings_fill: RiUserSettingsFill,
   ri_user_fill: RiUserFill,
   ri_calendar_line: RiCalendarLine,
+  arrow_up_circle: ArrowUpCircle,
+  ri_chat_ai_fill: RiChatAiFill,
+  ri_indeterminate_circle_fill: RiIndeterminateCircleFill,
+  ri_map_pin_line: RiMapPinLine,
+  ri_apple_line: RiAppleLine,
+  ri_window_line: RiWindowLine,
+  ri_login_box_line: RiLoginBoxLine,
 };
