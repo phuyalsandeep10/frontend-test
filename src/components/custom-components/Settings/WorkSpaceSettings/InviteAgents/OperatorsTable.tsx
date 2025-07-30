@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ReuseableTable } from '@/components/users/ReuseableTable';
 import { Icons } from '@/components/ui/Icons';
-import ReusableDialog from '@/components/users/ReusableDialog';
-import AddAgent from '@/components/users/pages/AddAgent';
+import ReusableDialog from './ReusableDialog';
+import AddAgent from './AddAgent';
+import { ReuseableTable } from './ReuseableTable';
 
 export interface OrderRow {
   FullName: string;

@@ -1,5 +1,5 @@
 import Settings from '@/components/custom-components/Settings/Settings';
-import WorkspaceInformation from '@/components/custom-components/Settings/WorkSpace_Setting/WorkSpaceInformation';
+import WorkspaceInformation from '@/components/custom-components/Settings/WorkSpaceSettings/WorkSpaceInformations/WorkSpaceInformation';
 import React from 'react';
 
 const AccountInformationPage = () => {

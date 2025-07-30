@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import { Icons } from '@/components/ui/Icons';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import OperatorsTable from '@/components/users/pages/OperatorsTable';
 import Settings from '@/components/custom-components/Settings/Settings';
+import OperatorsTable from '@/components/custom-components/Settings/WorkSpaceSettings/InviteAgents/OperatorsTable';
 
 const InviteAgents = () => {
   const [toggleActive, setToggleActive] = useState('Operators');

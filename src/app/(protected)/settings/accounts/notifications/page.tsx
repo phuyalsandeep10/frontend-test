@@ -1,4 +1,4 @@
-import Notifications from '@/components/custom-components/Settings/Notifications/Notifications';
+import Notifications from '@/components/custom-components/Settings/Accouints/Notifications/Notifications';
 import Settings from '@/components/custom-components/Settings/Settings';
 import React from 'react';
 

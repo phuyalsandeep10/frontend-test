@@ -5,10 +5,10 @@ import Image from 'next/image';
 import HelpIcon from '@/assets/images/HelpIcon.svg';
 import { Button } from '@/components/ui/button';
 import arrowup from '@/assets/images/arrowUp.svg';
-import VisitorTable from '@/components/custom-components/User/VisitorsPage/VisitorTable';
+import VisitorTable from '@/components/custom-components/Visitors/VisitorTable';
 
 const VisitorMap = dynamic(
-  () => import('@/components/custom-components/User/VisitorsPage/VisitorMap'),
+  () => import('@/components/custom-components/Visitors/VisitorMap'),
   {
     ssr: false,
   },
