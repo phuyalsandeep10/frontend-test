@@ -1,0 +1,165 @@
+'use client';
+
+import React, { useState } from 'react';
+
+import { userRoutes } from '@/routes/userRoutes';
+import { cn } from '@/lib/utils';
+import { Icons } from '@/components/ui/Icons';
+import { usePathname } from 'next/navigation';
+import SidebarSection, { SidebarItem } from '../SharedSidebar/SettingSidebar';
+
+const sidebarSectionsData: {
+  title: string;
+  items: SidebarItem[];
+}[] = [
+  {
+    title: 'Accounts',
+    items: [
+      {
+        label: 'Account Information',
+        href: userRoutes.SETTINGS.ACCOUNT_INFORMATION,
+        icon: <Icons.client className="h-5 w-5" />,
+      },
+      {
+        label: 'Notification',
+        href: userRoutes.SETTINGS.NOTIFICATIONS,
+        icon: <Icons.notification className="h-5 w-5" />,
+      },
+      {
+        label: 'Availability',
+        href: userRoutes.SETTINGS.AVAILABILITY,
+        icon: <Icons.clock className="h-5 w-5" />,
+      },
+      {
+        label: 'Security',
+        href: userRoutes.SETTINGS.SECURITY,
+        icon: <Icons.help className="h-5 w-5" />,
+      },
+      {
+        label: 'Personalization',
+        href: userRoutes.SETTINGS.PERSONALIZATION,
+        icon: <Icons.screen className="h-5 w-5" />,
+      },
+    ],
+  },
+  {
+    title: 'Billing',
+    items: [
+      {
+        label: 'Security',
+        href: userRoutes.SETTINGS.SECURITY,
+        icon: <Icons.help className="h-5 w-5" />,
+      },
+      {
+        label: 'Personalization',
+        href: userRoutes.SETTINGS.PERSONALIZATION,
+        icon: <Icons.search_eye className="h-5 w-5" />,
+      },
+    ],
+  },
+  {
+    title: 'Workspace Setting',
+    items: [
+      {
+        label: 'Workspace Information',
+        href: userRoutes.SETTINGS.INFORMATION,
+        icon: <Icons.danger className="h-5 w-5" />,
+      },
+      {
+        label: 'Transparency Logs',
+        href: userRoutes.SETTINGS.TRANSPARENCY_LOGS,
+        icon: <Icons.search_eye className="h-5 w-5" />,
+      },
+      {
+        label: 'Operator & Teams',
+        href: userRoutes.SETTINGS.OPERATOR_TEAMS,
+        icon: <Icons.client className="h-5 w-5" />,
+      },
+      {
+        label: 'Advance Configuration',
+        href: userRoutes.SETTINGS.ADVANCE_CONFIGURATION,
+        icon: <Icons.rocket className="h-5 w-5" />,
+      },
+    ],
+  },
+  {
+    title: 'Chatbox Setting',
+    items: [
+      {
+        label: 'Security',
+        href: userRoutes.SETTINGS.SECURITY,
+        icon: <Icons.help className="h-5 w-5" />,
+      },
+      {
+        label: 'Personalization',
+        href: userRoutes.SETTINGS.PERSONALIZATION,
+        icon: <Icons.screen className="h-5 w-5" />,
+      },
+    ],
+  },
+  {
+    title: 'Inbox Setting',
+    items: [
+      {
+        label: 'Security',
+        href: userRoutes.SETTINGS.SECURITY,
+        icon: <Icons.help className="h-5 w-5" />,
+      },
+      {
+        label: 'Personalization',
+        href: userRoutes.SETTINGS.PERSONALIZATION,
+        icon: <Icons.screen className="h-5 w-5" />,
+      },
+    ],
+  },
+  {
+    title: 'Email Setting',
+    items: [
+      {
+        label: 'Security',
+        href: userRoutes.SETTINGS.SECURITY,
+        icon: <Icons.help className="h-5 w-5" />,
+      },
+      {
+        label: 'Personalization',
+        href: userRoutes.SETTINGS.PERSONALIZATION,
+        icon: <Icons.screen className="h-5 w-5" />,
+      },
+    ],
+  },
+];
+
+const Sidebar = () => {
+  const pathname = usePathname();
+  // Function to find the section that contains the current pathname
+  const findInitialOpenSection = (): string => {
+    for (const section of sidebarSectionsData) {
+      if (section.items.some((item) => item.href === pathname)) {
+        return section.title;
+      }
+    }
+    return ''; // fallback if no match
+  };
+  const [openSection, setOpenSection] = useState<string>(
+    findInitialOpenSection(),
+  );
+  const handleToggle = (title: string) => {
+    setOpenSection((prev) => (prev === title ? '' : title));
+  };
+
+  return (
+    <div className={cn('text-brand-dark w-full pt-2 pr-4 pl-4 text-sm')}>
+      {sidebarSectionsData.map((section) => (
+        <SidebarSection
+          key={section.title}
+          title={section.title}
+          items={section.items}
+          isOpen={openSection === section.title}
+          onToggle={handleToggle}
+        />
+      ))}
+    </div>
+  );
+};
+
+export default Sidebar;

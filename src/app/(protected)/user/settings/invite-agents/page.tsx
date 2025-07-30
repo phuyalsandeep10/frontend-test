@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
-import Settings from '@/components/custom-components/User/Settings/Settings';
 import { Icons } from '@/components/ui/Icons';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import OperatorsTable from '@/components/users/pages/OperatorsTable';
+import Settings from '@/components/custom-components/Settings/Settings';
 
 const InviteAgents = () => {
   const [toggleActive, setToggleActive] = useState('Operators');

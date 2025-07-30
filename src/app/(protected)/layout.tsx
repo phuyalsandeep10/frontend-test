@@ -5,6 +5,8 @@ import { useEffect } from 'react';
 import { userRoutes } from '@/routes/userRoutes';
 import { AuthService } from '@/services/auth/auth';
 import { useAuthenticatedUser } from '@/hooks/auth/useAuthenticatedUser';
+import { SidebarProvider } from '@/components/ui/sidebar';
+import CustomSidebar from '@/components/custom-components/CustomSidebar/CustomSidebar';
 
 export default function ProtectedDashboardLayout({
   children,
@@ -35,5 +37,11 @@ export default function ProtectedDashboardLayout({
 
   // if (isLoading || !authData) return <p>Loading...</p>;
 
-  return <div>{children}</div>;
+  return (
+    <SidebarProvider>
+      <CustomSidebar />
+      {/* <SidebarTrigger /> */}
+      <div className="w-full">{children}</div>
+    </SidebarProvider>
+  );
 }

@@ -32,6 +32,8 @@ interface ZoomImageModalProps {
   labelClickText?: string;
   labelRestText?: string;
   descriptionText?: string;
+  onClose: () => void;
+  open: boolean;
 }
 
 const ZoomImageModal = ({
@@ -43,7 +45,9 @@ const ZoomImageModal = ({
   subHeading,
   onCropComplete,
   onSave,
-  triggerButton = <Button>Change Profile Picture</Button>,
+  onClose,
+  open,
+  // triggerButton = <Button>Change Profile Picture</Button>,
   labelClickText = 'Click to upload',
   labelRestText = ' or drag and drop SVG,PNG,JPG.',
   descriptionText = 'Upload a PNG and JPG, up to 10 MB.',
@@ -61,11 +65,13 @@ const ZoomImageModal = ({
 
   const handleCancel = () => {
     setIsOpen(false);
+    onClose();
   };
 
   const handleSave = () => {
     if (uploadedImage) {
       onSave(uploadedImage);
+      onClose();
     }
     setUploadedImage(null);
     setCrop({ x: 0, y: 0 });
@@ -84,8 +90,8 @@ const ZoomImageModal = ({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleModalClose}>
-      <DialogTrigger asChild>{triggerButton}</DialogTrigger>
+    <Dialog open={open} onOpenChange={(value) => !value && onClose()}>
+      <DialogTrigger asChild></DialogTrigger>
 
       <DialogContent className="p-[24px] sm:max-w-[431px]">
         <DialogHeader>

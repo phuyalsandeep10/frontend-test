@@ -64,6 +64,7 @@
   --color-theme-text-light: #d4d4d8;
   --color-pure-black: #000000;
   --color-pure-white: #ffffff;
+  --color-border-grey: #0000004d;
 
   --color-gray-primary: #737373;
   --color-gray-dark: #262626;
@@ -81,6 +82,7 @@
   --color-info: #3872b7;
   --color-info-light: #dae8fa;
   --color-alert-prominent: #f61818;
+  --color-prominent-success: #e5f9db;
   --color-warning-prominent: #f5ce31;
 
   /* Brand fonts  */
