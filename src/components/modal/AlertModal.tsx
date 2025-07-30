@@ -31,6 +31,7 @@ interface AlertDialogDemoProps {
   actionButtonProps?: Partial<ButtonProps>;
   cancelIsLoading?: boolean;
   actionIsLoading?: boolean;
+  children?: React.ReactNode;
 }
 
 export const AlertDialogDemo = forwardRef<
@@ -53,6 +54,7 @@ export const AlertDialogDemo = forwardRef<
       actionButtonProps,
       cancelIsLoading,
       actionIsLoading,
+      children,
     },
     ref,
   ) => {
@@ -75,6 +77,7 @@ export const AlertDialogDemo = forwardRef<
               <span>{subheading}</span>
             </AlertDialogDescription>
           </AlertDialogHeader>
+          {children}
           <AlertDialogFooter>
             <Button
               onClick={onCancel}

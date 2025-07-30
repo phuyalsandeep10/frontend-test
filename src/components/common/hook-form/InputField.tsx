@@ -16,6 +16,7 @@ type InputFieldProps<T extends FieldValues> = {
   placeholder?: string;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
+  labelClassName?: string;
 };
 
 export function InputField<T extends FieldValues>({
@@ -29,11 +30,16 @@ export function InputField<T extends FieldValues>({
   placeholder,
   leftIcon,
   rightIcon,
+  labelClassName,
 }: InputFieldProps<T>) {
   return (
     <div className={cn('space-y-1', className)}>
       {label && (
-        <Label htmlFor={name} required={required} className="mb-2">
+        <Label
+          htmlFor={name}
+          required={required}
+          className={cn(`mb-2 ${labelClassName}`)}
+        >
           {label}
         </Label>
       )}
