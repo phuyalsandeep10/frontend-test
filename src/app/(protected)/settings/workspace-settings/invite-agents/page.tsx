@@ -1,14 +1,36 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Icons } from '@/components/ui/Icons';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import Settings from '@/components/custom-components/Settings/Settings';
 import OperatorsTable from '@/components/custom-components/Settings/WorkSpaceSettings/InviteAgents/OperatorsTable';
+import TeamTable from '@/components/custom-components/Settings/WorkSpaceSettings/InviteAgents/Teams/TeamTable';
+import {
+  AlertDialogDemo,
+  AlertDialogDemoRef,
+} from '@/components/modal/AlertModal';
+import { AgenChatHistoryCard } from '@/components/custom-components/Settings/WorkSpaceSettings/InviteAgents/AgenChatHistoryCard';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const InviteAgents = () => {
   const [toggleActive, setToggleActive] = useState('Operators');
+  const alertRef = useRef<AlertDialogDemoRef>(null);
+
+  const handleOpenDialog = () => {
+    alertRef.current?.open();
+  };
+
+  const handleCancel = () => {
+    console.log('User cancelled');
+    alertRef.current?.close(); // Close dialog on cancel
+  };
+
+  const handleAction = () => {
+    console.log('User confirmed action');
+    alertRef.current?.close(); // Close dialog on action
+  };
   return (
     <Settings>
       <section className="font-outfit">
@@ -56,54 +78,86 @@ const InviteAgents = () => {
             </Button>
           </div>
 
-          {/* buttons to nvaigate to different pages */}
+          {/* buttons to navigate to different pages */}
 
-          <div className="border-b-grey-light mb-5 flex justify-between border-b-[1px] pb-1">
-            <div className="relative flex gap-[35px] text-xs leading-[17px] font-normal">
-              <span
-                className={`relative ${
-                  toggleActive === 'Invites'
-                    ? "text-brand-primary before:absolute before:-bottom-[5px] before:w-[61px] before:translate-x-0 before:border-b-[1px] before:pb-3 before:text-[bg-brand-primary] before:content-['']"
-                    : ''
-                }`}
-              >
-                Invites
-              </span>
-              <span
-                className={`relative ${
-                  toggleActive === 'Operators'
-                    ? "text-brand-primary before:absolute before:-bottom-[5px] before:w-[82px] before:-translate-x-2.5 before:border-b-[1px] before:pb-3 before:text-[bg-brand-primary] before:content-['']"
-                    : ''
-                }`}
-              >
-                Operators
-              </span>
-              <span
-                className={`relative ${
-                  toggleActive === 'Teams'
-                    ? "text-brand-primary before:absolute before:-bottom-[5px] before:w-[82px] before:-translate-x-5 before:border-b-[1px] before:pb-3 before:text-[bg-brand-primary] before:content-['']"
-                    : ''
-                }`}
-              >
-                Teams
-              </span>
-              <span
-                className={`relative ${
-                  toggleActive === 'Roles'
-                    ? "text-brand-primary before:absolute before:-bottom-[5px] before:w-[82px] before:-translate-x-5.5 before:border-b-[1px] before:pb-3 before:text-[bg-brand-primary] before:content-['']"
-                    : ''
-                }`}
-              >
-                Roles
-              </span>
+          <div>
+            <div className="">
+              <Tabs defaultValue="Operators" className="w-full gap-[11px]">
+                <div className="flex justify-between border-b">
+                  <TabsList className="border-grey-light flex gap-[35px] bg-transparent p-0 pb-1">
+                    <TabsTrigger
+                      value="Invites"
+                      className="text-muted-foreground data-[state=active]:text-brand-primary relative border-0 text-xs leading-[17px] font-normal !shadow-none data-[state=active]:before:absolute data-[state=active]:before:-bottom-[5px] data-[state=active]:before:w-[61px] data-[state=active]:before:border-b-[1px] data-[state=active]:before:pb-3 data-[state=active]:before:content-['']"
+                    >
+                      Invites
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="Operators"
+                      className="text-muted-foreground data-[state=active]:text-brand-primary relative text-xs leading-[17px] font-normal !shadow-none data-[state=active]:before:absolute data-[state=active]:before:-bottom-[5px] data-[state=active]:before:w-[82px] data-[state=active]:before:border-b-[1px] data-[state=active]:before:pb-3 data-[state=active]:before:content-['']"
+                    >
+                      Operators
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="Teams"
+                      className="text-muted-foreground data-[state=active]:text-brand-primary relative text-xs leading-[17px] font-normal !shadow-none data-[state=active]:before:absolute data-[state=active]:before:-bottom-[5px] data-[state=active]:before:w-[82px] data-[state=active]:before:border-b-[1px] data-[state=active]:before:pb-3 data-[state=active]:before:content-['']"
+                    >
+                      Teams
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="Roles"
+                      className="text-muted-foreground data-[state=active]:text-brand-primary relative text-xs leading-[17px] font-normal !shadow-none data-[state=active]:before:absolute data-[state=active]:before:-bottom-[5px] data-[state=active]:before:w-[82px] data-[state=active]:before:border-b-[1px] data-[state=active]:before:pb-3 data-[state=active]:before:content-['']"
+                    >
+                      Roles
+                    </TabsTrigger>
+                  </TabsList>
+                  <div className="text-brand-primary w-">
+                    <Icons.filter />
+                  </div>
+                </div>
+
+                <TabsContent value="Invites" />
+                <TabsContent value="Operators">
+                  <OperatorsTable handleOpenDialog={handleOpenDialog} />
+                </TabsContent>
+                <TabsContent value="Teams">
+                  {' '}
+                  <TeamTable handleOpenDialog={handleOpenDialog} />
+                </TabsContent>
+                <TabsContent value="Roles" />
+              </Tabs>
             </div>
-            <span className="text-brand-primary">
-              <Icons.filter />
-            </span>
           </div>
 
           {/* table of operators */}
-          <OperatorsTable />
+
+          {/* delete card */}
+
+          <AlertDialogDemo
+            ref={alertRef}
+            headericon={<Icons.ri_delete_bin_7_fillv />}
+            heading="Delete Agent"
+            subheading="This action will delete agent , you can temporarily suspend agent which wont delete his/her data."
+            cancelText="Cancel"
+            actionText="Confirm &Delete"
+            onCancel={handleCancel}
+            onAction={handleAction}
+            cancelClassName="bg-transparent text-disabled-foreground border-[1px] border-gray-primary"
+            actionClassName="bg-red-600 text-white"
+            modalClassName="flex items-center justify-center flex-col"
+            DialogHeaderClassName="text-center text-base leading-[26px] font-medium"
+            descriptionClassName="text-center text-xs font-normal leading-[17px] text-alert-prominent"
+            headerIconClass="flex justify-center "
+            iconClass="h-[52px] w-[52px] rounded-[26px] bg-error-light flex items-center justify-center text-alert-prominent "
+          />
+
+          {/* add card */}
+
+          {/* <AgenChatHistoryCard
+            headerIconClass="bg-black w-[36px] h-[36px] text-center rounded-[50px] px-3 py-3 flex items-center justify-center"
+            iconClass="text-white "
+            headericon={<Icons.ri_user_fill />}
+            ConviconClass="bg-black"
+          /> */}
         </div>
       </section>
     </Settings>

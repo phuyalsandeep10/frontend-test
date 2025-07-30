@@ -70,6 +70,8 @@ import {
   RiUserSettingsFill,
   RiUserFill,
   RiCalendarLine,
+  RiDeleteBin7Fill,
+  RiStarFill,
 } from '@remixicon/react';
 
 // register your icons here as your requirements
@@ -143,4 +145,6 @@ export const Icons = {
   ri_user_settings_fill: RiUserSettingsFill,
   ri_user_fill: RiUserFill,
   ri_calendar_line: RiCalendarLine,
+  ri_delete_bin_7_fillv: RiDeleteBin7Fill,
+  ri_star_fill: RiStarFill,
 };

@@ -31,6 +31,11 @@ interface AlertDialogDemoProps {
   actionButtonProps?: Partial<ButtonProps>;
   cancelIsLoading?: boolean;
   actionIsLoading?: boolean;
+  headericon?: React.ReactNode;
+  modalClassName?: string;
+  DialogHeaderClassName?: string;
+  headerIconClass?: string;
+  iconClass?: string;
 }
 
 export const AlertDialogDemo = forwardRef<
@@ -53,6 +58,11 @@ export const AlertDialogDemo = forwardRef<
       actionButtonProps,
       cancelIsLoading,
       actionIsLoading,
+      headericon,
+      modalClassName,
+      DialogHeaderClassName,
+      headerIconClass,
+      iconClass,
     },
     ref,
   ) => {
@@ -65,9 +75,19 @@ export const AlertDialogDemo = forwardRef<
 
     return (
       <AlertDialog open={open} onOpenChange={setOpen}>
-        <AlertDialogContent className="w-[568px] rounded-[8px] px-[34px] pt-[11px] pb-[29px] sm:max-w-[568px]">
+        <AlertDialogContent
+          className={`w-[568px] rounded-[8px] px-[34px] pt-[11px] pb-[29px] sm:max-w-[568px] ${modalClassName ?? ''}`}
+        >
           <AlertDialogHeader>
-            <AlertDialogTitle>{heading}</AlertDialogTitle>
+            {headericon && (
+              <div className={headerIconClass ?? ''}>
+                {' '}
+                <span className={iconClass ?? ''}>{headericon}</span>{' '}
+              </div>
+            )}
+            <AlertDialogTitle className={DialogHeaderClassName ?? ''}>
+              {heading}
+            </AlertDialogTitle>
             <AlertDialogDescription
               className={`mt-[4px] flex items-start gap-2 ${descriptionClassName}`}
             >

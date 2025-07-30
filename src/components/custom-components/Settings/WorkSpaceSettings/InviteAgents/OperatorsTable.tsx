@@ -21,7 +21,11 @@ interface Column<T> {
   render?: (row: T) => React.ReactNode;
 }
 
-export default function OperatorsTable() {
+export default function OperatorsTable({
+  handleOpenDialog,
+}: {
+  handleOpenDialog: () => void;
+}) {
   const [modalData, setModalData] = useState<null | {
     type: string;
     row: OrderRow;
@@ -105,7 +109,11 @@ export default function OperatorsTable() {
           <button aria-label="View agent">
             <Icons.ri_eye_fill />
           </button>
-          <button aria-label="Delete agent" className="text-[#F61818]">
+          <button
+            aria-label="Delete agent"
+            onClick={handleOpenDialog}
+            className="text-[#F61818]"
+          >
             <Icons.ri_delete_bin_5_line />
           </button>
         </div>
