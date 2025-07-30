@@ -101,6 +101,7 @@ export default function OperatorsTable() {
               }}
             />
           </ReusableDialog>
+
           <button aria-label="View agent">
             <Icons.ri_eye_fill />
           </button>
