@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
-import SubSidebarContentWrapper from '../CustomUserSidebar/SubSidebarContentWrapper';
+import SubSidebarContentWrapper from '../CustomSidebar/SubSidebarContentWrapper';
 import InboxChatSection from './InboxChatSection/InboxChatSection';
 import InboxChatInfo from './InboxChatInfo/InboxChatInfo';
 import InboxSubSidebar from './InboxSidebar/InboxSubSidebar';

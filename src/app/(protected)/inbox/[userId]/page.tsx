@@ -1,4 +1,4 @@
-import Inbox from '@/components/custom-components/User/Inbox/Inbox';
+import Inbox from '@/components/custom-components/Inbox/Inbox';
 import React from 'react';
 
 const InboxChatPage = () => {

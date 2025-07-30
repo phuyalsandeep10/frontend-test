@@ -2,7 +2,7 @@ import React from 'react';
 import Logo from '@/assets/svg/Logo';
 import { cn } from '@/lib/utils';
 // import { useSidebar } from '@/components/ui/sidebar';
-const UserSidebarHeader: React.FC = () => {
+const SidebarHeader: React.FC = () => {
   // const { toggleSidebar } = useSidebar();
   return (
     <div
@@ -35,4 +35,4 @@ const UserSidebarHeader: React.FC = () => {
   );
 };
 
-export default UserSidebarHeader;
+export default SidebarHeader;

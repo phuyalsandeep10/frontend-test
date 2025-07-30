@@ -7,16 +7,16 @@ export const userRoutes = {
   VERIFY_EMAIL: '/verify-email',
   VERIFY_TWO_FA_TOKEN: 'verify-two-factor-authentication',
   SETTINGS: {
-    ACCOUNT_INFORMATION: '/user/settings/account-information',
-    NOTIFICATIONS: '/user/settings/notifications',
-    AVAILABILITY: '/user/settings/availability',
-    SECURITY: '/user/settings/security',
-    PERSONALIZATION: '/user/settings/personalization',
+    ACCOUNT_INFORMATION: '/settings/account-information',
+    NOTIFICATIONS: '/settings/notifications',
+    AVAILABILITY: '/settings/availability',
+    SECURITY: '/settings/security',
+    PERSONALIZATION: '/settings/personalization',
     // Workspace Setting
-    INFORMATION: '/user/settings/workspace/information',
-    TRANSPARENCY_LOGS: '/user/settings/workspace/transparency-logs',
-    OPERATOR_TEAMS: '/user/settings/workspace/operator-teams',
-    ADVANCE_CONFIGURATION: '/user/settings/workspace/advance-configuration',
+    INFORMATION: '/settings/workspace/information',
+    TRANSPARENCY_LOGS: '/settings/workspace/transparency-logs',
+    OPERATOR_TEAMS: '/settings/workspace/operator-teams',
+    ADVANCE_CONFIGURATION: '/settings/workspace/advance-configuration',
   },
 
   YOUR_INBOXES: {

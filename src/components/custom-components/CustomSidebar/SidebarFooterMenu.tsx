@@ -11,7 +11,7 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 import { Icons } from '@/components/ui/Icons';
 
-const UserSidebarFooterMenu = () => {
+const SidebarFooterMenu = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -78,4 +78,4 @@ const UserSidebarFooterMenu = () => {
   );
 };
 
-export default UserSidebarFooterMenu;
+export default SidebarFooterMenu;

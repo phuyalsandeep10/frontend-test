@@ -9,12 +9,12 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 
-import UserSidebarFooterMenu from './UserSidebarFooterMenu';
-import UserSidebarHeader from './UserSidebarHeader';
+import UserSidebarFooterMenu from './SidebarFooterMenu';
+import UserSidebarHeader from './SidebarHeader';
 
 import MainSidebar from '@/components/custom-components/MainSidebar/MainSideBar';
 import { cn } from '@/lib/utils';
-const CustomUserSidebar = () => {
+const CustomSidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
 
   // Step 2: Toggle function
@@ -40,4 +40,4 @@ const CustomUserSidebar = () => {
   );
 };
 
-export default CustomUserSidebar;
+export default CustomSidebar;

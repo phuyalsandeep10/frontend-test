@@ -1,6 +1,6 @@
 'use client';
 
-import SubSidebarContentWrapper from '../CustomUserSidebar/SubSidebarContentWrapper';
+import SubSidebarContentWrapper from '../CustomSidebar/SubSidebarContentWrapper';
 import SettingsHeader from './SettingHeader';
 import SubSettingsSidebarMenus from './SubSettingsSidebarMenus';
 import React from 'react';
