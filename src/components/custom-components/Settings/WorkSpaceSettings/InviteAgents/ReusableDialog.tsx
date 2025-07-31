@@ -2,36 +2,23 @@
 'use client';
 
 import React from 'react';
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from '@/components/ui/dialog';
+import { Dialog, DialogTrigger, DialogContent } from '@/components/ui/dialog';
 
 type ReusableDialogProps = {
   trigger: React.ReactNode;
-  title: string;
-  description?: string;
   children?: React.ReactNode;
+  dialogClass?: string;
 };
 
 const ReusableDialog: React.FC<ReusableDialogProps> = ({
   trigger,
-  title,
-  description,
-  children,
+  children = null,
+  dialogClass = '',
 }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="!w-full !max-w-[1240px]">
-        <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          {description && <DialogDescription>{description}</DialogDescription>}
-        </DialogHeader>
+      <DialogContent className={`!w-full !max-w-[1240px] ${dialogClass}`}>
         {children}
       </DialogContent>
     </Dialog>

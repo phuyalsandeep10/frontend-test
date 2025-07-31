@@ -6,13 +6,6 @@ import { Calendar } from '@/components/ui/calendar';
 import { Icons } from '@/components/ui/Icons';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import {
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -56,7 +49,6 @@ const AddAgent: React.FC<AddAgentProps> = ({ defaultValues, onSubmit }) => {
     },
   });
   const [open, setOpen] = React.useState(false);
-  const [date, setDate] = React.useState<Date | undefined>(undefined);
 
   return (
     <>
@@ -254,9 +246,24 @@ const AddAgent: React.FC<AddAgentProps> = ({ defaultValues, onSubmit }) => {
                 value={field.value}
                 onValueChange={field.onChange}
               >
-                <ToggleGroupItem value="morning">Morning</ToggleGroupItem>
-                <ToggleGroupItem value="day">Day</ToggleGroupItem>
-                <ToggleGroupItem value="night">Night</ToggleGroupItem>
+                <ToggleGroupItem
+                  className="data-[state=on]:bg-brand-primary data-[state=on]:hover:bg-brand-primary rounded-[4px] px-[15px] py-[2px] data-[state=on]:border data-[state=on]:text-white"
+                  value="morning"
+                >
+                  Morning
+                </ToggleGroupItem>
+                <ToggleGroupItem
+                  className="data-[state=on]:bg-brand-primary data-[state=on]:hover:bg-brand-primary rounded-[4px] px-[15px] py-[2px] data-[state=on]:border data-[state=on]:text-white"
+                  value="day"
+                >
+                  Day
+                </ToggleGroupItem>
+                <ToggleGroupItem
+                  className="data-[state=on]:bg-brand-primary data-[state=on]:hover:bg-brand-primary rounded-[4px] px-[15px] py-[2px] data-[state=on]:border data-[state=on]:text-white"
+                  value="night"
+                >
+                  Night
+                </ToggleGroupItem>
               </ToggleGroup>
             )}
           />
@@ -350,12 +357,9 @@ const AddAgent: React.FC<AddAgentProps> = ({ defaultValues, onSubmit }) => {
             />
           </div>
 
-          <button
-            type="submit"
-            className="bg-brand-primary col-span-full mt-4 rounded-lg py-3 text-white"
-          >
+          <Button type="submit" className="col-span-full mt-4 w-full">
             Add Agent
-          </button>
+          </Button>
         </form>
       </Form>
     </>

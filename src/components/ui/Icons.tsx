@@ -72,6 +72,9 @@ import {
   RiCalendarLine,
   RiDeleteBin7Fill,
   RiStarFill,
+  RiUserLine,
+  RiContactsBookLine,
+  RiCloseCircleFill,
 } from '@remixicon/react';
 
 // register your icons here as your requirements
@@ -144,7 +147,10 @@ export const Icons = {
   ri_delete_bin_5_line: RiDeleteBin5Line,
   ri_user_settings_fill: RiUserSettingsFill,
   ri_user_fill: RiUserFill,
+  ri_user_line: RiUserLine,
   ri_calendar_line: RiCalendarLine,
-  ri_delete_bin_7_fillv: RiDeleteBin7Fill,
+  ri_delete_bin_7_fill: RiDeleteBin7Fill,
   ri_star_fill: RiStarFill,
+  ri_contacts_book_line: RiContactsBookLine,
+  ri_close_circle_fill: RiCloseCircleFill,
 };

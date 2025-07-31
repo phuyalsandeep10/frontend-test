@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import Settings from '@/components/custom-components/Settings/Settings';
 import OperatorsTable from '@/components/custom-components/Settings/WorkSpaceSettings/InviteAgents/OperatorsTable';
 import TeamTable from '@/components/custom-components/Settings/WorkSpaceSettings/InviteAgents/Teams/TeamTable';
+import RolesTable from '@/components/custom-components/Settings/WorkSpaceSettings/InviteAgents/Roles/RolesTable';
 import {
   AlertDialogDemo,
   AlertDialogDemoRef,
@@ -15,22 +16,36 @@ import { AgenChatHistoryCard } from '@/components/custom-components/Settings/Wor
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const InviteAgents = () => {
-  const [toggleActive, setToggleActive] = useState('Operators');
+  // dynamically pass props to alert dialog
+  const [modalProps, setModalProps] = useState({
+    heading: '',
+    subheading: '',
+    onAction: () => {},
+    headericon: <Icons.ri_delete_bin_7_fill />,
+  });
+
+  // trigger open close through ref
   const alertRef = useRef<AlertDialogDemoRef>(null);
 
-  const handleOpenDialog = () => {
+  // toggle alert modal
+  const handleOpenDialog = (props: {
+    heading: string;
+    subheading: string;
+    onAction: () => void;
+    headericon?: React.ReactNode;
+  }) => {
+    setModalProps({
+      heading: props.heading,
+      subheading: props.subheading,
+      onAction: () => {
+        props.onAction();
+        alertRef.current?.close(); // Close modal after action
+      },
+      headericon: props.headericon || <Icons.ri_delete_bin_7_fill />,
+    });
     alertRef.current?.open();
   };
 
-  const handleCancel = () => {
-    console.log('User cancelled');
-    alertRef.current?.close(); // Close dialog on cancel
-  };
-
-  const handleAction = () => {
-    console.log('User confirmed action');
-    alertRef.current?.close(); // Close dialog on action
-  };
   return (
     <Settings>
       <section className="font-outfit">
@@ -81,51 +96,51 @@ const InviteAgents = () => {
           {/* buttons to navigate to different pages */}
 
           <div>
-            <div className="">
-              <Tabs defaultValue="Operators" className="w-full gap-[11px]">
-                <div className="flex justify-between border-b">
-                  <TabsList className="border-grey-light flex gap-[35px] bg-transparent p-0 pb-1">
-                    <TabsTrigger
-                      value="Invites"
-                      className="text-muted-foreground data-[state=active]:text-brand-primary relative border-0 text-xs leading-[17px] font-normal !shadow-none data-[state=active]:before:absolute data-[state=active]:before:-bottom-[5px] data-[state=active]:before:w-[61px] data-[state=active]:before:border-b-[1px] data-[state=active]:before:pb-3 data-[state=active]:before:content-['']"
-                    >
-                      Invites
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="Operators"
-                      className="text-muted-foreground data-[state=active]:text-brand-primary relative text-xs leading-[17px] font-normal !shadow-none data-[state=active]:before:absolute data-[state=active]:before:-bottom-[5px] data-[state=active]:before:w-[82px] data-[state=active]:before:border-b-[1px] data-[state=active]:before:pb-3 data-[state=active]:before:content-['']"
-                    >
-                      Operators
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="Teams"
-                      className="text-muted-foreground data-[state=active]:text-brand-primary relative text-xs leading-[17px] font-normal !shadow-none data-[state=active]:before:absolute data-[state=active]:before:-bottom-[5px] data-[state=active]:before:w-[82px] data-[state=active]:before:border-b-[1px] data-[state=active]:before:pb-3 data-[state=active]:before:content-['']"
-                    >
-                      Teams
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="Roles"
-                      className="text-muted-foreground data-[state=active]:text-brand-primary relative text-xs leading-[17px] font-normal !shadow-none data-[state=active]:before:absolute data-[state=active]:before:-bottom-[5px] data-[state=active]:before:w-[82px] data-[state=active]:before:border-b-[1px] data-[state=active]:before:pb-3 data-[state=active]:before:content-['']"
-                    >
-                      Roles
-                    </TabsTrigger>
-                  </TabsList>
-                  <div className="text-brand-primary w-">
-                    <Icons.filter />
-                  </div>
+            <Tabs defaultValue="Operators" className="w-full gap-[12px]">
+              <div className="flex justify-between border-b">
+                <TabsList className="border-grey-light flex gap-[35px] bg-transparent p-0 pb-1">
+                  <TabsTrigger
+                    value="Invites"
+                    className="text-muted-foreground data-[state=active]:text-brand-primary relative border-0 text-xs leading-[17px] font-normal !shadow-none data-[state=active]:before:absolute data-[state=active]:before:-bottom-[5px] data-[state=active]:before:w-[61px] data-[state=active]:before:border-b-[1px] data-[state=active]:before:pb-3 data-[state=active]:before:content-['']"
+                  >
+                    Invites
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="Operators"
+                    className="text-muted-foreground data-[state=active]:text-brand-primary relative text-xs leading-[17px] font-normal !shadow-none data-[state=active]:before:absolute data-[state=active]:before:-bottom-[5px] data-[state=active]:before:w-[82px] data-[state=active]:before:border-b-[1px] data-[state=active]:before:pb-3 data-[state=active]:before:content-['']"
+                  >
+                    Operators
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="Teams"
+                    className="text-muted-foreground data-[state=active]:text-brand-primary relative text-xs leading-[17px] font-normal !shadow-none data-[state=active]:before:absolute data-[state=active]:before:-bottom-[5px] data-[state=active]:before:w-[82px] data-[state=active]:before:border-b-[1px] data-[state=active]:before:pb-3 data-[state=active]:before:content-['']"
+                  >
+                    Teams
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="Roles"
+                    className="text-muted-foreground data-[state=active]:text-brand-primary relative text-xs leading-[17px] font-normal !shadow-none data-[state=active]:before:absolute data-[state=active]:before:-bottom-[5px] data-[state=active]:before:w-[82px] data-[state=active]:before:border-b-[1px] data-[state=active]:before:pb-3 data-[state=active]:before:content-['']"
+                  >
+                    Roles
+                  </TabsTrigger>
+                </TabsList>
+                <div className="text-brand-primary w-">
+                  <Icons.filter />
                 </div>
+              </div>
 
-                <TabsContent value="Invites" />
-                <TabsContent value="Operators">
-                  <OperatorsTable handleOpenDialog={handleOpenDialog} />
-                </TabsContent>
-                <TabsContent value="Teams">
-                  {' '}
-                  <TeamTable handleOpenDialog={handleOpenDialog} />
-                </TabsContent>
-                <TabsContent value="Roles" />
-              </Tabs>
-            </div>
+              <TabsContent value="Invites" />
+              <TabsContent value="Operators">
+                <OperatorsTable handleOpenDialog={handleOpenDialog} />
+              </TabsContent>
+              <TabsContent value="Teams">
+                {' '}
+                <TeamTable handleOpenDialog={handleOpenDialog} />
+              </TabsContent>
+              <TabsContent value="Roles">
+                <RolesTable handleOpenDialog={handleOpenDialog} />
+              </TabsContent>
+            </Tabs>
           </div>
 
           {/* table of operators */}
@@ -134,13 +149,13 @@ const InviteAgents = () => {
 
           <AlertDialogDemo
             ref={alertRef}
-            headericon={<Icons.ri_delete_bin_7_fillv />}
-            heading="Delete Agent"
-            subheading="This action will delete agent , you can temporarily suspend agent which wont delete his/her data."
+            headericon={modalProps.headericon}
+            heading={modalProps.heading}
+            subheading={modalProps.subheading}
             cancelText="Cancel"
             actionText="Confirm &Delete"
-            onCancel={handleCancel}
-            onAction={handleAction}
+            onCancel={() => alertRef.current?.close()}
+            onAction={modalProps.onAction}
             cancelClassName="bg-transparent text-disabled-foreground border-[1px] border-gray-primary"
             actionClassName="bg-red-600 text-white"
             modalClassName="flex items-center justify-center flex-col"
@@ -151,8 +166,8 @@ const InviteAgents = () => {
           />
 
           {/* add card */}
-
-          {/* <AgenChatHistoryCard
+          {/* 
+          <AgenChatHistoryCard
             headerIconClass="bg-black w-[36px] h-[36px] text-center rounded-[50px] px-3 py-3 flex items-center justify-center"
             iconClass="text-white "
             headericon={<Icons.ri_user_fill />}

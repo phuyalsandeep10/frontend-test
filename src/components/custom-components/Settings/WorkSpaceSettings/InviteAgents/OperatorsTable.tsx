@@ -21,11 +21,18 @@ interface Column<T> {
   render?: (row: T) => React.ReactNode;
 }
 
+interface OperatorsTableProps {
+  handleOpenDialog: (props: {
+    heading: string;
+    subheading: string;
+    onAction: () => void;
+    headericon?: React.ReactNode;
+  }) => void;
+}
+
 export default function OperatorsTable({
   handleOpenDialog,
-}: {
-  handleOpenDialog: () => void;
-}) {
+}: OperatorsTableProps) {
   const [modalData, setModalData] = useState<null | {
     type: string;
     row: OrderRow;
@@ -79,7 +86,7 @@ export default function OperatorsTable({
               className={`h-2 w-2 rounded-full ${
                 isOperating ? 'bg-[#009959]' : 'bg-[#F61818]'
               }`}
-            ></span>
+            />
           </div>
         );
       },
@@ -89,19 +96,19 @@ export default function OperatorsTable({
       key: 'actions',
       label: 'Actions',
       render: (row) => (
-        <div className="flex gap-[10px]">
+        <div className="flex gap-2">
           <ReusableDialog
             trigger={
               <button aria-label="Edit agent">
-                <Icons.ri_edit2_fill className="text-[#000]" />
+                <Icons.ri_edit2_fill className="text-black" />
               </button>
             }
-            title="Add Agent"
+            title="Edit Agent"
           >
             <AddAgent
               defaultValues={{}}
               onSubmit={(data) => {
-                console.log('sublitted', data);
+                console.log('Submitted', data);
               }}
             />
           </ReusableDialog>
@@ -109,9 +116,20 @@ export default function OperatorsTable({
           <button aria-label="View agent">
             <Icons.ri_eye_fill />
           </button>
+
           <button
             aria-label="Delete agent"
-            onClick={handleOpenDialog}
+            onClick={() =>
+              handleOpenDialog({
+                heading: 'Delete Agent',
+                subheading:
+                  'This action will delete the agent. You can temporarily suspend the agent instead to retain their data.',
+                onAction: () => {
+                  console.log('Operator deleted');
+                },
+                headericon: <Icons.ri_delete_bin_7_fill />,
+              })
+            }
             className="text-[#F61818]"
           >
             <Icons.ri_delete_bin_5_line />
@@ -121,9 +139,5 @@ export default function OperatorsTable({
     },
   ];
 
-  return (
-    <>
-      <ReuseableTable columns={columns} data={orders} />
-    </>
-  );
+  return <ReuseableTable columns={columns} data={orders} />;
 }

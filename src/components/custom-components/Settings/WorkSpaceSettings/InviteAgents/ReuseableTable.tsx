@@ -3,19 +3,17 @@
 
 import {
   Table,
-  TableCaption,
   TableHeader,
   TableBody,
   TableHead,
   TableRow,
   TableCell,
 } from '@/components/ui/table';
-// import { ColumnDef } from '@/types/column';
-
-type ColumnKey = string;
+import { cn } from '@/lib/utils';
+import React from 'react';
 
 type Column<T> = {
-  key: string; // <== Accepts any string now
+  key: string;
   label: string;
   render?: (row: T) => React.ReactNode;
   headerClassName?: string;
@@ -25,20 +23,30 @@ type Column<T> = {
 type GenericTableProps<T> = {
   columns: Column<T>[];
   data: T[];
+  tableClassName?: string;
+  headerClassName?: string;
 };
 
 export function ReuseableTable<T extends Record<string, any>>({
   columns,
   data,
+  tableClassName = '',
+  headerClassName = '',
 }: GenericTableProps<T>) {
   return (
     <Table>
-      <TableHeader className="bg-light-blue mb-[11px] p-0">
+      <TableHeader
+        className={cn('bg-light-blue mb-[11px] p-0', tableClassName)}
+      >
         <TableRow>
           {columns.map((col, colIndex) => (
             <TableHead
-              key={col.key ? col.key.toString() : `col-${colIndex}`}
-              className={`text-sm leading-[21px] font-semibold ${col.headerClassName || ''}`}
+              key={col.key}
+              className={cn(
+                'text-sm leading-[21px] font-semibold',
+                col.headerClassName,
+                headerClassName,
+              )}
             >
               {col.label}
             </TableHead>
@@ -48,19 +56,18 @@ export function ReuseableTable<T extends Record<string, any>>({
 
       <TableBody>
         {data.map((row, rowIndex) => (
-          <TableRow key={row.id ?? rowIndex} className="border-none">
+          <TableRow key={(row as any).id ?? rowIndex} className="border-none">
             {columns.map((col, colIndex) => (
               <TableCell
-                key={
-                  col.key ? col.key.toString() : `cell-${rowIndex}-${colIndex}`
-                }
-                className={`text-xs leading-[17px] font-normal ${col.cellClassName || ''}`}
+                key={`${col.key}-${rowIndex}`}
+                className={cn(
+                  'text-xs leading-[17px] font-normal',
+                  col.cellClassName,
+                )}
               >
                 {col.render
                   ? col.render(row)
-                  : col.key
-                    ? row[col.key as keyof T]
-                    : ''}
+                  : (row[col.key as keyof T] as React.ReactNode)}
               </TableCell>
             ))}
           </TableRow>
