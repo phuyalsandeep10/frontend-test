@@ -34,7 +34,7 @@ const VisitorDetailModal: React.FC<VisitorDetailModalProps> = ({
 }) => {
   return (
     <div
-      className="border-grey-light w-[363px] rounded-[8px] border bg-white px-[20px] py-[20px] shadow-md"
+      className="border-grey-light w-[363px] rounded-[8px] border bg-white px-[20px] py-[20px] shadow-2xl"
       style={style}
     >
       <div className="mb-[24px] flex items-center justify-between">

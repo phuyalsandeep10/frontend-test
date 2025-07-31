@@ -5,9 +5,16 @@ import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import countriesData from '@/data/countries.json';
+import { pointInPolygon } from 'geometric';
+
+type Visitor = {
+  lat: number;
+  lng: number;
+  count: number;
+};
 
 type VisitorMapProps = {
-  visitors: { [countryCode: string]: number };
+  visitors: Visitor[];
 };
 
 const VisitorMap: React.FC<VisitorMapProps> = ({ visitors }) => {
@@ -17,11 +24,45 @@ const VisitorMap: React.FC<VisitorMapProps> = ({ visitors }) => {
     setGeoData(countriesData);
   }, []);
 
-  const normalizedVisitors = Object.fromEntries(
-    Object.entries(visitors).map(([code, count]) => [
-      code.toUpperCase(),
-      count,
-    ]),
+  const getCountryCodeFromCoords = (
+    lat: number,
+    lng: number,
+  ): string | null => {
+    if (!geoData) return null;
+
+    for (const feature of geoData.features) {
+      const geometry = feature.geometry;
+      const isoCode = feature.properties?.['ISO3166-1-Alpha-3'];
+
+      const coordinates =
+        geometry.type === 'MultiPolygon'
+          ? geometry.coordinates
+          : [geometry.coordinates];
+
+      for (const polygon of coordinates) {
+        for (const ring of polygon) {
+          const polygonPoints = ring.map(([lng, lat]: [number, number]) => [
+            lng,
+            lat,
+          ]);
+          if (pointInPolygon([lng, lat], polygonPoints)) {
+            return isoCode;
+          }
+        }
+      }
+    }
+    return null;
+  };
+
+  const normalizedVisitors = visitors.reduce(
+    (acc, { lat, lng, count }) => {
+      const isoCode = getCountryCodeFromCoords(lat, lng);
+      if (isoCode) {
+        acc[isoCode] = (acc[isoCode] || 0) + count;
+      }
+      return acc;
+    },
+    {} as { [key: string]: number },
   );
 
   const countryStyle = (feature: any): L.PathOptions => {

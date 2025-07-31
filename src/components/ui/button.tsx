@@ -39,6 +39,14 @@ const buttonVariants = cva(
           font-semibold
           text-[16px]
         `,
+        outline_gray: `
+          border border-gray-primary
+          bg-transparent
+          text-gray-primary
+          offset-0
+          font-semibold
+          text-[12px]
+        `,
         secondary: `
           border-2 border-brand-primary
           bg-transparent

@@ -34,24 +34,29 @@ const FilterComponent = () => {
   ];
 
   return (
-    <div className="border-grey-light flex w-fit gap-4 rounded-xl border bg-white p-4 shadow-xl">
+    <div
+      className="flex w-[443px] gap-4 rounded-[8px] bg-white p-4 px-[36px]"
+      style={{
+        boxShadow: '0 0 10px rgba(0, 0, 0, 0.4)',
+      }}
+    >
       {/* Filter by Status */}
-      <div className="w-56">
-        <div className="border-grey-light text-theme-text-primary mb-2 flex items-center justify-between rounded-[4px] border px-3 py-2 text-[12px] leading-[16px] font-semibold">
+      <div className="w-[175px]">
+        <div className="border-grey-light text-theme-text-primary mb-2 flex items-center justify-between rounded-[4px] border p-[10px] text-[12px] leading-[16px] font-semibold">
           <span>Filter By Status</span>
           <Icons.chevron_down className="text-theme-text-primary h-4 w-4" />
         </div>
-        <div className="space-y-3 rounded border border-gray-300 p-3">
+        <div className="border-grey-light space-y-3 rounded border p-3">
           {statuses.map((status) => (
             <label
               key={status}
-              className="flex cursor-pointer items-center gap-3 text-sm"
+              className="flex cursor-pointer items-center gap-[16px] text-[12px]"
             >
               <input
                 type="checkbox"
                 checked={statusFilters.includes(status)}
                 onChange={() => toggleStatus(status)}
-                className="accent-brand-primary h-4 w-4"
+                className="accent-brand-primary border-grey-light h-[22px] w-[20px]"
               />
               {status}
             </label>
@@ -60,8 +65,8 @@ const FilterComponent = () => {
       </div>
 
       {/* Filter By */}
-      <div className="w-56 border-l border-purple-200 pl-4">
-        <div className="border-grey-light text-theme-text-primary mb-2 flex items-center justify-between rounded border px-3 py-2 text-sm font-semibold">
+      <div className="border-brand-light h-12 w-[178px] border-l pl-4">
+        <div className="border-grey-light text-theme-text-primary mb-2 flex items-center justify-between rounded border px-3 py-2 text-[12px] font-semibold">
           <span>Filter By</span>
           <Icons.chevron_down className="text-theme-text-primary h-4 w-4" />
         </div>
@@ -69,13 +74,13 @@ const FilterComponent = () => {
           {sortOptions.map((option) => (
             <label
               key={option}
-              className="flex cursor-pointer items-center gap-3 text-sm"
+              className="flex cursor-pointer items-center gap-3 text-[12px] leading-[17px]"
             >
               <input
                 type="checkbox"
                 checked={sortOption === option}
                 onChange={() => handleSortSelect(option)}
-                className="accent-brand-primary h-4 w-4"
+                className="accent-brand-primary h-[22px] w-[20px]"
               />
               <span className="flex items-center gap-1">
                 {option}

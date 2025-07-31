@@ -38,6 +38,12 @@ function DataTable<TData>({
   onFilterClick,
 }: DataTableProps<TData>) {
   const [globalFilter, setGlobalFilter] = useState('');
+  const [filterActive, setFilterActive] = useState(false);
+
+  const handleFilterClick = (e: React.MouseEvent) => {
+    setFilterActive((prev) => !prev);
+    onFilterClick?.(e);
+  };
 
   const table = useReactTable({
     data,
@@ -55,11 +61,14 @@ function DataTable<TData>({
       {(showSearch || showFilterIcon) && (
         <div className="mb-[33px] flex items-center justify-between">
           {showFilterIcon ? (
-            <div onClick={onFilterClick} className="cursor-pointer">
+            <div
+              onClick={handleFilterClick}
+              className={`cursor-pointer rounded p-1 ${filterActive ? 'text-brand-primary' : 'text-theme-text-primary'}`}
+            >
               {customFilterIcon ? (
                 customFilterIcon
               ) : (
-                <Icons.filter className="text-theme-text-primary h-6 w-6" />
+                <Icons.filter className="h-6 w-6" />
               )}
             </div>
           ) : (

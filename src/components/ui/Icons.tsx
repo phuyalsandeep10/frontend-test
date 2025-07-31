@@ -77,6 +77,7 @@ import {
   RiAppleLine,
   RiWindowLine,
   RiLoginBoxLine,
+  RiDeleteBin7Fill,
 } from '@remixicon/react';
 
 // register your icons here as your requirements
@@ -157,4 +158,5 @@ export const Icons = {
   ri_apple_line: RiAppleLine,
   ri_window_line: RiWindowLine,
   ri_login_box_line: RiLoginBoxLine,
+  ri_delete_bin_7_fill: RiDeleteBin7Fill,
 };

@@ -8,6 +8,7 @@ import { Icons } from '@/components/ui/Icons';
 import VisitorDetailModal from '@/components/custom-components/Visitors/VisitorDetailModal';
 import profile from '@/assets/images/profile.jpg';
 import FilterComponent from './FilterComponent';
+import DeleteModal from '@/components/modal/DeleteModal';
 
 type VisitorData = {
   id: number;
@@ -175,8 +176,8 @@ const VisitorTable = () => {
     const icon = e.currentTarget as HTMLElement;
     const rect = icon.getBoundingClientRect();
     setFilterPosition({
-      top: rect.bottom + window.scrollY,
-      left: rect.left + window.scrollX,
+      top: rect.bottom + window.scrollY + 12,
+      left: rect.left + window.scrollX + 12,
     });
     setIsFilterOpen((prev) => !prev);
   };
@@ -188,7 +189,7 @@ const VisitorTable = () => {
     const rect = eyeIcon.getBoundingClientRect();
     setModalPosition({
       top: rect.bottom + window.scrollY,
-      left: rect.left + window.scrollX - 150,
+      left: rect.left + window.scrollX - 330,
     });
     setSelectedVisitor(visitor);
   };
@@ -197,6 +198,10 @@ const VisitorTable = () => {
     setSelectedVisitor(null);
     setModalPosition(null);
   };
+
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteTargetVisitor, setDeleteTargetVisitor] =
+    useState<VisitorData | null>(null);
 
   const columns: ColumnDef<VisitorData>[] = useMemo(
     () => [
@@ -284,7 +289,10 @@ const VisitorTable = () => {
             />
             <Icons.ri_indeterminate_circle_fill
               className="text-alert-prominent h-4 w-4 cursor-pointer"
-              onClick={() => console.log(`Remove ${row.original.visitor}`)}
+              onClick={() => {
+                setDeleteTargetVisitor(row.original);
+                setIsDeleteModalOpen(true);
+              }}
             />
           </div>
         ),
@@ -302,6 +310,26 @@ const VisitorTable = () => {
         showFilterIcon
         showSearch
       />
+
+      {isDeleteModalOpen && deleteTargetVisitor && (
+        <DeleteModal
+          open={isDeleteModalOpen}
+          onOpenChange={setIsDeleteModalOpen}
+          title="Delete Ticket"
+          description={`Are you sure you want to delete this ticket? This action cannot be undone.`}
+          cancelText="Cancel"
+          confirmText="Delete Ticket"
+          cancelVariant="outline_gray"
+          confirmVariant="destructive"
+          cancelSize="sm"
+          confirmSize="sm"
+          onCancel={() => console.log('Cancel clicked')}
+          onConfirm={() => {
+            console.log(`Deleted!!`);
+            setDeleteTargetVisitor(null);
+          }}
+        />
+      )}
 
       {isFilterOpen && filterPosition && (
         <div
