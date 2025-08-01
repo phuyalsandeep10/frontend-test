@@ -34,6 +34,7 @@ import {
   UserPlus,
   Filter,
   Info,
+  Loader2,
 } from 'lucide-react';
 import {
   RiCheckboxCircleFill,
@@ -70,6 +71,8 @@ import {
   RiUserSettingsFill,
   RiUserFill,
   RiCalendarLine,
+  RiAlertLine,
+  RiDownloadCloudLine,
 } from '@remixicon/react';
 
 // register your icons here as your requirements
@@ -143,4 +146,7 @@ export const Icons = {
   ri_user_settings_fill: RiUserSettingsFill,
   ri_user_fill: RiUserFill,
   ri_calendar_line: RiCalendarLine,
+  alert: RiAlertLine,
+  download_cloud: RiDownloadCloudLine,
+  loader: Loader2,
 };

@@ -2,13 +2,13 @@
 
 import React, { useState, useImperativeHandle, forwardRef } from 'react';
 import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog'; // swap from alert-dialog
 import { Button, type ButtonProps } from '@/components/ui/button';
 
 export interface AlertDialogDemoRef {
@@ -34,18 +34,15 @@ interface AlertDialogDemoProps {
   children?: React.ReactNode;
 }
 
-export const AlertDialogDemo = forwardRef<
-  AlertDialogDemoRef,
-  AlertDialogDemoProps
->(
+const AlertDialogDemo = forwardRef<AlertDialogDemoRef, AlertDialogDemoProps>(
   (
     {
       icon,
       heading,
       subheading,
       descriptionClassName,
-      cancelText,
-      actionText,
+      cancelText = 'Cancel',
+      actionText = 'Confirm',
       onCancel,
       onAction,
       cancelClassName,
@@ -65,22 +62,33 @@ export const AlertDialogDemo = forwardRef<
       close: () => setOpen(false),
     }));
 
+    const handleCancel = () => {
+      setOpen(false);
+      onCancel?.();
+    };
+
+    const handleAction = () => {
+      onAction?.();
+    };
+
     return (
-      <AlertDialog open={open} onOpenChange={setOpen}>
-        <AlertDialogContent className="w-[568px] rounded-[8px] px-[34px] pt-[11px] pb-[29px] sm:max-w-[568px]">
-          <AlertDialogHeader>
-            <AlertDialogTitle>{heading}</AlertDialogTitle>
-            <AlertDialogDescription
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="w-[568px] rounded-[8px] px-[34px] pt-[11px] pb-[29px] sm:max-w-[568px]">
+          <DialogHeader>
+            <DialogTitle>{heading}</DialogTitle>
+            <DialogDescription
               className={`mt-[4px] flex items-start gap-2 ${descriptionClassName}`}
             >
               {icon}
               <span>{subheading}</span>
-            </AlertDialogDescription>
-          </AlertDialogHeader>
+            </DialogDescription>
+          </DialogHeader>
+
           {children}
-          <AlertDialogFooter>
+
+          <DialogFooter>
             <Button
-              onClick={onCancel}
+              onClick={handleCancel}
               className={cancelClassName}
               isLoading={cancelIsLoading}
               {...cancelButtonProps}
@@ -88,20 +96,19 @@ export const AlertDialogDemo = forwardRef<
               {cancelText}
             </Button>
             <Button
-              onClick={onAction}
+              onClick={handleAction}
               className={actionClassName}
               isLoading={actionIsLoading}
               {...actionButtonProps}
             >
               {actionText}
             </Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     );
   },
 );
 
 AlertDialogDemo.displayName = 'AlertDialogDemo';
-
 export default AlertDialogDemo;
