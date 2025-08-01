@@ -34,6 +34,7 @@ import {
   UserPlus,
   Filter,
   Info,
+  Reply,
 } from 'lucide-react';
 import {
   RiCheckboxCircleFill,
@@ -143,4 +144,5 @@ export const Icons = {
   ri_user_settings_fill: RiUserSettingsFill,
   ri_user_fill: RiUserFill,
   ri_calendar_line: RiCalendarLine,
+  reply: Reply,
 };
