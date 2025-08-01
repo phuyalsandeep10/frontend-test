@@ -1,5 +1,7 @@
 import React from 'react';
 import MessageItem from './MessageList/MessageItem';
+import LanguageSelector from './LanguageSelector';
+import InboxChatSectionHeader from './InboxChatSectionHeader';
 
 export interface Message {
   id: number;
@@ -15,8 +17,10 @@ interface InboxChatSectionProps {
 
 const InboxChatSection = ({ messages }: InboxChatSectionProps) => {
   return (
-    <div className="flex-1 overflow-y-auto p-4">
-      <div className="space-y-4">
+    <div className="flex-1 p-4">
+      <InboxChatSectionHeader />
+      <LanguageSelector />
+      <div className="max-h-[calc(100vh-250px)] min-h-[calc(100vh-250px)] space-y-4 overflow-y-auto">
         {messages.map((message) => (
           <MessageItem key={message.id} message={message} />
         ))}
