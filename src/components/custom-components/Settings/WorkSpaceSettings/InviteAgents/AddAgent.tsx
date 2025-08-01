@@ -357,7 +357,10 @@ const AddAgent: React.FC<AddAgentProps> = ({ defaultValues, onSubmit }) => {
             />
           </div>
 
-          <Button type="submit" className="col-span-full mt-4 w-full">
+          <Button
+            type="submit"
+            className="col-span-full mt-4 h-full max-h-[36px] w-full rounded-lg px-[22px] py-2.5 text-xs leading-4 font-semibold"
+          >
             Add Agent
           </Button>
         </form>

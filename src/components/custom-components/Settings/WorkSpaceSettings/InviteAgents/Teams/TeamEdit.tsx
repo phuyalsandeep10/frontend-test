@@ -49,87 +49,86 @@ const TeamEdit: React.FC<TeamEditProps> = ({
       </CardHeader>
 
       <CardContent className="p-0">
-        <Form {...form} onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="pb-5">
-            <Label
-              required
-              htmlFor="teamname"
-              className="pb-3 text-base leading-[26px] font-medium"
-            >
-              Team Name
-            </Label>
-            <InputField
-              className="w-full"
-              name="teamname"
-              control={form.control}
-              id="teamname"
-              rules={{ required: 'Team name is required' }}
-            />
-          </div>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            {' '}
+            <div className="pb-5">
+              <Label
+                required
+                htmlFor="teamname"
+                className="pb-3 text-base leading-[26px] font-medium"
+              >
+                Team Name
+              </Label>
+              <InputField
+                className="w-full"
+                name="teamname"
+                control={form.control}
+              />
+            </div>
+            <div className="pb-5">
+              <Label
+                required
+                htmlFor="member"
+                className="pb-3 text-base leading-[26px] font-medium"
+              >
+                Team Member
+              </Label>
 
-          <div className="pb-5">
-            <Label
-              required
-              htmlFor="member"
-              className="pb-3 text-base leading-[26px] font-medium"
-            >
-              Team Member
-            </Label>
-
-            <Controller
-              name="member"
-              control={form.control}
-              render={({ field }) => (
-                <div className="border-grey-light rounded-sm border">
-                  <div className="flex items-center justify-between rounded-sm px-5 py-[18px]">
-                    <span>Frank Lampard</span>
-                    <div className="flex items-center gap-3.5">
-                      <ToggleGroup
-                        type="single"
-                        className="bg-brand-disable flex gap-7 px-[13px] py-1"
-                        value={field.value}
-                        onValueChange={field.onChange}
-                      >
-                        <ToggleGroupItem
-                          value="Lead"
-                          className="data-[state=on]:bg-brand-primary data-[state=on]:hover:bg-brand-primary rounded-[4px] px-[15px] py-[2px] data-[state=on]:border data-[state=on]:text-white"
+              <Controller
+                name="member"
+                control={form.control}
+                render={({ field }) => (
+                  <div className="border-grey-light rounded-sm border">
+                    <div className="flex items-center justify-between rounded-sm px-5 py-[18px]">
+                      <span>Frank Lampard</span>
+                      <div className="flex items-center gap-3.5">
+                        <ToggleGroup
+                          type="single"
+                          className="bg-brand-disable flex gap-7 px-[13px] py-1"
+                          value={field.value}
+                          onValueChange={field.onChange}
                         >
-                          Lead
-                        </ToggleGroupItem>
-                        <ToggleGroupItem
-                          value="Admin"
-                          className="data-[state=on]:bg-brand-primary data-[state=on]:hover:bg-brand-primary rounded-[4px] px-[15px] py-[2px] data-[state=on]:border data-[state=on]:text-white"
-                        >
-                          Admin
-                        </ToggleGroupItem>
-                        <ToggleGroupItem
-                          value="Moderator"
-                          className="data-[state=on]:bg-brand-primary data-[state=on]:hover:bg-brand-primary rounded-[4px] px-[15px] py-[2px] data-[state=on]:border data-[state=on]:text-white"
-                        >
-                          Moderator
-                        </ToggleGroupItem>
-                        <ToggleGroupItem
-                          value="Agent"
-                          className="data-[state=on]:bg-brand-primary data-[state=on]:hover:bg-brand-primary rounded-[4px] px-[15px] py-[2px] data-[state=on]:border data-[state=on]:text-white"
-                        >
-                          Agent
-                        </ToggleGroupItem>
-                      </ToggleGroup>
-                      <Icons.ri_delete_bin_5_line className="text-alert-prominent cursor-pointer" />
+                          <ToggleGroupItem
+                            value="Lead"
+                            className="data-[state=on]:bg-brand-primary data-[state=on]:hover:bg-brand-primary rounded-[4px] px-[15px] py-[2px] data-[state=on]:border data-[state=on]:text-white"
+                          >
+                            Lead
+                          </ToggleGroupItem>
+                          <ToggleGroupItem
+                            value="Admin"
+                            className="data-[state=on]:bg-brand-primary data-[state=on]:hover:bg-brand-primary rounded-[4px] px-[15px] py-[2px] data-[state=on]:border data-[state=on]:text-white"
+                          >
+                            Admin
+                          </ToggleGroupItem>
+                          <ToggleGroupItem
+                            value="Moderator"
+                            className="data-[state=on]:bg-brand-primary data-[state=on]:hover:bg-brand-primary rounded-[4px] px-[15px] py-[2px] data-[state=on]:border data-[state=on]:text-white"
+                          >
+                            Moderator
+                          </ToggleGroupItem>
+                          <ToggleGroupItem
+                            value="Agent"
+                            className="data-[state=on]:bg-brand-primary data-[state=on]:hover:bg-brand-primary rounded-[4px] px-[15px] py-[2px] data-[state=on]:border data-[state=on]:text-white"
+                          >
+                            Agent
+                          </ToggleGroupItem>
+                        </ToggleGroup>
+                        <Icons.ri_delete_bin_5_line className="text-alert-prominent cursor-pointer" />
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
-            />
-          </div>
-
-          <Button
-            type="submit"
-            className="bg-brand-disable text-brand-primary hover:bg-brand-disable h-full max-h-[36px] w-full rounded-sm px-[22px] py-3 text-xs leading-4 font-semibold"
-          >
-            <Icons.plus />
-            Add Member
-          </Button>
+                )}
+              />
+            </div>
+            <Button
+              type="submit"
+              className="bg-brand-disable text-brand-primary hover:bg-brand-disable h-full max-h-[36px] w-full rounded-sm px-[22px] py-3 text-xs leading-4 font-semibold"
+            >
+              <Icons.plus />
+              Add Member
+            </Button>
+          </form>
         </Form>
       </CardContent>
 

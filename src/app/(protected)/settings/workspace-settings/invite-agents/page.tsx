@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, ReactNode } from 'react';
 import { Icons } from '@/components/ui/Icons';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -14,10 +14,20 @@ import {
 } from '@/components/modal/AlertModal';
 import { AgenChatHistoryCard } from '@/components/custom-components/Settings/WorkSpaceSettings/InviteAgents/AgenChatHistoryCard';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import ReusableDialog from '@/components/custom-components/Settings/WorkSpaceSettings/InviteAgents/ReusableDialog';
+import AddAgent from '@/components/custom-components/Settings/WorkSpaceSettings/InviteAgents/AddAgent';
+
+// Define the modalProps type
+type ModalProps = {
+  heading: string;
+  subheading: string;
+  onAction: () => void;
+  headericon?: ReactNode; // Use ReactNode for components, strings, etc.
+};
 
 const InviteAgents = () => {
   // dynamically pass props to alert dialog
-  const [modalProps, setModalProps] = useState({
+  const [modalProps, setModalProps] = useState<ModalProps>({
     heading: '',
     subheading: '',
     onAction: () => {},
@@ -28,18 +38,13 @@ const InviteAgents = () => {
   const alertRef = useRef<AlertDialogDemoRef>(null);
 
   // toggle alert modal
-  const handleOpenDialog = (props: {
-    heading: string;
-    subheading: string;
-    onAction: () => void;
-    headericon?: React.ReactNode;
-  }) => {
+  const handleOpenDialog = (props: ModalProps) => {
     setModalProps({
       heading: props.heading,
       subheading: props.subheading,
       onAction: () => {
         props.onAction();
-        alertRef.current?.close(); // Close modal after action
+        alertRef.current?.close();
       },
       headericon: props.headericon || <Icons.ri_delete_bin_7_fill />,
     });
@@ -86,11 +91,25 @@ const InviteAgents = () => {
               className="text-pure-black placeholder:text-pure-black border-grey-light h-[36px] rounded-sm border-[1px]"
             />
 
-            <Button className="h-full max-h-[36px] w-auto rounded px-[22px] py-2.5 text-xs leading-4 font-semibold">
-              {' '}
-              <Icons.plus />
-              Add agent in your workspace
-            </Button>
+            {/* add agennt button */}
+            <ReusableDialog
+              trigger={
+                <Button className="h-full max-h-[36px] w-auto rounded px-[22px] py-2.5 text-xs leading-4 font-semibold">
+                  {' '}
+                  <Icons.plus />
+                  Add agent in your workspace
+                </Button>
+              }
+              dialogTitle="Add Agent"
+              dialogClass="gap-8 p-10 !max-w-[768px]"
+            >
+              <AddAgent
+                defaultValues={{}}
+                onSubmit={(data) => {
+                  console.log('Submitted', data);
+                }}
+              />
+            </ReusableDialog>
           </div>
 
           {/* buttons to navigate to different pages */}

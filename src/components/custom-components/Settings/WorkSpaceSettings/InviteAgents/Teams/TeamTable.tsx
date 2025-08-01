@@ -74,7 +74,6 @@ const TeamTable: React.FC<TeamTableProps> = ({ handleOpenDialog }) => {
                 <Icons.ri_edit2_fill className="text-black" />
               </button>
             }
-            title="Edit Team"
           >
             <AddAgent
               defaultValues={{}}
@@ -134,7 +133,7 @@ const TeamTable: React.FC<TeamTableProps> = ({ handleOpenDialog }) => {
           }
           dialogClass="!max-w-[387px] py-10 w-full px-5 gap-0 inline-block"
         >
-          <CreateTeam />
+          <CreateTeam onSubmit={(data) => console.log('Team created:', data)} />
         </ReusableDialog>
 
         <ReusableDialog
@@ -149,7 +148,7 @@ const TeamTable: React.FC<TeamTableProps> = ({ handleOpenDialog }) => {
           }
           dialogClass="!max-w-[768px] py-[27px] px-10 gap-0"
         >
-          <AddMember />
+          <AddMember onSubmit={(data) => console.log('Team created:', data)} />
         </ReusableDialog>
       </div>
 

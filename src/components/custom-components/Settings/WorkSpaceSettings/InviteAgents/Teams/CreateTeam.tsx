@@ -48,37 +48,37 @@ const CreateTeam: React.FC<CreateTeamProps> = ({
       </CardHeader>
 
       <CardContent className="p-0">
-        <Form {...form} onSubmit={form.handleSubmit(onSubmit)}>
-          <div>
-            <Label
-              required
-              htmlFor="newteam"
-              className="pb-3 text-base leading-[26px] font-medium"
-            >
-              Enter new team
-            </Label>
-            <InputField
-              className="w-full"
-              name="newteam"
-              control={form.control}
-              id="newteam"
-              rules={{ required: 'Team name is required' }}
-            />
-          </div>
-
-          <CardFooter className="mt-4 flex justify-end gap-4 p-0">
-            <Button
-              className="basis-1/3 rounded-lg py-3"
-              variant="outline"
-              type="button"
-              onClick={onCancel}
-            >
-              Cancel
-            </Button>
-            <Button type="submit" className="basis-1/3 rounded-lg py-3">
-              Continue
-            </Button>
-          </CardFooter>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            {' '}
+            <div>
+              <Label
+                required
+                htmlFor="newteam"
+                className="pb-3 text-base leading-[26px] font-medium"
+              >
+                Enter new team
+              </Label>
+              <InputField
+                className="w-full"
+                name="newteam"
+                control={form.control}
+              />
+            </div>
+            <CardFooter className="mt-4 flex justify-end gap-4 p-0">
+              <Button
+                className="basis-1/3 rounded-lg py-3"
+                variant="outline"
+                type="button"
+                onClick={onCancel}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" className="basis-1/3 rounded-lg py-3">
+                Continue
+              </Button>
+            </CardFooter>
+          </form>
         </Form>
       </CardContent>
     </Card>

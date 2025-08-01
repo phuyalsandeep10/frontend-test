@@ -5,6 +5,7 @@ import { Icons } from '@/components/ui/Icons';
 import ReusableDialog from './ReusableDialog';
 import AddAgent from './AddAgent';
 import { ReuseableTable } from './ReuseableTable';
+import { AgenChatHistoryCard } from '@/components/custom-components/Settings/WorkSpaceSettings/InviteAgents/AgenChatHistoryCard';
 
 export interface OrderRow {
   FullName: string;
@@ -103,7 +104,8 @@ export default function OperatorsTable({
                 <Icons.ri_edit2_fill className="text-black" />
               </button>
             }
-            title="Edit Agent"
+            dialogTitle="Edit Information"
+            dialogClass="!max-w-[768px]"
           >
             <AddAgent
               defaultValues={{}}
@@ -113,9 +115,17 @@ export default function OperatorsTable({
             />
           </ReusableDialog>
 
-          <button aria-label="View agent">
-            <Icons.ri_eye_fill />
-          </button>
+          {/* view agent chat */}
+          <ReusableDialog
+            trigger={
+              <button aria-label="View agent">
+                <Icons.ri_eye_fill />
+              </button>
+            }
+            dialogClass="gap-0 !max-w-[554px]"
+          >
+            <AgenChatHistoryCard />
+          </ReusableDialog>
 
           <button
             aria-label="Delete agent"

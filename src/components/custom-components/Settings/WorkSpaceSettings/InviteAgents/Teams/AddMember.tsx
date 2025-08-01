@@ -55,62 +55,64 @@ const AddMember: React.FC<AddMemberProps> = ({
       </CardHeader>
 
       <CardContent className="px-0">
-        <Form {...form} onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            {/* Email Field */}
-            <div>
-              <Label
-                required
-                htmlFor="email"
-                className="pb-3 text-base leading-[26px] font-medium"
-              >
-                Enter agent’s Email
-              </Label>
-              <InputField name="email" control={form.control} />
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              {/* Email Field */}
+              <div>
+                <Label
+                  required
+                  htmlFor="email"
+                  className="pb-3 text-base leading-[26px] font-medium"
+                >
+                  Enter agent’s Email
+                </Label>
+                <InputField name="email" control={form.control} />
+              </div>
+
+              {/* Full Name Field */}
+              <div>
+                <Label
+                  required
+                  htmlFor="fullName"
+                  className="pb-3 text-base leading-[26px] font-medium"
+                >
+                  Full Name
+                </Label>
+                <InputField name="fullName" control={form.control} />
+              </div>
+
+              {/* Role Select Field */}
+              <div className="col-span-full">
+                <Label
+                  required
+                  htmlFor="role"
+                  className="pb-3 text-base leading-[26px] font-medium"
+                >
+                  Role
+                </Label>
+                <SelectField
+                  name="role"
+                  control={form.control}
+                  placeholder="Select Role"
+                  options={[
+                    { value: 'admin', label: 'Admin' },
+                    { value: 'editor', label: 'Editor' },
+                    { value: 'viewer', label: 'Viewer' },
+                  ]}
+                />
+              </div>
             </div>
 
-            {/* Full Name Field */}
-            <div>
-              <Label
-                required
-                htmlFor="fullName"
-                className="pb-3 text-base leading-[26px] font-medium"
+            <CardFooter className="px-0">
+              <Button
+                type="submit"
+                className="col-span-full mt-4 w-full rounded-lg"
               >
-                Full Name
-              </Label>
-              <InputField name="fullName" control={form.control} />
-            </div>
-
-            {/* Role Select Field */}
-            <div className="col-span-full">
-              <Label
-                required
-                htmlFor="role"
-                className="pb-3 text-base leading-[26px] font-medium"
-              >
-                Role
-              </Label>
-              <SelectField
-                name="role"
-                control={form.control}
-                placeholder="Select Role"
-                options={[
-                  { value: 'admin', label: 'Admin' },
-                  { value: 'editor', label: 'Editor' },
-                  { value: 'viewer', label: 'Viewer' },
-                ]}
-              />
-            </div>
-          </div>
-
-          <CardFooter className="px-0">
-            <Button
-              type="submit"
-              className="col-span-full mt-4 w-full rounded-lg"
-            >
-              Send Invitation
-            </Button>
-          </CardFooter>
+                Send Invitation
+              </Button>
+            </CardFooter>
+          </form>
         </Form>
       </CardContent>
     </Card>
