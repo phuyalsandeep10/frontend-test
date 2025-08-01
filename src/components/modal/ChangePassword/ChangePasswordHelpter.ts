@@ -1,7 +1,7 @@
 import { z } from 'zod';
 export const changePasswordModalSchema = z
   .object({
-    current_password: z
+    old_password: z
       .string()
       .nonempty({ message: 'Current Password is required' })
       .min(6, {

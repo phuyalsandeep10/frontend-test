@@ -12,6 +12,7 @@ export const useCreateOrganizations = () => {
       OrganizationsService.createOrganizations(payload),
     onSuccess: (data) => {
       router.push(ROUTES.DASHBOARD);
+      toast.success(data?.message || 'Organization created Successfully');
       console.log('Organization created Successfully', data);
     },
     onError: (error: any) => {

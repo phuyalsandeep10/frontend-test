@@ -20,9 +20,10 @@ import ErrorToast from '@/components/common/toasts/ErrorToast';
 
 const VerifyTwoFaToken = () => {
   const router = useRouter();
+  const [hasError, setHasError] = useState(false);
   const [shouldRenderForm, setShouldRenderForm] = useState(false);
   const [otpVerifySuccess, setOtpVerifySuccess] = useState(false);
-  const [otpVerifyError, setotpVerifyError] = useState(false);
+  // const [otpVerifyError, setotpVerifyError] = useState(false);
   const { data, isLoading } = useAuthenticatedUser();
 
   const { mutate: verify2faOtp, isPending: isVerifyOtpPending } =
@@ -37,11 +38,12 @@ const VerifyTwoFaToken = () => {
     verify2faOtp(values, {
       onSuccess: () => {
         setOtpVerifySuccess(true);
-        setotpVerifyError(false);
+        // setotpVerifyError(false);
       },
       onError: () => {
-        setotpVerifyError(true);
+        // setotpVerifyError(true);
         setOtpVerifySuccess(false);
+        setHasError(true);
       },
     });
   };
@@ -86,7 +88,7 @@ const VerifyTwoFaToken = () => {
             subHeading="Please enter the 6-digit code we just sent you at linked Authenticator app."
           />
         </div>
-        {otpVerifyError && (
+        {/* {otpVerifyError && (
           <ErrorToast
             text="We couldn't validate the code you provided. Kindly recheck and enter it again."
             onClick={() => setotpVerifyError(false)}
@@ -97,7 +99,7 @@ const VerifyTwoFaToken = () => {
             text="OTP validation successful"
             onClick={() => setOtpVerifySuccess(false)}
           />
-        )}
+        )} */}
 
         <Form {...form}>
           <form
@@ -111,7 +113,7 @@ const VerifyTwoFaToken = () => {
                   required
                   control={form.control}
                   name="token"
-                  hasError
+                  hasError={hasError}
                 />
                 <Button
                   variant="default"

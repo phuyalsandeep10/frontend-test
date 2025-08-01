@@ -10,13 +10,10 @@ import { forgotPasswordFormSchema } from './forgotPasswordHelper';
 import { useForgotPassword } from '@/hooks/auth/useForgotPassword';
 import HeadingSubHeadingTypography from '../RegisterForm/HeadingSubHeadingTypography';
 import { Icons } from '@/components/ui/Icons';
-import { ValidEmailInput } from '@/components/common/hook-form/ValidEmailInput';
-import { useState } from 'react';
+import { InputField } from '@/components/common/hook-form/InputField';
 
 const ForgotPasswordForm = () => {
   const { mutate: forgotPass, isPending } = useForgotPassword();
-  const [isEmailValid, setIsEmailValid] = useState(false);
-  const [validEmail, setValidEmail] = useState('');
 
   const form = useForm<z.infer<typeof forgotPasswordFormSchema>>({
     resolver: zodResolver(forgotPasswordFormSchema),
@@ -57,13 +54,12 @@ const ForgotPasswordForm = () => {
               onSubmit={form.handleSubmit(onSubmit)}
               className="w-full space-y-4"
             >
-              <ValidEmailInput
-                onValidityChange={(valid, email) => {
-                  setIsEmailValid(valid);
-                  setValidEmail(email);
-                }}
+              <InputField
+                control={form.control}
                 name="email"
-                label="Enter your Email "
+                label="Email Address"
+                type="email"
+                placeholder="Enter your email address"
                 required
               />
 

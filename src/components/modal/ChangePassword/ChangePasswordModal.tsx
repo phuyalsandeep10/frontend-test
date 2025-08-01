@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -20,6 +20,7 @@ import { changePasswordModalSchema } from './ChangePasswordHelpter';
 import HeadingSubHeadingTypography from '@/components/custom-components/Auth/RegisterForm/HeadingSubHeadingTypography';
 import { StrongPasswordField } from '@/components/common/hook-form/StrongPasswordField';
 import { Button } from '@/components/ui/button';
+import { useResetPassword } from '@/hooks/auth/useResetPassword';
 
 type ChangePasswordFormValues = z.infer<typeof changePasswordModalSchema>;
 
@@ -37,6 +38,8 @@ interface ChangePasswordModalProps {
   continuePendingText?: string;
 
   onSubmit?: (values: ChangePasswordFormValues) => Promise<void> | void;
+  open: boolean;
+  setOpen: React.Dispatch<SetStateAction<boolean>>;
 }
 
 const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({
@@ -45,39 +48,32 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({
   headingClassName = 'text-black font-medium text-[16px] leading-[26px]',
   subHeadingClassName = 'text-black text-[12px] leading-[17px] font-normal',
   headingContainerClassName = 'mb-[20px]',
-  triggerButton = <Button>Change Password</Button>,
   cancelButtonText = 'Cancel',
   continueButtonText = 'Continue',
   continuePendingText = 'Continuing...',
-  onSubmit,
+  open,
+  setOpen,
 }) => {
   const form = useForm<ChangePasswordFormValues>({
     resolver: zodResolver(changePasswordModalSchema),
     defaultValues: {
-      current_password: '',
+      old_password: '',
       new_password: '',
       confirm_password: '',
     },
   });
 
-  const [isPending, setIsPending] = React.useState(false);
-  const [open, setOpen] = React.useState(false);
+  const { mutate: resetPassword, isPending, isSuccess } = useResetPassword();
 
   const handleSubmit = async (values: ChangePasswordFormValues) => {
-    setIsPending(true);
-    try {
-      if (onSubmit) await onSubmit(values);
-      setOpen(false);
-      form.reset();
-    } finally {
-      setIsPending(false);
-    }
+    resetPassword({
+      old_password: values.old_password,
+      new_password: values.new_password,
+    });
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{triggerButton}</DialogTrigger>
-
       <DialogContent className="w-[344px] gap-0">
         <DialogHeader>
           <DialogTitle>
@@ -99,7 +95,7 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({
           >
             <StrongPasswordField
               control={form.control}
-              name="current_password"
+              name="old_password"
               label="Current password"
               required
               placeholder="**********"
