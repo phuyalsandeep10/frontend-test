@@ -24,11 +24,12 @@ import VerifyEmailViaOtpForm from './VerifyEmailViaOtp/VerifyEmailViaOtpForm';
 import BusinessRegisterForm from './BusinessRegisterForm/BusinessRegisterForm';
 import { StrongPasswordField } from '@/components/common/hook-form/StrongPasswordField';
 import { ValidEmailInput } from '@/components/common/hook-form/ValidEmailInput';
-import ErrorToast from '@/components/common/toasts/ErrorToast';
+import ErrorText from '@/components/common/hook-form/ErrorText';
 
 const RegisterForm = () => {
-  const [currentStep, setCurrentStep] = useState<number>(1);
+  const [currentStep, setCurrentStep] = useState<number>(0);
   const [isAgreed, setIsAreed] = useState(false);
+  const [isAgreeError, setisAgreeError] = useState('');
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [validEmail, setValidEmail] = useState('');
   const [otpError, setOtpError] = useState<string | null>(null);
@@ -38,29 +39,28 @@ const RegisterForm = () => {
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
       name: '',
-      email: '',
       password: '',
     },
   });
 
   const onSubmit = (values: z.infer<typeof registerFormSchema>) => {
-    register(values, {
+    const registerFormData = { ...values, email: validEmail };
+    console.log(registerFormData);
+    if (!isAgreed) {
+      setisAgreeError('You must agree to the Terms and Conditions to proceed.');
+      return;
+    }
+    setisAgreeError('');
+    register(registerFormData, {
       onSuccess: () => {
         setCurrentStep(1);
       },
       onError: () => {},
     });
   };
-  console.log(validEmail);
   return (
     <>
-      <div className="relative">
-        {otpError && (
-          <div className="absolute top-0 right-0 left-0 z-10 pt-[16px]">
-            <ErrorToast text={otpError} onClick={() => setOtpError(null)} />
-          </div>
-        )}
-      </div>
+      <div className="relative"></div>
       <div
         className={`${currentStep === 0 && 'mt-11'} ${currentStep === 1 && 'mt-[168px]'} ${currentStep === 2 && 'mt-16'} `}
       >
@@ -108,6 +108,7 @@ const RegisterForm = () => {
                 labelText="I have read and I accept Chatboq’s terms and use."
                 redirectLinkText="Read Terms"
               />
+              {isAgreeError && <ErrorText error={isAgreeError} />}
 
               <Button
                 variant="default"

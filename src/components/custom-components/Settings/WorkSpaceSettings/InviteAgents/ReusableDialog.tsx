@@ -13,24 +13,30 @@ import {
 
 type ReusableDialogProps = {
   trigger: React.ReactNode;
-  title: string;
-  description?: string;
   children?: React.ReactNode;
+  dialogClass?: string;
+  dialogTitle?: string;
+  dialogDescription?: string;
 };
 
 const ReusableDialog: React.FC<ReusableDialogProps> = ({
   trigger,
-  title,
-  description,
-  children,
+  children = null,
+  dialogClass = '',
+  dialogTitle = '',
+  dialogDescription = '',
 }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="!w-full !max-w-[1240px]">
-        <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          {description && <DialogDescription>{description}</DialogDescription>}
+      <DialogContent
+        className={`!w-full !max-w-[1240px] gap-8 p-10 ${dialogClass}`}
+      >
+        <DialogHeader className="gap-0">
+          <DialogTitle className="text-xl leading-[30px] font-semibold">
+            {dialogTitle}
+          </DialogTitle>
+          <DialogDescription>{dialogDescription}</DialogDescription>
         </DialogHeader>
         {children}
       </DialogContent>

@@ -84,6 +84,7 @@
   --color-alert-prominent: #f61818;
   --color-prominent-success: #e5f9db;
   --color-warning-prominent: #f5ce31;
+  --color-brand-bg-gradient: '#C9C9F780';
 
   /* Brand fonts  */
   --font-outfit: var(--font-outfit);
@@ -167,6 +168,7 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }

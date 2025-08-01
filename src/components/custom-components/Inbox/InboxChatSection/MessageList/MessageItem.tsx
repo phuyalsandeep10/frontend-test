@@ -6,6 +6,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { MoreVertical } from 'lucide-react';
 import { Icons } from '@/components/ui/Icons';
+import { useState } from 'react';
 
 interface Message {
   id: number;
@@ -15,7 +16,13 @@ interface Message {
   date?: string;
 }
 
-const MessageItem = ({ message }: { message: Message }) => {
+interface MessageItemProps {
+  message: Message;
+}
+
+const MessageItem = ({ message }: MessageItemProps) => {
+  const [replyTo, setReplyTo] = useState(true);
+
   return (
     <div>
       {message.date && (
@@ -44,7 +51,22 @@ const MessageItem = ({ message }: { message: Message }) => {
               : 'bg-brand-disable text-gray-dark'
           }`}
         >
+          {message.sender === 'agent' && replyTo && (
+            <div className="bg-brand-bg-gradient flex items-center justify-center overflow-hidden">
+              <div className="w-full items-center rounded-2xl border border-l-4 py-2.5 pr-4 pl-7">
+                <div className="flex items-center gap-2 text-lg font-semibold text-white">
+                  <Icons.reply className="h-5 w-5" />
+                  <span>Replied</span>
+                </div>
+                <p className="mt-2 text-base text-white">
+                  Great! Thanks for your help with the recent issue!
+                </p>
+              </div>
+            </div>
+          )}
+
           <p className="text-sm">{message.message}</p>
+
           <div
             className={`mt-1 flex items-center ${message.sender === 'agent' ? 'justify-end' : ''}`}
           >

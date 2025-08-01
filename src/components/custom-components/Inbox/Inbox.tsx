@@ -8,8 +8,17 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import io from 'socket.io-client';
 import { useParams } from 'next/navigation';
+import ReplyMessage from './ReplyMessage';
 
 const socket = io('http://localhost:4000');
+
+interface Message {
+  id: number;
+  sender: 'agent' | 'customer';
+  message: string;
+  time: string;
+  date?: string;
+}
 
 const Inbox = () => {
   const params = useParams();
@@ -68,14 +77,15 @@ const Inbox = () => {
       <div className="flex-1">
         <InboxChatSection messages={messages} />
 
-        <div className="m-4">
+        <div className="relative m-4">
+          <ReplyMessage />
           <Textarea
             placeholder="Enter your message here"
             className="h-24"
             ref={inputRef}
           />
           <div className="mt-3 flex justify-end">
-            <Button onClick={onSend}>Send</Button>
+            <Button onClick={onSend}>{'Send'}</Button>
           </div>
         </div>
       </div>
