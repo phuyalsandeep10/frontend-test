@@ -1,6 +1,4 @@
 'use client';
-
-import Image from 'next/image';
 import React, { useState } from 'react';
 import {
   ColumnDef,
@@ -18,16 +16,34 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
-import filter from '@/assets/images/filter.svg';
-import search from '@/assets/images/search.svg';
+import { Icons } from '@/components/ui/Icons';
 
 type DataTableProps<TData> = {
   columns: ColumnDef<TData>[];
   data: TData[];
+  showSearch?: boolean;
+  showFilterIcon?: boolean;
+  customFilterIcon?: React.ReactNode;
+  placeholderText?: string;
+  onFilterClick?: (e: React.MouseEvent) => void;
 };
 
-function DataTable<TData>({ columns, data }: DataTableProps<TData>) {
+function DataTable<TData>({
+  columns,
+  data,
+  showSearch = true,
+  showFilterIcon = true,
+  customFilterIcon,
+  placeholderText = 'Search by Visitor...',
+  onFilterClick,
+}: DataTableProps<TData>) {
   const [globalFilter, setGlobalFilter] = useState('');
+  const [filterActive, setFilterActive] = useState(false);
+
+  const handleFilterClick = (e: React.MouseEvent) => {
+    setFilterActive((prev) => !prev);
+    onFilterClick?.(e);
+  };
 
   const table = useReactTable({
     data,
@@ -42,24 +58,38 @@ function DataTable<TData>({ columns, data }: DataTableProps<TData>) {
 
   return (
     <div className="space-y-4">
-      <div className="mb-[33px] flex items-center justify-between">
-        <Image
-          src={filter}
-          alt="filter"
-          className="text-theme-text-primary h-[24px] w-[24px]"
-        />
-        <div className="relative w-[269px]">
-          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-            <Image src={search} alt="search" className="h-5 w-5" />
-          </div>
-          <Input
-            placeholder="Search by Visitor"
-            value={globalFilter ?? ''}
-            onChange={(e) => setGlobalFilter(e.target.value)}
-            className="text-theme-text-primary border-grey-light w-full rounded-[8px] pl-10"
-          />
+      {(showSearch || showFilterIcon) && (
+        <div className="mb-[33px] flex items-center justify-between">
+          {showFilterIcon ? (
+            <div
+              onClick={handleFilterClick}
+              className={`cursor-pointer rounded p-1 ${filterActive ? 'text-brand-primary' : 'text-theme-text-primary'}`}
+            >
+              {customFilterIcon ? (
+                customFilterIcon
+              ) : (
+                <Icons.filter className="h-6 w-6" />
+              )}
+            </div>
+          ) : (
+            <div />
+          )}
+
+          {showSearch && (
+            <div className="relative w-[269px]">
+              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                <Icons.search className="text-theme-text-primary h-5 w-5" />
+              </div>
+              <Input
+                placeholder={placeholderText}
+                value={globalFilter ?? ''}
+                onChange={(e) => setGlobalFilter(e.target.value)}
+                className="text-theme-text-primary border-grey-light w-full rounded-[8px] pl-10"
+              />
+            </div>
+          )}
         </div>
-      </div>
+      )}
 
       <div>
         <Table>
