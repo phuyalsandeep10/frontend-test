@@ -5,6 +5,7 @@ import { Icons } from '@/components/ui/Icons';
 import ReusableDialog from './ReusableDialog';
 import AddAgent from './AddAgent';
 import { ReuseableTable } from './ReuseableTable';
+import { AgenChatHistoryCard } from '@/components/custom-components/Settings/WorkSpaceSettings/InviteAgents/AgenChatHistoryCard';
 
 export interface OrderRow {
   FullName: string;
@@ -21,7 +22,18 @@ interface Column<T> {
   render?: (row: T) => React.ReactNode;
 }
 
-export default function OperatorsTable() {
+interface OperatorsTableProps {
+  handleOpenDialog: (props: {
+    heading: string;
+    subheading: string;
+    onAction: () => void;
+    headericon?: React.ReactNode;
+  }) => void;
+}
+
+export default function OperatorsTable({
+  handleOpenDialog,
+}: OperatorsTableProps) {
   const [modalData, setModalData] = useState<null | {
     type: string;
     row: OrderRow;
@@ -75,7 +87,7 @@ export default function OperatorsTable() {
               className={`h-2 w-2 rounded-full ${
                 isOperating ? 'bg-[#009959]' : 'bg-[#F61818]'
               }`}
-            ></span>
+            />
           </div>
         );
       },
@@ -85,27 +97,51 @@ export default function OperatorsTable() {
       key: 'actions',
       label: 'Actions',
       render: (row) => (
-        <div className="flex gap-[10px]">
+        <div className="flex gap-2">
           <ReusableDialog
             trigger={
               <button aria-label="Edit agent">
-                <Icons.ri_edit2_fill className="text-[#000]" />
+                <Icons.ri_edit2_fill className="text-black" />
               </button>
             }
-            title="Add Agent"
+            dialogTitle="Edit Information"
+            dialogClass="!max-w-[768px]"
           >
             <AddAgent
               defaultValues={{}}
               onSubmit={(data) => {
-                console.log('sublitted', data);
+                console.log('Submitted', data);
               }}
             />
           </ReusableDialog>
 
-          <button aria-label="View agent">
-            <Icons.ri_eye_fill />
-          </button>
-          <button aria-label="Delete agent" className="text-[#F61818]">
+          {/* view agent chat */}
+          <ReusableDialog
+            trigger={
+              <button aria-label="View agent">
+                <Icons.ri_eye_fill />
+              </button>
+            }
+            dialogClass="gap-0 !max-w-[554px]"
+          >
+            <AgenChatHistoryCard />
+          </ReusableDialog>
+
+          <button
+            aria-label="Delete agent"
+            onClick={() =>
+              handleOpenDialog({
+                heading: 'Delete Agent',
+                subheading:
+                  'This action will delete the agent. You can temporarily suspend the agent instead to retain their data.',
+                onAction: () => {
+                  console.log('Operator deleted');
+                },
+                headericon: <Icons.ri_delete_bin_7_fill />,
+              })
+            }
+            className="text-[#F61818]"
+          >
             <Icons.ri_delete_bin_5_line />
           </button>
         </div>
@@ -113,9 +149,5 @@ export default function OperatorsTable() {
     },
   ];
 
-  return (
-    <>
-      <ReuseableTable columns={columns} data={orders} />
-    </>
-  );
+  return <ReuseableTable columns={columns} data={orders} />;
 }
