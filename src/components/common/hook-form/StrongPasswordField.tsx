@@ -127,7 +127,11 @@ export function StrongPasswordField<T extends FieldValues>({
                 className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer text-black"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                {showPassword ? (
+                  <Icons.eye_off size={18} />
+                ) : (
+                  <Icons.Eye size={18} />
+                )}
               </span>
             </div>
 
