@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import QRCode from 'qrcode';
 
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -18,6 +18,9 @@ import { Button } from '@/components/ui/button';
 import OTP from '@/components/common/hook-form/OTP';
 import { AuthenticatorSchema } from './AuthenticatorHelpter';
 import { z } from 'zod';
+import { useVerifyTwoFaOtp } from '@/hooks/auth/useVerifyTwoFaOtp';
+import Image from 'next/image';
+import { Skeleton } from '@/components/ui/skeleton';
 
 type AuthenticatorFormValues = z.infer<typeof AuthenticatorSchema>;
 
@@ -27,14 +30,12 @@ interface AuthenticatorModalProps {
   headingClassName?: string;
   subHeadingClassName?: string;
   headingContainerClassName?: string;
-
-  triggerButton?: React.ReactNode;
-
   cancelButtonText?: string;
   submitButtonText?: string;
   submitPendingText?: string;
-
-  onSubmit?: (values: AuthenticatorFormValues) => Promise<void> | void;
+  open: boolean;
+  setOpen: any;
+  otpauth_url: string;
 }
 
 const AuthenticatorModal: React.FC<AuthenticatorModalProps> = ({
@@ -43,37 +44,41 @@ const AuthenticatorModal: React.FC<AuthenticatorModalProps> = ({
   headingClassName = 'text-black font-medium text-[16px] leading-[26px]',
   subHeadingClassName = 'text-black text-[12px] leading-[17px] font-normal',
   headingContainerClassName = 'mb-[20px]',
-  triggerButton = <Button>Authenticator</Button>,
   cancelButtonText = 'Cancel',
   submitButtonText = 'Verify',
   submitPendingText = 'Verifying...',
-  onSubmit,
+  open,
+  setOpen,
+  otpauth_url,
 }) => {
+  const [qrcodeUrl, setQrCodeUrl] = useState('');
   const form = useForm<AuthenticatorFormValues>({
     resolver: zodResolver(AuthenticatorSchema),
     defaultValues: { token: '' },
   });
 
-  const [isPending, setIsPending] = React.useState(false);
-  const [open, setOpen] = React.useState(false);
+  const { mutate: verify2faOtp, isPending } = useVerifyTwoFaOtp();
 
   const handleSubmit = async (values: AuthenticatorFormValues) => {
-    setIsPending(true);
-    try {
-      if (onSubmit) await onSubmit(values);
-      setOpen(false);
-      form.reset();
-    } finally {
-      setIsPending(false);
-    }
+    verify2faOtp({
+      token: values.token,
+    });
   };
 
   const hasError = !!form.formState.errors.token;
 
+  useEffect(() => {
+    if (otpauth_url) {
+      QRCode.toDataURL(otpauth_url)
+        .then(setQrCodeUrl)
+        .catch((err) => {
+          console.error('Failed to generate QR Code:', err);
+        });
+    }
+  }, [otpauth_url]);
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{triggerButton}</DialogTrigger>
-
       <DialogContent className="w-[344px] gap-0">
         <DialogHeader>
           <DialogTitle>
@@ -87,6 +92,20 @@ const AuthenticatorModal: React.FC<AuthenticatorModalProps> = ({
           </DialogTitle>
           <DialogClose className="absolute top-4 right-4" />
         </DialogHeader>
+
+        <div className="flex justify-center py-2">
+          {qrcodeUrl ? (
+            <Image
+              src={qrcodeUrl}
+              alt="QR Code"
+              className="h-40 w-40"
+              height={160}
+              width={160}
+            />
+          ) : (
+            <Skeleton className="h-40 w-40" />
+          )}
+        </div>
 
         <Form {...form}>
           <form

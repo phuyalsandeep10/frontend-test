@@ -10,8 +10,11 @@ import Image from 'next/image';
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { Icons } from '@/components/ui/Icons';
+import { useLogout } from '@/hooks/auth/useLogout';
 
 const SidebarFooterMenu = () => {
+  const { mutate: logout, isPending } = useLogout();
+  console.log('Loging out');
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -69,9 +72,13 @@ const SidebarFooterMenu = () => {
           Profile
         </DropdownMenuItem>
         <DropdownMenuItem
+          onClick={() => {
+            console.log('Clicked...');
+            logout();
+          }}
           className={cn('hover:bg-muted w-full cursor-pointer text-sm')}
         >
-          Logout
+          {isPending ? 'Logging out' : 'Logout'}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -80,7 +80,7 @@ const LoginForm = () => {
             label="Password"
             type="password"
             placeholder="Enter your password"
-            rightIcon={<Icons.eye size={16} />}
+            // rightIcon={<Icons.eye size={16} />}
             required
           />
           <div>

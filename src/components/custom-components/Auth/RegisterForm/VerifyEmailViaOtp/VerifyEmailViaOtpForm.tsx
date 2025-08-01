@@ -1,5 +1,5 @@
 import { Form } from '@/components/ui/form';
-import React, { SetStateAction } from 'react';
+import React, { SetStateAction, useState } from 'react';
 import z from 'zod';
 import { verifyEmailViaOtpFormSchema } from './verifyEmailViaOtpFormHelper';
 import { useForm } from 'react-hook-form';
@@ -19,6 +19,7 @@ const VerifyEmailViaOtpForm = ({
   setCurrentStep,
   setOtpError,
 }: VerifyEmailViaOtpProps) => {
+  const [hasError, setHasError] = useState(false);
   const { mutate: verifyEmail, isPending: verifyEmailPending } =
     useVerifyEmail();
   const form = useForm<z.infer<typeof verifyEmailViaOtpFormSchema>>({
@@ -44,8 +45,6 @@ const VerifyEmailViaOtpForm = ({
       },
     });
   };
-
-  const [hasError, setHasError] = React.useState(false);
 
   return (
     <div>
