@@ -36,6 +36,7 @@ import {
   Info,
   Reply,
   ArrowUpCircle,
+  Eye,
 } from 'lucide-react';
 import {
   RiCheckboxCircleFill,
@@ -169,4 +170,5 @@ export const Icons = {
   ri_window_line: RiWindowLine,
   ri_login_box_line: RiLoginBoxLine,
   ri_calendar_line: RiCalendarLine,
+  Eye: Eye,
 };
