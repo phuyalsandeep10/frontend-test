@@ -10,6 +10,7 @@ interface PrimaryCheckboxProps {
   redirectLink: string;
   redirectLinkText: string;
   labelText: string;
+  error?: boolean;
 }
 const PrimaryCheckbox = ({
   isAgreed,
@@ -17,6 +18,7 @@ const PrimaryCheckbox = ({
   redirectLink,
   redirectLinkText,
   labelText,
+  error = false,
 }: PrimaryCheckboxProps) => {
   return (
     <div className="flex items-center gap-2">
@@ -25,10 +27,11 @@ const PrimaryCheckbox = ({
         checked={isAgreed}
         onCheckedChange={(value) => setIsAreed(!!value)}
         className={cn(
-          'h-4 w-4 rounded border',
+          'h-4 w-4 rounded border transition-colors',
           isAgreed
             ? 'data-[state=checked]:border-brand-primary data-[state=checked]:bg-brand-primary data-[state=checked]:text-white'
             : 'border-gray-light bg-white',
+          error && 'border-alert-prominent',
         )}
       />
       <Label className="text-sm font-normal text-black" htmlFor="isAgreed">

@@ -49,9 +49,12 @@ export function StrongPasswordField<T extends FieldValues>({
       status.hasUpperCase,
       status.hasNumber,
       status.hasMinLength,
+      status.hasSpecialChar,
     ].filter(Boolean).length;
+
     if (!password) return '';
-    if (conditionsMet === 3) return 'Strong password';
+    if (conditionsMet === 4) return 'Strong password';
+    if (conditionsMet === 0 || conditionsMet === 1) return 'Poor password';
     return 'Weak password';
   };
 
@@ -64,7 +67,10 @@ export function StrongPasswordField<T extends FieldValues>({
     ) {
       return 'text-success';
     }
-    if (strengthText === "Password didn't match") {
+    if (
+      strengthText === "Password didn't match" ||
+      strengthText === 'Poor password'
+    ) {
       return 'text-alert-prominent';
     }
     if (strengthText === 'Weak password') {
@@ -96,12 +102,13 @@ export function StrongPasswordField<T extends FieldValues>({
         rules={{
           required: 'Password is required',
           validate: (value) => {
-            const { hasUpperCase, hasNumber, hasMinLength } =
+            const { hasUpperCase, hasNumber, hasMinLength, hasSpecialChar } =
               getPasswordValidationStatus(value);
             if (!hideChecklist) {
               if (!hasUpperCase) return 'Must include an uppercase letter';
               if (!hasNumber) return 'Must include a number';
               if (!hasMinLength) return 'Must be at least 8 characters';
+              if (!hasSpecialChar) return 'Must include a special character';
             }
             return true;
           },
@@ -156,12 +163,21 @@ export function StrongPasswordField<T extends FieldValues>({
               status.hasMinLength ? 'bg-brand-primary' : 'bg-theme-text-primary'
             }`}
           />
+          <div
+            className={`h-[4px] flex-1 rounded-full transition-all ${
+              status.hasSpecialChar
+                ? 'bg-brand-primary'
+                : 'bg-theme-text-primary'
+            }`}
+          />
         </div>
       )}
       {!hideChecklist && (
         <div className="mt-2">
-          <p className="text-gray-primary text-xs">Password Must Contain:</p>
-          <ul className="mt-1 space-y-1 text-sm">
+          <p className="text-theme-text-primary mb-[8px] text-[12px]">
+            Password Must Contain:
+          </p>
+          <ul className="mt-1 space-y-2 text-[12px]">
             <ValidationItem
               label="At least 1 uppercase"
               isValid={status.hasUpperCase}
@@ -173,6 +189,10 @@ export function StrongPasswordField<T extends FieldValues>({
             <ValidationItem
               label="At least 8 characters"
               isValid={status.hasMinLength}
+            />
+            <ValidationItem
+              label="At least 1 special character"
+              isValid={status.hasSpecialChar}
             />
           </ul>
         </div>

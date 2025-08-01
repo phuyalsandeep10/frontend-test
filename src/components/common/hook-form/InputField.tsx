@@ -63,7 +63,7 @@ export function InputField<T extends FieldValues>({
                   isPasswordField && 'pr-6',
                   fieldState.error && 'border-color-error',
                   inputClassName,
-                  'border-grey-light h-[36px] border-[1px] px-3 placeholder:text-sm focus:outline-none',
+                  'border-grey-light h-[36px] border-[1px] px-3 placeholder:text-[14px] focus:outline-none',
                 )}
                 {...field}
               />

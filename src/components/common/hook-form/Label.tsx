@@ -17,7 +17,7 @@ const Label: React.FC<LabelProps> = ({
   return (
     <ShadcnLabel
       htmlFor={htmlFor}
-      className={`text-theme-text-dark font-outfit mb-1 block text-[20px] font-semibold ${className}`}
+      className={`text-brand-dark font-outfit mb-1 block text-[20px] leading-[30px] font-semibold ${className}`}
     >
       {children}
       {required && <span className="text-error ml-1">*</span>}

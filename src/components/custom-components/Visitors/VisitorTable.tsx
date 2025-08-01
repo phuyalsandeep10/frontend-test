@@ -203,6 +203,21 @@ const VisitorTable = () => {
   const [deleteTargetVisitor, setDeleteTargetVisitor] =
     useState<VisitorData | null>(null);
 
+  const statuses = [
+    'Active',
+    'Inactive',
+    'Guest',
+    'Engaged',
+    'Registered Recently',
+  ];
+  const sortOptions = [
+    'Oldest First',
+    'Newest First',
+    'A-Z (Name)',
+    'Z-A (Name)',
+    'Most Engaged',
+  ];
+
   const columns: ColumnDef<VisitorData>[] = useMemo(
     () => [
       {
@@ -317,6 +332,8 @@ const VisitorTable = () => {
           onOpenChange={setIsDeleteModalOpen}
           title="Delete Ticket"
           description={`Are you sure you want to delete this ticket? This action cannot be undone.`}
+          icon={<Icons.ri_delete_bin_7_fill className="text-alert-prominent" />}
+          iconBgColor="bg-error-light"
           cancelText="Cancel"
           confirmText="Delete Ticket"
           cancelVariant="outline_gray"
@@ -340,7 +357,24 @@ const VisitorTable = () => {
             zIndex: 1000,
           }}
         >
-          <FilterComponent />
+          <FilterComponent
+            statusOptions={statuses}
+            sortOptions={sortOptions}
+            statusLabel="Filter By Status"
+            sortLabel="Filter By"
+            onStatusChange={(statuses) => console.log('Statuses:', statuses)}
+            onSortChange={(sort) => console.log('Sort Option:', sort)}
+            getSortIcon={(option, isSelected) => {
+              if (option === 'A-Z (Name)' || option === 'Z-A (Name)') {
+                return isSelected ? (
+                  <Icons.chevron_up className="h-2 w-2" />
+                ) : (
+                  <Icons.chevron_down className="h-2 w-2" />
+                );
+              }
+              return null;
+            }}
+          />
         </div>
       )}
       {selectedVisitor && modalPosition && (
