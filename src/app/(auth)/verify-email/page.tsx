@@ -2,11 +2,14 @@
 
 import AuthLayout from '@/components/custom-components/Auth/common/AuthLayout';
 import EmailVerifyForm from '@/components/custom-components/Auth/EmailVerifyForm/EmailVerifyForm';
+import { Suspense } from 'react';
 
 const VerifyEmailPage = () => {
   return (
     <AuthLayout>
-      <EmailVerifyForm />
+      <Suspense fallback={<div>Loading...</div>}>
+        <EmailVerifyForm />
+      </Suspense>
     </AuthLayout>
   );
 };
