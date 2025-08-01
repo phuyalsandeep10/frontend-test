@@ -13,7 +13,7 @@ export const ROUTES = {
     SECURITY: '/settings/security',
     PERSONALIZATION: '/settings/personalization',
     // Workspace Setting
-    INFORMATION: '/settings/workspace/information',
+    INFORMATION: '/settings/workspace-settings/workspace-information',
     TRANSPARENCY_LOGS: '/settings/workspace/transparency-logs',
     OPERATOR_TEAMS: '/settings/workspace/operator-teams',
     ADVANCE_CONFIGURATION: '/settings/workspace/advance-configuration',
