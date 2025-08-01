@@ -31,9 +31,14 @@ type FormValues = {
 interface AddAgentProps {
   defaultValues: Partial<FormValues>;
   onSubmit: (data: FormValues) => void;
+  submitButton: string;
 }
 
-const AddAgent: React.FC<AddAgentProps> = ({ defaultValues, onSubmit }) => {
+const AddAgent: React.FC<AddAgentProps> = ({
+  defaultValues,
+  onSubmit,
+  submitButton,
+}) => {
   const form = useForm<FormValues>({
     defaultValues: defaultValues || {
       email: '',
@@ -96,11 +101,12 @@ const AddAgent: React.FC<AddAgentProps> = ({ defaultValues, onSubmit }) => {
               name="role"
               required
               control={form.control}
-              placeholder="admin"
+              placeholder="Admin"
               options={[
                 { value: 'admin', label: 'Admin' },
-                { value: 'editor', label: 'Editor' },
-                { value: 'viewer', label: 'Viewer' },
+                { value: 'agent', label: 'Agent' },
+                { value: 'moderator', label: 'Moderator' },
+                { value: 'lead', label: 'Lead' },
               ]}
             />
           </div>
@@ -117,12 +123,15 @@ const AddAgent: React.FC<AddAgentProps> = ({ defaultValues, onSubmit }) => {
             <SelectField
               name="clientHandled"
               required
-              placeholder="admin"
+              placeholder="0-6"
               control={form.control}
+              className="text-red-400"
               options={[
-                { value: 'admin', label: 'Admin' },
-                { value: 'editor', label: 'Editor' },
-                { value: 'viewer', label: 'Viewer' },
+                { value: 'client1', label: '0-6' },
+                { value: 'client2', label: '7-20' },
+                { value: 'client3', label: '21-50' },
+                { value: 'client4', label: '50-120' },
+                { value: 'client5', label: '120-200' },
               ]}
             />
           </div>
@@ -350,9 +359,11 @@ const AddAgent: React.FC<AddAgentProps> = ({ defaultValues, onSubmit }) => {
               control={form.control}
               placeholder="Select Team"
               options={[
-                { value: 'admin', label: 'Admin' },
-                { value: 'editor', label: 'Editor' },
-                { value: 'viewer', label: 'Viewer' },
+                { value: 'team1', label: 'Team 1' },
+                { value: 'team2', label: 'Team 2' },
+                { value: 'team3', label: 'Team 3' },
+                { value: 'team4', label: 'Team 4' },
+                { value: 'add_team', label: 'Add Team' },
               ]}
             />
           </div>
@@ -361,7 +372,7 @@ const AddAgent: React.FC<AddAgentProps> = ({ defaultValues, onSubmit }) => {
             type="submit"
             className="col-span-full mt-4 h-full max-h-[36px] w-full rounded-lg px-[22px] py-2.5 text-xs leading-4 font-semibold"
           >
-            Add Agent
+            {submitButton}
           </Button>
         </form>
       </Form>

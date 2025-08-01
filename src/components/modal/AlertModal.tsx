@@ -31,12 +31,12 @@ interface AlertDialogDemoProps {
   actionButtonProps?: Partial<ButtonProps>;
   cancelIsLoading?: boolean;
   actionIsLoading?: boolean;
-  children?: React.ReactNode;
   headericon?: React.ReactNode;
   modalClassName?: string;
   DialogHeaderClassName?: string;
   headerIconClass?: string;
   iconClass?: string;
+  children?: React.ReactNode;
 }
 
 export const AlertDialogDemo = forwardRef<
@@ -59,7 +59,6 @@ export const AlertDialogDemo = forwardRef<
       actionButtonProps,
       cancelIsLoading,
       actionIsLoading,
-      children,
       headericon,
       modalClassName,
       DialogHeaderClassName,
@@ -97,7 +96,6 @@ export const AlertDialogDemo = forwardRef<
               <span>{subheading}</span>
             </AlertDialogDescription>
           </AlertDialogHeader>
-          {children}
           <AlertDialogFooter>
             <Button
               onClick={onCancel}

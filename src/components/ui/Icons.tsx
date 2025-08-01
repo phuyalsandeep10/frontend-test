@@ -83,6 +83,7 @@ import {
   RiUserLine,
   RiContactsBookLine,
   RiCloseCircleFill,
+  RiTimeFill,
 } from '@remixicon/react';
 
 // register your icons here as your requirements
@@ -169,4 +170,5 @@ export const Icons = {
   ri_window_line: RiWindowLine,
   ri_login_box_line: RiLoginBoxLine,
   ri_calendar_line: RiCalendarLine,
+  ri_time_fill: RiTimeFill, //added arrow down by rahul
 };

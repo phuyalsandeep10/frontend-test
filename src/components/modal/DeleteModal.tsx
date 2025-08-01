@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState } from 'react';
 import {
   Dialog,
@@ -9,7 +8,6 @@ import {
 } from '@/components/ui/dialog';
 import { Icons } from '../ui/Icons';
 import { Button, type ButtonProps } from '../ui/button';
-
 interface DeleteModalProps {
   trigger?: React.ReactNode;
   open: boolean;
@@ -24,8 +22,11 @@ interface DeleteModalProps {
   confirmSize?: ButtonProps['size'];
   onCancel?: () => void;
   onConfirm?: () => void;
+  icon?: React.ReactNode;
+  iconBgColor?: string;
+  iconColor?: string;
+  descriptionColor?: string;
 }
-
 const DeleteModal: React.FC<DeleteModalProps> = ({
   trigger,
   open,
@@ -38,6 +39,10 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
   confirmVariant = 'destructive',
   cancelSize,
   confirmSize,
+  icon,
+  iconBgColor,
+  iconColor,
+  descriptionColor,
   onCancel,
   onConfirm,
 }) => {
@@ -45,32 +50,34 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
     onCancel?.();
     onOpenChange(false);
   };
-
   const handleConfirm = () => {
     onConfirm?.();
     onOpenChange(false);
   };
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-
       <DialogContent className="flex w-[326px] flex-col items-center text-center">
         <DialogTitle className="sr-only">{title}</DialogTitle>
-
-        <div className="bg-error-light flex h-[52px] w-[52px] items-center justify-center rounded-full">
-          <Icons.ri_delete_bin_7_fill className="text-alert-prominent" />
+        <div
+          className={`flex h-[52px] w-[52px] items-center justify-center rounded-full ${iconBgColor ?? 'bg-error-light'}`}
+        >
+          {icon ?? (
+            <Icons.ri_delete_bin_7_fill
+              className={iconColor ?? 'text-alert-prominent'}
+            />
+          )}
         </div>
-
         <div>
           <p className="mb-[8px] text-[16px] leading-[26px] font-medium">
             {title}
           </p>
-          <p className="text-alert-prominent text-[12px] leading-[17px]">
+          <p
+            className={`text-[12px] leading-[17px] ${descriptionColor ?? 'text-alert-prominent'}`}
+          >
             {description}
           </p>
         </div>
-
         <div className="w-full">
           <div className="flex justify-between gap-4">
             <Button
@@ -95,5 +102,4 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
     </Dialog>
   );
 };
-
 export default DeleteModal;

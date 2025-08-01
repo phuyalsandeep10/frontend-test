@@ -28,6 +28,7 @@ interface AgenChatHistoryCardProps {
   iconClass?: string;
   defaultValues?: Partial<FormValues>;
   onSubmit?: (data: FormValues) => void;
+  submitButton?: string;
 }
 
 export function AgenChatHistoryCard({
@@ -36,6 +37,7 @@ export function AgenChatHistoryCard({
   iconClass,
   defaultValues,
   onSubmit,
+  submitButton,
 }: AgenChatHistoryCardProps) {
   const form = useForm<FormValues>({
     defaultValues: defaultValues || {
