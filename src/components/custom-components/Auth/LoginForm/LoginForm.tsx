@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { ROUTES } from '@/routes/routes';
 import Link from 'next/link';
 import { baseURL } from '@/apiConfigs/axiosInstance';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { loginFormSchema } from './loginHelper';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -14,13 +14,14 @@ import { AuthService } from '@/services/auth/auth';
 import { useLoginUser } from '@/hooks/auth/useLoginUser';
 import HeadingSubHeadingTypography from '../RegisterForm/HeadingSubHeadingTypography';
 import { InputField } from '@/components/common/hook-form/InputField';
-import { Icons } from '@/components/ui/Icons';
 import Button from '@/components/common/hook-form/Button';
 import ReCAPTCHA from 'react-google-recaptcha';
 import Image from 'next/image';
 import googleIcon from '@/assets/images/google.svg';
 
 const LoginForm = () => {
+  const [isNotARobot, setIsNotARobot] = useState(false);
+  const [captchaError, setCaptchaError] = useState('');
   const router = useRouter();
   const searchParams = useSearchParams();
   const accessToken = searchParams.get('access_token');
@@ -37,8 +38,23 @@ const LoginForm = () => {
   });
 
   async function onSubmit(values: z.infer<typeof loginFormSchema>) {
+    if (!isNotARobot) {
+      setCaptchaError('Please verify that you are not a robot.');
+      return;
+    }
+    setCaptchaError('');
     login(values);
   }
+
+  const onCaptchaSuccess = (value: string | null) => {
+    if (value) {
+      setIsNotARobot(true);
+      setCaptchaError('');
+    } else {
+      setIsNotARobot(false);
+      setCaptchaError('Captcha failed. Please try again.');
+    }
+  };
 
   useEffect(() => {
     if (accessToken && refreshToken) {
@@ -93,19 +109,26 @@ const LoginForm = () => {
                   Remember Me
                 </span>
               </label>
-
               <Link
-                href="forgot-password"
+                href="/forgot-password"
                 className="text-brand-primary text-[14px] leading-[21px] font-normal"
               >
                 Forgot password?
               </Link>
             </div>
-            {/* Google ReCAPTCHA UI */}
+
+            {/* ReCAPTCHA */}
             <div className="w-full pt-4">
-              <ReCAPTCHA sitekey="site-key-here " />
+              <ReCAPTCHA
+                sitekey={process.env.NEXT_PUBLIC_GOOGLE_RECAPTHA_SITE_KEY!}
+                onChange={onCaptchaSuccess}
+              />
+              {captchaError && (
+                <p className="mt-2 text-sm text-red-500">{captchaError}</p>
+              )}
             </div>
           </div>
+
           <Button
             variant="default"
             type="submit"
@@ -114,7 +137,8 @@ const LoginForm = () => {
           >
             {isPending ? 'Logging in...' : 'Login to Dashboard'}
           </Button>
-          <p className="align-center text-center font-medium">Or</p>
+
+          <p className="text-center font-medium">Or</p>
 
           <Button
             variant="outline"
@@ -139,7 +163,8 @@ const LoginForm = () => {
           >
             Continue With Google
           </Button>
-          <p>
+
+          <p className="text-center">
             Don’t have an account?
             <Link
               href="/register"

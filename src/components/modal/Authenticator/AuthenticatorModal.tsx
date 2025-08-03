@@ -79,7 +79,7 @@ const AuthenticatorModal: React.FC<AuthenticatorModalProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="w-[344px] gap-0">
+      <DialogContent className="font-outfit w-[344px] gap-0">
         <DialogHeader>
           <DialogTitle>
             <HeadingSubHeadingTypography
@@ -92,8 +92,10 @@ const AuthenticatorModal: React.FC<AuthenticatorModalProps> = ({
           </DialogTitle>
           <DialogClose className="absolute top-4 right-4" />
         </DialogHeader>
-
-        <div className="flex justify-center py-2">
+        <p className="text-center text-sm font-medium text-black">
+          Scan the QR to setup authentication
+        </p>
+        <div className="flex justify-center">
           {qrcodeUrl ? (
             <Image
               src={qrcodeUrl}

@@ -17,25 +17,25 @@ export default function ProtectedDashboardLayout({
   const router = useRouter();
   const authTokens = AuthService.getAuthTokens();
 
-  // useEffect(() => {
-  //   if (!authTokens) {
-  //     router.replace(ROUTES.LOGIN);
-  //   }
-  //   if (!isLoading) {
-  //     const user = authData?.data?.user;
-  //     const is2FaEnabled = user?.two_fa_enabled;
-  //     const is2FaVerified = authData?.data?.is_2fa_verified;
-  //     if (!user) {
-  //       router.replace(ROUTES.LOGIN);
-  //     } else if (!is2FaEnabled && !is2FaVerified) {
-  //       router.replace(ROUTES.DASHBOARD);
-  //     } else if (is2FaEnabled && !is2FaVerified) {
-  //       router.replace(ROUTES.VERIFY_TWO_FA_TOKEN);
-  //     }
-  //   }
-  // }, [authData, isLoading, router, authTokens]);
+  useEffect(() => {
+    if (!authTokens) {
+      router.replace(ROUTES.LOGIN);
+    }
+    if (!isLoading) {
+      const user = authData?.data?.user;
+      const is2FaEnabled = user?.two_fa_enabled;
+      const is2FaVerified = authData?.data?.is_2fa_verified;
+      if (!user) {
+        router.replace(ROUTES.LOGIN);
+      } else if (!is2FaEnabled && !is2FaVerified) {
+        router.replace(ROUTES.DASHBOARD);
+      } else if (is2FaEnabled && !is2FaVerified) {
+        router.replace(ROUTES.VERIFY_TWO_FA_TOKEN);
+      }
+    }
+  }, [authData, isLoading, router, authTokens]);
 
-  // if (isLoading || !authData) return <p>Loading...</p>;
+  if (isLoading || !authData) return <p>Loading...</p>;
 
   return (
     <SidebarProvider>

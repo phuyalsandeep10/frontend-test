@@ -21,14 +21,6 @@ import {
 } from '@/components/ui/alert-dialog';
 import AuthenticatorModal from '@/components/modal/Authenticator/AuthenticatorModal';
 
-const TwoFactorAuthenticationDialog = dynamic(
-  () =>
-    import(
-      '@/components/custom-components/Auth/TwoFactorAuthentication/TwoFactorAuthenticationDialog/TwoFactorAuthenticationDialog'
-    ),
-  { ssr: false },
-);
-
 const DashboardPage = () => {
   const [openPasswordModal, setOpenPasswordModal] = useState(false);
   const [open2FaDialog, setOpen2FaDialog] = useState(false);
