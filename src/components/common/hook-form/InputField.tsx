@@ -52,6 +52,9 @@ export function InputField<T extends FieldValues>({
       <Controller
         control={control}
         name={name}
+        rules={{
+          required: required ? 'This field is required' : false,
+        }}
         render={({ field, fieldState }) => (
           <>
             <div className="relative">

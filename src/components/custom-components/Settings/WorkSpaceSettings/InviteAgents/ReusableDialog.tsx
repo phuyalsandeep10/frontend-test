@@ -29,9 +29,7 @@ const ReusableDialog: React.FC<ReusableDialogProps> = ({
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent
-        className={`!w-full !max-w-[1240px] gap-8 p-10 ${dialogClass}`}
-      >
+      <DialogContent className={`!w-full !max-w-[1240px] gap-8 ${dialogClass}`}>
         <DialogHeader className="gap-0">
           <DialogTitle className="text-xl leading-[30px] font-semibold">
             {dialogTitle}

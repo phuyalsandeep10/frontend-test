@@ -6,11 +6,6 @@ import { Icons } from '@/components/ui/Icons';
 
 const sidebarList = [
   {
-    label: 'Dashboard',
-    icon: Icons.dashboard,
-    route: ROUTES.TOOLS_FEATURES.DASHBOARD,
-  },
-  {
     label: 'Tickets',
     icon: Icons.ticket,
     route: ROUTES.TOOLS_FEATURES.TICKET,

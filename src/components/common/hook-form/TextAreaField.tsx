@@ -13,6 +13,7 @@ type TextAreaFieldProps<T extends FieldValues> = {
   textareaClassName?: string;
   placeholder?: string;
   rows?: number;
+  labelClassName?: string;
 };
 
 export function TextAreaField<T extends FieldValues>({
@@ -24,11 +25,16 @@ export function TextAreaField<T extends FieldValues>({
   textareaClassName,
   placeholder,
   rows = 4,
+  labelClassName,
 }: TextAreaFieldProps<T>) {
   return (
     <div className={cn('flex flex-col gap-1', className)}>
       {label && (
-        <Label htmlFor={name} required={required}>
+        <Label
+          htmlFor={name}
+          required={required}
+          className={cn(`${labelClassName}`)}
+        >
           {label}
         </Label>
       )}
@@ -49,7 +55,7 @@ export function TextAreaField<T extends FieldValues>({
               {...field}
             />
             {fieldState.error && (
-              <p className="text-color-error text-sm">
+              <p className="text-alert-prominent text-sm">
                 {fieldState.error.message}
               </p>
             )}

@@ -16,6 +16,7 @@ import { AgenChatHistoryCard } from '@/components/custom-components/Settings/Wor
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ReusableDialog from '@/components/custom-components/Settings/WorkSpaceSettings/InviteAgents/ReusableDialog';
 import AddAgent from '@/components/custom-components/Settings/WorkSpaceSettings/InviteAgents/AddAgent';
+import InviteTable from '@/components/custom-components/Settings/WorkSpaceSettings/InviteAgents/Invites/InviteTable';
 
 // Define the modalProps type
 type ModalProps = {
@@ -108,6 +109,7 @@ const InviteAgents = () => {
                 onSubmit={(data) => {
                   console.log('Submitted', data);
                 }}
+                submitButton="Add Agent"
               />
             </ReusableDialog>
           </div>
@@ -148,7 +150,9 @@ const InviteAgents = () => {
                 </div>
               </div>
 
-              <TabsContent value="Invites" />
+              <TabsContent value="Invites">
+                <InviteTable handleOpenDialog={handleOpenDialog} />
+              </TabsContent>
               <TabsContent value="Operators">
                 <OperatorsTable handleOpenDialog={handleOpenDialog} />
               </TabsContent>

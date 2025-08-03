@@ -5,6 +5,8 @@ import { Icons } from '../ui/Icons';
 
 interface ImageUploaderProps {
   onImageSelect: (imageDataUrl: string) => void;
+  icon?: React.ReactNode; // custom icon passed as prop
+  wrapperClassName?: string; // to customize outer div
   labelClickText?: string;
   labelRestText?: string;
   descriptionText?: string;
@@ -12,8 +14,10 @@ interface ImageUploaderProps {
 
 const ImageUploader: React.FC<ImageUploaderProps> = ({
   onImageSelect,
+  icon,
+  wrapperClassName = 'flex h-[181px] w-[383px] flex-col items-center justify-center rounded-md border',
   labelClickText = 'Click to upload',
-  labelRestText = 'or drag and drop SVG,PNG,JPG.',
+  labelRestText = 'or drag and drop SVG, PNG, JPG.',
   descriptionText = 'Upload a PNG and JPG, up to 10 MB.',
 }) => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,7 +25,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
     if (!file) return;
 
     const isValidType = ['image/jpeg', 'image/png'].includes(file.type);
-    const isValidSize = file.size <= 10 * 1024 * 1024; // 10 MB
+    const isValidSize = file.size <= 10 * 1024 * 1024;
 
     if (!isValidType) {
       alert('Only PNG and JPG formats are allowed.');
@@ -44,13 +48,13 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
 
   return (
     <div className="flex flex-col">
-      <div className="flex h-[181px] w-[383px] flex-col items-center justify-center rounded-md border">
+      <div className={wrapperClassName}>
         <label
           htmlFor="imageUploadInput"
           className="flex cursor-pointer flex-col items-center gap-3 rounded-[8px] bg-white px-4 py-3 text-[#18181B] hover:border-blue-500"
           style={{ userSelect: 'none' }}
         >
-          <Icons.upload className="text-brand-primary h-5 w-5" />
+          {icon ? <div>{icon}</div> : <Icons.upload />}
 
           <div className="text-center">
             <span className="text-brand-primary text-[18px] leading-[29px] font-semibold underline">

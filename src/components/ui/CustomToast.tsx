@@ -48,7 +48,7 @@ export const CustomToast: React.FC<CustomToastProps> = ({
       {/* Content */}
       <div className="flex-1">
         {title && <h4 className="text-base font-semibold">{title}</h4>}
-        {description && <p className="mt-1 text-base">{description}</p>}
+        {description && <p className="text-base">{description}</p>}
       </div>
 
       {/* Close Button */}
@@ -57,7 +57,7 @@ export const CustomToast: React.FC<CustomToastProps> = ({
         className="text-gray-primary absolute top-2 right-2"
         aria-label="Close"
       >
-        <Icons.x className="w-6- mt-5 mr-5 h-6 cursor-pointer" />
+        <Icons.x className="w-6- mt-2 mr-1 h-6 cursor-pointer" />
       </button>
     </div>
   );

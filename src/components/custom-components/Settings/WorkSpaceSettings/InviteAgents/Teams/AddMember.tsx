@@ -107,7 +107,7 @@ const AddMember: React.FC<AddMemberProps> = ({
             <CardFooter className="px-0">
               <Button
                 type="submit"
-                className="col-span-full mt-4 w-full rounded-lg"
+                className="bg-brand-primary col-span-full mt-4 h-[36px] w-full rounded-lg px-[22px] py-2.5 text-xs leading-4 font-semibold text-white"
               >
                 Send Invitation
               </Button>

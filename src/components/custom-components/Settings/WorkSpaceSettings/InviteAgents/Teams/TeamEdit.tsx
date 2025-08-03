@@ -38,7 +38,7 @@ const TeamEdit: React.FC<TeamEditProps> = ({
   });
 
   return (
-    <Card className="w-full max-w-full px-5">
+    <Card className="w-full max-w-full border-0 p-0 shadow-none">
       <CardHeader className="inline-flex flex-col gap-1 p-0">
         <CardTitle className="text-brand-dark text-xl leading-[30px] font-semibold">
           Edit Team
@@ -133,7 +133,7 @@ const TeamEdit: React.FC<TeamEditProps> = ({
       </CardContent>
 
       {/* Save Change button outside form might cause issue - move inside form if needed */}
-      <CardFooter className="mt-4 flex justify-end gap-4 p-0">
+      <CardFooter className="flex justify-end gap-4 p-0">
         <Button
           type="button"
           className="h-full max-h-[36px] w-auto rounded-lg px-[22px] py-3 text-xs leading-4 font-semibold"

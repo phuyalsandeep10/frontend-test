@@ -3,30 +3,50 @@ import AlertDialogDemo, {
 } from '@/components/modal/AlertModal';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/ui/Icons';
-import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 
 import React, { useRef } from 'react';
-import { useForm, Control } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { InputField } from '@/components/common/hook-form/InputField';
+import { showToast } from '@/shared/toast';
+
+type FormData = {
+  workspaceId: string;
+};
 
 const TerminateWorkspace = () => {
   const dialogRef = useRef<AlertDialogDemoRef>(null);
-  const { control } = useForm();
+
+  const { control, handleSubmit, getValues } = useForm<FormData>({
+    defaultValues: {
+      workspaceId: '',
+    },
+  });
 
   const handleDeleteClick = () => {
     dialogRef.current?.open();
   };
 
-  const handleConfirmDelete = () => {
-    console.log('Workspace deleted');
+  // This function runs when user clicks "Yes, Delete" in modal
+  const handleConfirmDelete = handleSubmit((data) => {
+    console.log('Typed confirmation:', data.workspaceId);
+
+    // Show toast success message
+    showToast({
+      title: 'Deleted Successfully',
+      description: 'Workspace has been deleted',
+      variant: 'success',
+      position: 'top-right',
+    });
+
     dialogRef.current?.close();
-  };
+  });
 
   const handleCancelDelete = () => {
     console.log('Delete cancelled');
     dialogRef.current?.close();
   };
+
   return (
     <div>
       <div className={cn('mt-10')}>
@@ -58,10 +78,12 @@ const TerminateWorkspace = () => {
                   >
                     Enter Workspace ID
                   </label>
-                  <Input
+                  <input
                     id="workspace-id"
                     placeholder="Bramhabyfields"
-                    className={cn('mt-2.5 h-9 w-1/2')}
+                    className={cn(
+                      'mt-2.5 h-9 w-1/2 rounded border border-gray-300 px-2',
+                    )}
                   />
                 </div>
 
@@ -83,19 +105,18 @@ const TerminateWorkspace = () => {
       <AlertDialogDemo
         ref={dialogRef}
         heading="Are you sure?"
-        subheading="Please enter workspace ID to confirm deletion."
-        icon={
-          <Icons.danger className="text-alert-prominent mt-0.5" size={20} />
-        }
+        subheading="You are going to delete “Bramhabytelab” workspace. This action is irreversible"
+        icon={<Icons.alert className="text-alert-prominent mt-0.5" size={20} />}
         cancelText="Cancel"
         actionText="Yes, Delete"
         onCancel={handleCancelDelete}
-        // onAction={handleSubmit(handleConfirmDelete)}
-        descriptionClassName="font-outfit font-normal text-xs leading-[17px] text-alert-prominent"
+        onAction={handleConfirmDelete} // <- Important: hook the confirm handler here
+        descriptionClassName="font-outfit font-normal text-xs leading-[17px] text-alert-prominent w-[65%] mt-3"
         cancelButtonProps={{ variant: 'outline' }}
         actionButtonProps={{ variant: 'destructive' }}
+        cancelClassName="cursor-pointer"
+        actionClassName="cursor-pointer"
       >
-        {/* ✅ Custom content inside modal */}
         <div className="pt-6">
           <InputField
             control={control}
