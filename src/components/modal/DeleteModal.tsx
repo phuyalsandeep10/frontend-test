@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState } from 'react';
 import {
   Dialog,
@@ -9,7 +8,6 @@ import {
 } from '@/components/ui/dialog';
 import { Icons } from '../ui/Icons';
 import { Button, type ButtonProps } from '../ui/button';
-
 interface DeleteModalProps {
   trigger?: React.ReactNode;
   open: boolean;
@@ -29,7 +27,6 @@ interface DeleteModalProps {
   iconColor?: string;
   descriptionColor?: string;
 }
-
 const DeleteModal: React.FC<DeleteModalProps> = ({
   trigger,
   open,
@@ -53,12 +50,10 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
     onCancel?.();
     onOpenChange(false);
   };
-
   const handleConfirm = () => {
     onConfirm?.();
     onOpenChange(false);
   };
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
@@ -74,7 +69,6 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
             />
           )}
         </div>
-
         <div>
           <p className="mb-[8px] text-[16px] leading-[26px] font-medium">
             {title}
@@ -85,7 +79,6 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
             {description}
           </p>
         </div>
-
         <div className="w-full">
           <div className="flex justify-between gap-4">
             <Button
@@ -110,5 +103,4 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
     </Dialog>
   );
 };
-
 export default DeleteModal;

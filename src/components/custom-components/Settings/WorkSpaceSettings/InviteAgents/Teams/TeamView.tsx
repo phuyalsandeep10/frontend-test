@@ -15,7 +15,7 @@ import TeamMemberInfo from '@/components/custom-components/Settings/WorkSpaceSet
 
 const TeamView: React.FC = () => {
   return (
-    <Card className="w-full max-w-full px-5">
+    <Card className="w-full max-w-full border-0 p-0 px-5 shadow-none">
       <CardHeader className="inline-flex items-center gap-x-[17px] gap-y-[14px] p-0">
         <CardTitle className="text-lg leading-[29px] font-semibold">
           Team Members
@@ -58,8 +58,16 @@ const TeamView: React.FC = () => {
       </CardContent>
 
       <CardFooter className="mt-4 flex justify-center gap-4">
-        <Button variant="outline">Cancel</Button>
-        <Button type="button" className="rounded-lg py-3">
+        <Button
+          className="text-brand-primary h-[36px] w-full max-w-[130px] rounded-lg px-4 py-2.5 text-xs leading-4 font-semibold"
+          variant="outline"
+        >
+          Cancel
+        </Button>
+        <Button
+          className="bg-brand-primary h-[36px] w-full max-w-[130px] rounded-lg px-4 py-2.5 text-xs leading-4 font-semibold text-white"
+          type="button"
+        >
           Edit Team
         </Button>
       </CardFooter>

@@ -65,11 +65,12 @@ const RolesTable: React.FC<RolesTableProps> = ({ handleOpenDialog }) => {
                 <Icons.ri_edit2_fill className="text-black" />
               </button>
             }
-            dialogClass="!max-w-[676px] px-5"
+            dialogClass="!max-w-[676px] px-5 py-10 gap-0"
           >
             <RoleForm
               defaultValues={{}}
               onSubmit={(data) => console.log('Edited role:', data)}
+              roleHead="Edit Role"
             />
           </ReusableDialog>
 
@@ -123,6 +124,7 @@ const RolesTable: React.FC<RolesTableProps> = ({ handleOpenDialog }) => {
             onSubmit={(data) => {
               console.log('New role created:', data);
             }}
+            roleHead="Create Role"
           />
         </ReusableDialog>
       </div>

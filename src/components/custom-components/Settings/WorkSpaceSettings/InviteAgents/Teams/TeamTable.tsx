@@ -8,7 +8,8 @@ import AddAgent from '@/components/custom-components/Settings/WorkSpaceSettings/
 import { ReuseableTable } from '@/components/custom-components/Settings/WorkSpaceSettings/InviteAgents/ReuseableTable';
 import AddMember from '@/components/custom-components/Settings/WorkSpaceSettings/InviteAgents/Teams/AddMember';
 import CreateTeam from '@/components/custom-components/Settings/WorkSpaceSettings/InviteAgents/Teams/CreateTeam';
-// import TeamView from '@/components/custom-components/Settings/WorkSpaceSettings/InviteAgents/Teams/TeamView';
+import TeamEdit from '@/components/custom-components/Settings/WorkSpaceSettings/InviteAgents/Teams/TeamEdit';
+import TeamView from '@/components/custom-components/Settings/WorkSpaceSettings/InviteAgents/Teams/TeamView';
 
 export interface OrderRow {
   TeamName: string;
@@ -74,19 +75,20 @@ const TeamTable: React.FC<TeamTableProps> = ({ handleOpenDialog }) => {
                 <Icons.ri_edit2_fill className="text-black" />
               </button>
             }
+            dialogClass="!max-w-[768px] gap-0 px-5 py-10"
           >
-            <AddAgent
-              defaultValues={{}}
-              onSubmit={(data) => {
-                console.log('submitted', data);
-              }}
-            />
+            <TeamEdit onSubmit={() => {}} />
           </ReusableDialog>
-
-          <button aria-label="View team">
-            <Icons.ri_eye_fill />
-          </button>
-
+          <ReusableDialog
+            trigger={
+              <button aria-label="View team">
+                <Icons.ri_eye_fill />
+              </button>
+            }
+            dialogClass="!max-w-[411px] gap-0 inline-block"
+          >
+            <TeamView />
+          </ReusableDialog>
           <button
             aria-label="Delete team"
             onClick={() =>
@@ -154,7 +156,6 @@ const TeamTable: React.FC<TeamTableProps> = ({ handleOpenDialog }) => {
 
       {/* Team table */}
       <ReuseableTable columns={columns} data={orders} />
-      {/* <TeamView /> */}
     </>
   );
 };

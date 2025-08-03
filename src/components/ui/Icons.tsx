@@ -87,6 +87,7 @@ import {
   RiUserLine,
   RiContactsBookLine,
   RiCloseCircleFill,
+  RiTimeFill,
 } from '@remixicon/react';
 
 // register your icons here as your requirements
@@ -177,4 +178,5 @@ export const Icons = {
   download_cloud: RiDownloadCloudLine,
   loader: Loader2,
   Eye: Eye,
+  ri_time_fill: RiTimeFill, //added arrow down by rahul
 };

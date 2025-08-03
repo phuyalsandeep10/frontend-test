@@ -27,6 +27,7 @@ type FormValues = {
 interface RoleFormProps {
   defaultValues?: Partial<FormValues>;
   onSubmit: (data: FormValues) => void;
+  roleHead: string;
 }
 
 type OrderRow = {
@@ -40,7 +41,11 @@ type Column<T> = {
   render?: (row: T) => React.ReactNode;
 };
 
-const RoleForm: React.FC<RoleFormProps> = ({ defaultValues, onSubmit }) => {
+const RoleForm: React.FC<RoleFormProps> = ({
+  defaultValues,
+  onSubmit,
+  roleHead,
+}) => {
   const form = useForm<FormValues>({
     defaultValues: defaultValues || {
       role: '',
@@ -98,7 +103,7 @@ const RoleForm: React.FC<RoleFormProps> = ({ defaultValues, onSubmit }) => {
     <Card className="w-full max-w-full border-0 py-0 shadow-none">
       <CardHeader className="p-0">
         <CardTitle className="text-lg leading-[29px] font-semibold">
-          Edit Role
+          {roleHead}
         </CardTitle>
         <CardDescription className="text-xs leading-[17px] font-normal">
           Modify an existing role’s name, permissions, or access levels to keep
@@ -187,11 +192,18 @@ const RoleForm: React.FC<RoleFormProps> = ({ defaultValues, onSubmit }) => {
             {/* Footer Buttons */}
             <CardFooter className="flex justify-end gap-4 px-0 pt-6">
               <DialogClose asChild>
-                <Button variant="outline" type="button">
+                <Button
+                  className="bg-brand-primary h-[36px] w-full max-w-[130px] rounded-lg px-4 py-2.5 text-xs leading-4 font-semibold text-white"
+                  variant="outline"
+                  type="button"
+                >
                   Cancel
                 </Button>
               </DialogClose>
-              <Button type="submit" className="rounded-lg py-3">
+              <Button
+                className="bg-brand-primary h-[36px] w-full max-w-[130px] rounded-lg px-4 py-3 text-xs leading-4 font-semibold text-white"
+                type="submit"
+              >
                 Save Changes
               </Button>
             </CardFooter>

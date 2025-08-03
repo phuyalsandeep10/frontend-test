@@ -2,17 +2,19 @@
 
 import React, { useState } from 'react';
 import { Icons } from '@/components/ui/Icons';
-import ReusableDialog from './ReusableDialog';
-import AddAgent from './AddAgent';
-import { ReuseableTable } from './ReuseableTable';
+import ReusableDialog from '@/components/custom-components/Settings/WorkSpaceSettings/InviteAgents/ReusableDialog';
+import AddAgent from '@/components/custom-components/Settings/WorkSpaceSettings/InviteAgents/AddAgent';
+import { ReuseableTable } from '@/components/custom-components/Settings/WorkSpaceSettings/InviteAgents//ReuseableTable';
 import { AgenChatHistoryCard } from '@/components/custom-components/Settings/WorkSpaceSettings/InviteAgents/AgenChatHistoryCard';
+import MailIcon from '@/assets/images/mailIcon.svg';
+import Image from 'next/image';
 
 export interface OrderRow {
-  FullName: string;
+  invite: string;
+  invite_Sent: string;
+  status: string;
   Roles: string;
-  Shift: string;
   OperatingHours: string;
-  Invitedon: string;
   Actions: string;
 }
 
@@ -22,18 +24,17 @@ interface Column<T> {
   render?: (row: T) => React.ReactNode;
 }
 
-interface OperatorsTableProps {
+export interface InviteAgentProps {
   handleOpenDialog: (props: {
     heading: string;
     subheading: string;
     onAction: () => void;
     headericon?: React.ReactNode;
+    submitButton?: string;
   }) => void;
 }
 
-export default function OperatorsTable({
-  handleOpenDialog,
-}: OperatorsTableProps) {
+export default function InviteTable({ handleOpenDialog }: InviteAgentProps) {
   const [modalData, setModalData] = useState<null | {
     type: string;
     row: OrderRow;
@@ -41,25 +42,60 @@ export default function OperatorsTable({
 
   const orders: OrderRow[] = [
     {
-      FullName: 'Yubesh Koirala',
+      invite: 'unish@yahoo.com',
+      invite_Sent: '08/07/2025',
+      status: 'Sent',
       Roles: 'Admin',
-      Shift: 'morning',
       OperatingHours: '9:00 - 17:00',
-      Invitedon: '08/07/2025',
       Actions: '',
     },
     {
-      FullName: 'Yubesh Koirala',
+      invite: 'yubeshkoirala11@gmail.com',
+      invite_Sent: '08/07/2025',
+      status: 'Rejected',
       Roles: 'Agent',
-      Shift: 'Day',
       OperatingHours: '9:00 - 17:00',
-      Invitedon: '08/07/2025',
       Actions: '',
     },
   ];
 
   const columns: Column<OrderRow>[] = [
-    { key: 'FullName', label: 'Full Name' },
+    { key: 'invite', label: 'Invited' },
+    {
+      key: 'invite_Sent',
+      label: 'Invited sent on',
+    },
+    {
+      key: 'status',
+      label: 'Status',
+      render: (row) => (
+        <div
+          className="flex items-center gap-2"
+          onClick={() =>
+            handleOpenDialog({
+              heading: 'Send Reminder',
+              subheading:
+                'Do you want to notify about the invitation you sent to join the workspace ?',
+              onAction: () => {
+                console.log('Operator deleted');
+              },
+              headericon: <Icons.ri_time_fill />,
+            })
+          }
+        >
+          <span>{row.status}</span>
+          {row.status.toLowerCase().includes('sent') && (
+            <Image
+              src={MailIcon}
+              alt="Mail Icon"
+              width={16}
+              height={16}
+              className="h-4 w-4"
+            />
+          )}
+        </div>
+      ),
+    },
     {
       key: 'Roles',
       label: 'Roles',
@@ -74,59 +110,16 @@ export default function OperatorsTable({
         </div>
       ),
     },
-    { key: 'Shift', label: 'Shift' },
     {
       key: 'OperatingHours',
       label: 'Operating Hours',
-      render: (row) => {
-        const isOperating = row.OperatingHours.trim() !== '';
-        return (
-          <div className="flex items-center gap-2">
-            <span>{row.OperatingHours}</span>
-            <span
-              className={`h-2 w-2 rounded-full ${
-                isOperating ? 'bg-[#009959]' : 'bg-[#F61818]'
-              }`}
-            />
-          </div>
-        );
-      },
     },
-    { key: 'Invitedon', label: 'Invited on' },
     {
       key: 'actions',
       label: 'Actions',
       render: (row) => (
         <div className="flex gap-2">
-          <ReusableDialog
-            trigger={
-              <button aria-label="Edit agent">
-                <Icons.ri_edit2_fill className="text-black" />
-              </button>
-            }
-            dialogTitle="Edit Information"
-            dialogClass="!max-w-[768px] "
-          >
-            <AddAgent
-              defaultValues={{}}
-              onSubmit={(data) => {
-                console.log('Submitted', data);
-              }}
-              submitButton="Edit Agent"
-            />
-          </ReusableDialog>
-
-          {/* view agent chat */}
-          <ReusableDialog
-            trigger={
-              <button aria-label="View agent">
-                <Icons.ri_eye_fill />
-              </button>
-            }
-            dialogClass="gap-0 !max-w-[554px]"
-          >
-            <AgenChatHistoryCard submitButton="Edit Agent" />
-          </ReusableDialog>
+          {/* delete icon */}
 
           <button
             aria-label="Delete agent"

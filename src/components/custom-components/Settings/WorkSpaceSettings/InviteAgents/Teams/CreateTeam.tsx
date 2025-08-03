@@ -67,14 +67,19 @@ const CreateTeam: React.FC<CreateTeamProps> = ({
             </div>
             <CardFooter className="mt-4 flex justify-end gap-4 p-0">
               <Button
-                className="basis-1/3 rounded-lg py-3"
+                // className="basis-1/3 rounded-lg py-3"
+                className="bg-brand-primary h-[36px] w-full max-w-[130px] rounded-lg px-[22px] py-2.5 text-xs leading-4 font-semibold text-white"
                 variant="outline"
                 type="button"
                 onClick={onCancel}
               >
                 Cancel
               </Button>
-              <Button type="submit" className="basis-1/3 rounded-lg py-3">
+              <Button
+                type="submit"
+                className="bg-brand-primary h-[36px] w-full max-w-[130px] rounded-lg px-[22px] py-2.5 text-xs leading-4 font-semibold text-white"
+                // className="basis-1/3 rounded-lg py-3"
+              >
                 Continue
               </Button>
             </CardFooter>
