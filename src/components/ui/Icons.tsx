@@ -88,6 +88,7 @@ import {
   RiContactsBookLine,
   RiCloseCircleFill,
   RiTimeFill,
+  RiKey2Fill,
 } from '@remixicon/react';
 
 // register your icons here as your requirements
@@ -179,4 +180,5 @@ export const Icons = {
   loader: Loader2,
   Eye: Eye,
   ri_time_fill: RiTimeFill, //added arrow down by rahul
+  key: RiKey2Fill, // key added by sagar
 };
