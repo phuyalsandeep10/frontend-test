@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { useCopyToClipboard } from '../../../../hooks/utils/useCopyToClipboard';
 import { Button } from '@/components/ui/button';
 import { Check, Copy } from 'lucide-react';
 import { Card } from '@/components/ui/card';
+import { useCopyToClipboard } from '@/hooks/utils/useCopyToClipboard';
 
 interface IconData {
   name: string;

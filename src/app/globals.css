@@ -45,12 +45,26 @@
   /* Brand theme custom colors   */
   --color-theme-bg: #f8f8f8;
   --color-brand-primary: #9500ff;
+  --color-brand-hover: #a233ff;
+  --color-brand-pressed: #7a00d1;
   --color-brand-dark: #2d004c;
   --color-brand-light: #dfb3ff;
+  --color-brand-disable: #e8dfff;
+  --color-disabled-foreground: #71717a;
 
+  --color-secondary-hover: #f6ebff;
+  --color-secondary-pressed: #e3d1ff;
+  --color-secondary-disabled: #d9bfff;
+  --color-light-blue: #c9c9f7;
+  --color-grey-light: #d4d4d4;
+  --color-light: #c9c9f7;
+  --color-brand-text: #9b5cc7;
   --color-theme-text-primary: #71717a;
   --color-theme-text-dark: #18181b;
   --color-theme-text-light: #d4d4d8;
+  --color-pure-black: #000000;
+  --color-pure-white: #ffffff;
+  --color-border-grey: #0000004d;
 
   --color-gray-primary: #737373;
   --color-gray-dark: #262626;
@@ -58,15 +72,26 @@
 
   --color-error: #f61819;
   --color-error-light: #fad6d5;
+  --color-error-bg: #fff5f3;
+  --color-error-border: #fad6d5;
   --color-success: #009959;
   --color-success-light: #e5f9dc;
+  --color-success-prominent: #009959;
   --color-warning: #f5ce32;
   --color-warning-light: #fef1d2;
   --color-info: #3872b7;
   --color-info-light: #dae8fa;
+  --color-alert-prominent: #f61818;
+  --color-prominent-success: #e5f9db;
+  --color-warning-prominent: #f5ce31;
+  --color-brand-bg-gradient: '#C9C9F780';
 
   /* Brand fonts  */
   --font-outfit: var(--font-outfit);
+
+  --leading-21: '21px';
+  --leading-19: '19px';
+  --leading-17: '17px';
 }
 
 :root {
@@ -94,7 +119,8 @@
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.984 0.003 247.858);
+  /* --sidebar: oklch(0.984 0.003 247.858); */
+  --sidebar: #fff;
   --sidebar-foreground: oklch(0.129 0.042 264.695);
   --sidebar-primary: oklch(0.208 0.042 265.755);
   --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
@@ -142,7 +168,21 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
 }
+
+/* .custom-scroll::-webkit-scrollbar {
+  width: 1px;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 1px;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+} */

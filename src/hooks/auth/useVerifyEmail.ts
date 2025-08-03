@@ -1,0 +1,28 @@
+import { ROUTES } from '@/routes/routes';
+import { AuthService } from '@/services/auth/auth';
+import { VerifyEmailpayload } from '@/services/auth/types';
+import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+
+export const useVerifyEmail = () => {
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: (payload: VerifyEmailpayload) =>
+      AuthService.verifyEmail(payload),
+    onSuccess: (data) => {
+      toast.success(data?.message || 'Email verified successfully');
+      const authToken = {
+        accessToken: data?.access_token,
+        refreshToken: data?.refresh_token,
+      };
+      AuthService.setAuthTokens(authToken);
+      console.log('Verify email success:', data);
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.detail || 'Email verification failed');
+      console.error('Verify email error:', error);
+    },
+  });
+};

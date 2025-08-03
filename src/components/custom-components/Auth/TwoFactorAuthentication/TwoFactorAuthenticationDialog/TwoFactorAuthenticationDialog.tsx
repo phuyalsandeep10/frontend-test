@@ -19,9 +19,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
 import Image from 'next/image';
-import { useVerifyTwoFaOtp } from '../../../../../../hooks/auth/useVerifyTwoFaOtp';
 import { usePathname, useRouter } from 'next/navigation';
-import { userRoutes } from '@/routes/userRoutes';
+import { ROUTES } from '@/routes/routes';
+import { useVerifyTwoFaOtp } from '@/hooks/auth/useVerifyTwoFaOtp';
 
 const twoFactorAuthSchema = object({
   token: string().min(1, 'Authentication code is required'),
@@ -64,8 +64,8 @@ const TwoFactorAuthenticationDialog: React.FC<TwoFactorAuthProps> = ({
     if (!isPending) {
       closeModal();
       setValue('token', '');
-      if (pathname !== userRoutes.DASHBOARD) {
-        router.replace(userRoutes.DASHBOARD);
+      if (pathname !== ROUTES.DASHBOARD) {
+        router.replace(ROUTES.DASHBOARD);
       }
     }
   };

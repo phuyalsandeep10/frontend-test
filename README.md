@@ -2,6 +2,22 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+### 1. Clone the repository
+
+git clone https://github.com/your-username/your-repo.git
+cd your-repo
+
+## Branching Strategy
+
+### 🔧 Development Branch
+
+All feature development and testing should be done on the `staging` branch.
+
+````bash
+
+git checkout staging
+git pull origin staging
+
 First, run the development server:
 
 ```bash
@@ -12,7 +28,7 @@ yarn dev
 pnpm dev
 # or
 bun dev
-```
+````
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 

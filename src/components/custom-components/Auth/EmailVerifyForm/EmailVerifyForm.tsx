@@ -4,75 +4,83 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Card } from '@/components/ui/card';
+import { Form } from '@/components/ui/form';
 import { emailVerifyFormSchema } from './emailVerifyFormHelper';
-import { useVerifyEmail } from '../../../../../hooks/auth/useVerifyEmail';
+import { useVerifyEmail } from '@/hooks/auth/useVerifyEmail';
+import OTP from '@/components/common/hook-form/OTP';
+import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import SuccessScreen from '../ForgotPasswordVerifyForm/ForgotPasswordSuccess';
 
 const EmailVerifyForm = () => {
-  const { mutate: verifyEmailAddress, isPending } = useVerifyEmail();
-
+  const [hasError, setHasError] = useState(false);
+  const [verifySuccess, setVerifySuccess] = useState(false);
+  const searchParams = useSearchParams();
+  const email = searchParams.get('email');
+  const { mutate: verifyEmail, isPending: verifyEmailPending } =
+    useVerifyEmail();
   const form = useForm<z.infer<typeof emailVerifyFormSchema>>({
     resolver: zodResolver(emailVerifyFormSchema),
     defaultValues: {
       token: '',
-      email: '',
     },
   });
 
-  async function onSubmit(values: z.infer<typeof emailVerifyFormSchema>) {
-    verifyEmailAddress(values);
-  }
+  const onSubmit = (values: any) => {
+    const verifyEmailData = { ...values, email };
+    console.log(verifyEmailData);
+    verifyEmail(verifyEmailData, {
+      onSuccess: () => {
+        setHasError(false);
+        setVerifySuccess(true);
+      },
+      onError: (error) => {
+        setHasError(true);
+        setVerifySuccess(false);
+        console.log(error);
+      },
+    });
+  };
 
   return (
-    <div className="flex h-screen items-center justify-center">
-      <Card className="w-full max-w-sm">
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="w-full space-y-2 px-6"
-          >
-            <FormField
-              control={form.control}
-              name="token"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Token</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter your token" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+    <div className="mt-[150px]">
+      {!verifySuccess ? (
+        <>
+          <p className="text-theme-text-primary mb-8">
+            We have sent mail with verification code to *****@gmail.com.
+          </p>
 
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter your email" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit" className="cursor-pointer">
-              {isPending ? 'Verifying...' : 'Verify'}
-            </Button>
-          </form>
-        </Form>
-      </Card>
+          <div className="w-[489px]">
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="w-full space-y-4"
+              >
+                <OTP
+                  label="Enter OTP received in mail."
+                  required
+                  control={form.control}
+                  name="token"
+                  hasError={hasError}
+                />
+                <Button
+                  variant="default"
+                  type="submit"
+                  size="lg"
+                  className="mt-4 w-full"
+                >
+                  {verifyEmailPending ? 'Verifying...' : 'Continue'}
+                </Button>
+              </form>
+            </Form>
+          </div>
+        </>
+      ) : (
+        <SuccessScreen
+          text="SUCCESSFUL"
+          subText="Email Verification successful."
+        />
+      )}
     </div>
   );
 };
