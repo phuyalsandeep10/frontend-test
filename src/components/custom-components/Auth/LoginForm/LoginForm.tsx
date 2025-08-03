@@ -64,7 +64,7 @@ const LoginForm = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full space-y-4 pt-10"
+          className="w-full space-y-4 pt-10 pb-[16px]"
         >
           <InputField
             control={form.control}
@@ -80,7 +80,6 @@ const LoginForm = () => {
             label="Password"
             type="password"
             placeholder="Enter your password"
-            // rightIcon={<Icons.eye size={16} />}
             required
           />
           <div>
@@ -88,12 +87,17 @@ const LoginForm = () => {
               <label className="flex items-center space-x-2">
                 <input
                   type="checkbox"
-                  className="accent-brand-primary h-4 w-4"
+                  className="accent-brand-primary border-grey-light h-4 w-4"
                 />
-                <span>Remember Me</span>
+                <span className="text-[14px] leading-[21px] font-normal">
+                  Remember Me
+                </span>
               </label>
 
-              <Link href="forgot-password" className="text-brand-primary">
+              <Link
+                href="forgot-password"
+                className="text-brand-primary text-[14px] leading-[21px] font-normal"
+              >
                 Forgot password?
               </Link>
             </div>
@@ -108,7 +112,7 @@ const LoginForm = () => {
             size="lg"
             className="mt-4 w-full"
           >
-            {isPending ? 'Continuing...' : 'Continue'}
+            {isPending ? 'Logging in...' : 'Login to Dashboard'}
           </Button>
           <p className="align-center text-center font-medium">Or</p>
 

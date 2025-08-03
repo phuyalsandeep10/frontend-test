@@ -83,6 +83,7 @@ const RegisterForm = () => {
                 name="name"
                 label="Enter your full name"
                 placeholder="Full Name"
+                required
               />
 
               <ValidEmailInput
@@ -107,6 +108,7 @@ const RegisterForm = () => {
                 redirectLink="/"
                 labelText="I have read and I accept Chatboq’s terms and use."
                 redirectLinkText="Read Terms"
+                error={!!isAgreeError}
               />
               {isAgreeError && <ErrorText error={isAgreeError} />}
 
@@ -144,7 +146,7 @@ const RegisterForm = () => {
               </Button>
             </form>
 
-            <p className="lead mt-8 text-right text-[18px] font-normal text-black">
+            <p className="lead mt-8 text-left text-[18px] font-normal text-black">
               Already have an account?
               <Link
                 href={'/login'}

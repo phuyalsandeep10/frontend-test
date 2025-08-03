@@ -34,8 +34,10 @@ import {
   UserPlus,
   Filter,
   Info,
+  Loader2,
   Reply,
   ArrowUpCircle,
+  Eye,
 } from 'lucide-react';
 import {
   RiCheckboxCircleFill,
@@ -72,6 +74,8 @@ import {
   RiUserSettingsFill,
   RiUserFill,
   RiCalendarLine,
+  RiAlertLine,
+  RiDownloadCloudLine,
   RiChatAiFill,
   RiIndeterminateCircleFill,
   RiMapPinLine,
@@ -170,5 +174,9 @@ export const Icons = {
   ri_window_line: RiWindowLine,
   ri_login_box_line: RiLoginBoxLine,
   ri_calendar_line: RiCalendarLine,
+  alert: RiAlertLine,
+  download_cloud: RiDownloadCloudLine,
+  loader: Loader2,
+  Eye: Eye,
   ri_time_fill: RiTimeFill, //added arrow down by rahul
 };

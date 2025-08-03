@@ -26,6 +26,10 @@ interface DeleteModalProps {
   iconBgColor?: string;
   iconColor?: string;
   descriptionColor?: string;
+  icon?: React.ReactNode;
+  iconBgColor?: string;
+  iconColor?: string;
+  descriptionColor?: string;
 }
 const DeleteModal: React.FC<DeleteModalProps> = ({
   trigger,
@@ -59,6 +63,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent className="flex w-[326px] flex-col items-center text-center">
         <DialogTitle className="sr-only">{title}</DialogTitle>
+
         <div
           className={`flex h-[52px] w-[52px] items-center justify-center rounded-full ${iconBgColor ?? 'bg-error-light'}`}
         >
