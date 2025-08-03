@@ -7,8 +7,8 @@ export const ROUTES = {
   VERIFY_EMAIL: '/verify-email',
   VERIFY_TWO_FA_TOKEN: 'verify-two-factor-authentication',
   SETTINGS: {
-    ACCOUNT_INFORMATION: '/settings/account-information',
-    NOTIFICATIONS: '/settings/notifications',
+    ACCOUNT_INFORMATION: '/settings/accounts/account-information',
+    NOTIFICATIONS: '/settings/accounts/notifications',
     AVAILABILITY: '/settings/availability',
     SECURITY: '/settings/security',
     PERSONALIZATION: '/settings/personalization',
@@ -29,7 +29,7 @@ export const ROUTES = {
   },
   TOOLS_FEATURES: {
     DASHBOARD: '/tools_features/dashboard',
-    TICKET: '/tools_features/ticket',
+    TICKET: '/ticket',
     VISITORS: '/tools_features/visitors',
     AI_ASSISTANT: '/tools_features/ai_assistant',
     TRIGGER: '/tools_features/trigger',
