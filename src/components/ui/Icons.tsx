@@ -88,6 +88,9 @@ import {
   RiContactsBookLine,
   RiCloseCircleFill,
   RiTimeFill,
+  RiMicrosoftFill,
+  RiKanbanView2,
+  RiTableFill,
 } from '@remixicon/react';
 
 // register your icons here as your requirements
@@ -179,4 +182,7 @@ export const Icons = {
   loader: Loader2,
   Eye: Eye,
   ri_time_fill: RiTimeFill, //added arrow down by rahul
+  microsofit_fill: RiMicrosoftFill,
+  karaban_view: RiKanbanView2,
+  table_view: RiTableFill,
 };
