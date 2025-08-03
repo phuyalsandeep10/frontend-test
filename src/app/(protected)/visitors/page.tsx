@@ -23,8 +23,8 @@ const VisitorMap = dynamic(
 
 const page = () => {
   return (
-    <div className="mx-[112px]">
-      <div className="mb-[32px]">
+    <div className="font-outfit mx-28">
+      <div className="mb-8">
         <Heading
           title="Visitors"
           description="Track and engage with visitors on your website in real-time."
@@ -40,7 +40,7 @@ const page = () => {
         />
       </div>
       <div>
-        <div className="mb-[40px]">
+        <div className="mb-10">
           <CurrentVisitors
             title="Current Visitors"
             description="See who is currently browsing your website and initiate conversations."

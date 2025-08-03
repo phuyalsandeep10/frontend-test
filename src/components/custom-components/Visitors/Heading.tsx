@@ -8,15 +8,15 @@ type HeadingProps = {
 
 const Heading: React.FC<HeadingProps> = ({ title, description, icon }) => {
   return (
-    <div className="mt-[44px] mb-[40px]">
-      <div className="flex gap-[8px]">
-        <h1 className="pb-[4px] text-[32px] leading-[40px] font-semibold tracking-tight">
+    <div className="mt-11 mb-10">
+      <div className="flex gap-2">
+        <h1 className="pb-1 text-[32px] leading-10 font-semibold tracking-tight">
           {title}
         </h1>
         {icon && <span className="flex items-center">{icon}</span>}
       </div>
       <p
-        className="text-theme-text-primary text-[12px] leading-[17px]"
+        className="text-theme-text-primary text-xs leading-4"
         style={{ letterSpacing: '0.002em' }}
       >
         {description}

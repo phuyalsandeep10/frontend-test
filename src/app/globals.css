@@ -94,6 +94,10 @@
   --leading-17: '17px';
 }
 
+.custom-gradient {
+  background: linear-gradient(0.42deg, #ffffff 74.08%, #d498ff 122.88%);
+}
+
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);

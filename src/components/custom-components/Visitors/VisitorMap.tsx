@@ -104,18 +104,18 @@ const VisitorMap: React.FC<VisitorMapProps> = ({ visitors }) => {
       <div class="flex gap-[10px] items-center" style="min-width: 150px; max-width: max-content;">
         ${
           flagUrl
-            ? `<div class="border border-grey-light p-[2px] rounded-[6px] flex items-center justify-center w-[40px] h-[40px] shrink-0">
-                <img src="${flagUrl}" alt="${countryName} flag" class="w-[20px] h-[22px] block" />
+            ? `<div class="border border-grey-light p-[2px] rounded-[6px] flex items-center justify-center w-10 h-10 shrink-0">
+                <img src="${flagUrl}" alt="${countryName} flag" class="w-5 h-[22px] block" />
               </div>`
             : ''
         }
         <div class="flex flex-col justify-center">
-          <div class="font-semibold leading-[29px] text-[18px] whitespace-nowrap">
+          <div class="font-semibold leading-7 text-lg whitespace-nowrap">
             ${countryName}
           </div>
-          <div class="font-bold flex items-center gap-[4px] whitespace-nowrap">
+          <div class="font-bold flex items-center gap-1 whitespace-nowrap">
                ${userFillSvg}
-            <span class="leading-[29px] font-medium text-[18px] text-theme-text-primary">${count}</span>
+            <span class="leading-7 font-medium text-lg text-theme-text-primary">${count}</span>
           </div>
         </div>
       </div>

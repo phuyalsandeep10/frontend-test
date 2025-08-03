@@ -19,10 +19,10 @@ const CurrentVisitors: React.FC<CurrentVisitorsProps> = ({
   buttonIcon,
 }) => {
   return (
-    <div className="mb-[40px]">
+    <div className="mb-10">
       <div className="flex items-center justify-between">
         <p
-          className="text-brand-dark text-[20px] leading-[30px] font-semibold"
+          className="text-brand-dark text-xl leading-7.5 font-semibold"
           style={{ letterSpacing: '-0.001em' }}
         >
           {title}
@@ -32,12 +32,12 @@ const CurrentVisitors: React.FC<CurrentVisitorsProps> = ({
         </Button>
       </div>
       <p
-        className="text-theme-text-primary mb-[8px] text-[12px] leading-[17px]"
+        className="text-theme-text-primary mb-2 text-xs leading-4.5"
         style={{ letterSpacing: '0.002em' }}
       >
         {description}
       </p>
-      <p className="text-brand-dark text-[14px] leading-[21px] font-semibold">
+      <p className="text-brand-dark text-[14px] leading-5 font-semibold">
         {highlightText}
       </p>
     </div>
