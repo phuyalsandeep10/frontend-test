@@ -26,10 +26,6 @@ interface DeleteModalProps {
   iconBgColor?: string;
   iconColor?: string;
   descriptionColor?: string;
-  icon?: React.ReactNode;
-  iconBgColor?: string;
-  iconColor?: string;
-  descriptionColor?: string;
 }
 const DeleteModal: React.FC<DeleteModalProps> = ({
   trigger,
