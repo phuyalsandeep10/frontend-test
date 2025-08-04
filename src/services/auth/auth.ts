@@ -135,7 +135,7 @@ export class AuthService {
   // Verify 2fa otp
   static async verify2FAOtp(payload: verify2FaPayload) {
     try {
-      const response = await axiosInstance.post('/auth/2fa-verfiy', payload);
+      const response = await axiosInstance.post('/auth/2fa-verify', payload);
       return response.data;
     } catch (error) {
       throw error;

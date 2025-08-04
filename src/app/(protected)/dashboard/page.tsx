@@ -1,14 +1,7 @@
 'use client';
 
+import AuthenticatorModal from '@/components/modal/Authenticator/AuthenticatorModal';
 import ChangePasswordModal from '@/components/modal/ChangePassword/ChangePasswordModal';
-import { Button } from '@/components/ui/button';
-import { useGenerateTwoFaOtp } from '@/hooks/auth/useGenerateTwoFaOtp';
-import { useDisable2Fa } from '@/hooks/auth/useDisable2Fa';
-import { useAuthenticatedUser } from '@/hooks/auth/useAuthenticatedUser';
-import React, { useEffect, useState } from 'react';
-import dynamic from 'next/dynamic';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,7 +12,12 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import AuthenticatorModal from '@/components/modal/Authenticator/AuthenticatorModal';
+import { Button } from '@/components/ui/button';
+import { useAuthenticatedUser } from '@/hooks/auth/useAuthenticatedUser';
+import { useDisable2Fa } from '@/hooks/auth/useDisable2Fa';
+import { useGenerateTwoFaOtp } from '@/hooks/auth/useGenerateTwoFaOtp';
+import dynamic from 'next/dynamic';
+import { useEffect, useState } from 'react';
 
 const TwoFactorAuthenticationDialog = dynamic(
   () =>
@@ -61,6 +59,7 @@ const DashboardPage = () => {
       setIs2FaEnabled(user.two_fa_enabled);
     }
   }, [user]);
+  console.log({ twoFaGeneratedOtpData });
 
   return (
     <div>
@@ -147,7 +146,7 @@ const DashboardPage = () => {
       <AuthenticatorModal
         open={open2FaAuthenticatorModal}
         setOpen={setOpen2FaAuthenticatorModal}
-        otpauth_url={twoFaGeneratedOtpData?.['2fa_otp_auth_url'] || ''}
+        otpauth_url={twoFaGeneratedOtpData?.data?.['otp_auth_url'] || ''}
       />
     </div>
   );

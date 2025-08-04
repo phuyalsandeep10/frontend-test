@@ -1,4 +1,3 @@
-import { ROUTES } from '@/routes/routes';
 import { AuthService } from '@/services/auth/auth';
 import { VerifyEmailpayload } from '@/services/auth/types';
 import { useMutation } from '@tanstack/react-query';
@@ -11,7 +10,8 @@ export const useVerifyEmail = () => {
   return useMutation({
     mutationFn: (payload: VerifyEmailpayload) =>
       AuthService.verifyEmail(payload),
-    onSuccess: (data) => {
+    onSuccess: (response) => {
+      const data = response?.data;
       toast.success(data?.message || 'Email verified successfully');
       const authToken = {
         accessToken: data?.access_token,
