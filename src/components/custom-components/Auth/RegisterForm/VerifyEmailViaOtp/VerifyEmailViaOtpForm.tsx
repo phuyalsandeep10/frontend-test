@@ -49,7 +49,8 @@ const VerifyEmailViaOtpForm = ({
   return (
     <div>
       <p className="text-theme-text-primary mb-8">
-        We have sent mail with verification code to *****@gmail.com.
+        We have sent mail with verification code to{' '}
+        <span className="font-semibold"> *****@gmail.com.</span>
       </p>
 
       <div className="w-[489px]">

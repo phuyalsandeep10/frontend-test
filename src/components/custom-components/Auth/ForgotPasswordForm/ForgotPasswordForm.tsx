@@ -48,7 +48,7 @@ const ForgotPasswordForm = () => {
           }
         />
 
-        <div className="flex h-screen pt-[40px]">
+        <div className="flex pt-[40px]">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}

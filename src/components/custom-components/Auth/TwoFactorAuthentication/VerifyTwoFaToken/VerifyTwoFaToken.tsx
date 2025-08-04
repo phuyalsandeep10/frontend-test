@@ -26,7 +26,7 @@ const VerifyTwoFaToken = () => {
 
   if (isLoading || !open2FaAuthenticatorModal) {
     return (
-      <div className="flex h-screen items-center justify-center">
+      <div className="flex items-center justify-center">
         <div>Loading...</div>
       </div>
     );

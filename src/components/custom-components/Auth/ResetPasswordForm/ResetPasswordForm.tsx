@@ -38,7 +38,7 @@ const ResetPasswordForm = () => {
         Dashboard
       </Link>
 
-      <div className="flex h-screen items-center justify-center">
+      <div className="flex items-center justify-center">
         <Card className="w-full max-w-sm">
           <Form {...form}>
             <form
