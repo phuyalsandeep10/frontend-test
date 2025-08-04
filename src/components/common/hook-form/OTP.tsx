@@ -1,7 +1,15 @@
-import React, { useState } from 'react';
-import Label from './Label';
+'use client';
+
+import React from 'react';
 import { Controller } from 'react-hook-form';
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from '@/components/ui/input-otp';
+import Label from './Label';
 import ErrorText from './ErrorText';
+import { cn } from '@/lib/utils';
 
 type OTPProps = {
   label?: string;
@@ -23,75 +31,50 @@ const OTP: React.FC<OTPProps> = ({
   name,
   control,
   hasError,
-  width,
-  height,
+  width = '60px',
+  height = '60px',
   gap = '8',
-  textSize = 'text-[32px]',
+  textSize,
 }) => {
   return (
     <Controller
       name={name}
       control={control}
       defaultValue=""
-      render={({ field, fieldState }) => {
-        const otp = field.value
-          .split('')
-          .concat(Array(length).fill(''))
-          .slice(0, length);
+      render={({ field, fieldState }) => (
+        <div className="w-full space-y-4">
+          <Label htmlFor="otp-0" required={required} className="mb-6">
+            {label}
+          </Label>
 
-        const handleChange = (value: string, index: number) => {
-          if (!/^[0-9]?$/.test(value)) return;
-          const newOtp = [...otp];
-          newOtp[index] = value;
-          const newValue = newOtp.join('');
-          field.onChange(newValue);
-
-          if (value && index < length - 1) {
-            const nextInput = document.getElementById(`otp-${index + 1}`);
-            nextInput?.focus();
-          }
-        };
-
-        const handleKeyDown = (
-          e: React.KeyboardEvent<HTMLInputElement>,
-          index: number,
-        ) => {
-          if (e.key === 'Backspace' && !otp[index] && index > 0) {
-            const prevInput = document.getElementById(`otp-${index - 1}`);
-            prevInput?.focus();
-          }
-        };
-
-        return (
-          <div className="w-full space-y-4">
-            <Label htmlFor="otp-0" required={required} className="mb-6">
-              {label}
-            </Label>
-
-            <div className={`flex w-full gap-${gap}`}>
-              {otp.map((digit: string, i: number) => (
-                <input
+          <InputOTP
+            maxLength={length}
+            value={field.value}
+            onChange={field.onChange}
+          >
+            <InputOTPGroup className={`flex gap-${gap}`}>
+              {Array.from({ length }).map((_, i) => (
+                <InputOTPSlot
                   key={i}
                   id={`otp-${i}`}
-                  type="text"
-                  inputMode="numeric"
-                  maxLength={1}
-                  value={digit}
-                  onChange={(e) => handleChange(e.target.value, i)}
-                  onKeyDown={(e) => handleKeyDown(e, i)}
-                  className={`h-[60px] w-[60px] min-w-0 flex-1 rounded-[8px] border-2 text-center ${textSize} font-semibold ${
+                  index={i}
+                  className={cn(
+                    'h-[60px] w-[60px] min-w-0 rounded-[8px] border-2 text-center text-3xl font-semibold',
+                    textSize,
                     hasError
                       ? 'border-alert-prominent text-grey-light'
-                      : 'border-gray-dark'
-                  } focus:border-brand-primary`}
-                  style={{ maxWidth: `${100 / length}%`, width, height }}
+                      : 'border-gray-dark',
+                    'data-[active=true]:border-brand-primary data-[active=true]:ring-[0px]',
+                  )}
+                  style={{ width, height }}
                 />
               ))}
-            </div>
-            {fieldState.error && <ErrorText error={fieldState.error.message} />}
-          </div>
-        );
-      }}
+            </InputOTPGroup>
+          </InputOTP>
+
+          {fieldState.error && <ErrorText error={fieldState.error.message} />}
+        </div>
+      )}
     />
   );
 };

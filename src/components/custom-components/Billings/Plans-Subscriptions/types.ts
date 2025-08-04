@@ -7,6 +7,7 @@ export type ToggleOption = {
 
 export type HeaderComponentProps = {
   heading: string;
+  className?: string;
 };
 
 export type Plan = {

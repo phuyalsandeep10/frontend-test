@@ -98,6 +98,15 @@
   background: linear-gradient(0.42deg, #ffffff 74.08%, #d498ff 122.88%);
 }
 
+.custom-gradient-2 {
+  background: linear-gradient(
+    105.14deg,
+    #d9a1ff 12.72%,
+    #9b5cc7 50.5%,
+    #9500ff 90.86%
+  );
+}
+
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
