@@ -1,12 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/ui/Icons';
-import { Plan } from './ManagePlansComponent';
-
-type PlanCardProps = {
-  plan: Plan;
-  onChangePlan: (planName: string) => void;
-  onCancelPlan: (planName: string) => void;
-};
+import { PlanCardProps } from './types';
 
 export const PlanCard = ({
   plan,

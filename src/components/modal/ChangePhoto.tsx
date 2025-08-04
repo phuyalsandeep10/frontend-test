@@ -12,13 +12,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import React, { ChangeEvent } from 'react';
 
-interface ChangePhotoModalProps {
+interface ChangePhotoProps {
   open: boolean;
   onClose: () => void;
   onImageChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-const ChangePhotoModal: React.FC<ChangePhotoModalProps> = ({
+const ChangePhotoModal: React.FC<ChangePhotoProps> = ({
   open,
   onClose,
   onImageChange,

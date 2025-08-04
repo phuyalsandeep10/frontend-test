@@ -70,11 +70,9 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
           )}
         </div>
         <div>
-          <p className="mb-[8px] text-[16px] leading-[26px] font-medium">
-            {title}
-          </p>
+          <p className="mb-2 text-[16px] leading-[26px] font-medium">{title}</p>
           <p
-            className={`text-[12px] leading-[17px] ${descriptionColor ?? 'text-alert-prominent'}`}
+            className={`text-xs leading-4 ${descriptionColor ?? 'text-alert-prominent'}`}
           >
             {description}
           </p>

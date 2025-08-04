@@ -4,15 +4,9 @@ import React, { useState, useMemo } from 'react';
 import { Icons } from '@/components/ui/Icons';
 import { ColumnDef } from '@tanstack/react-table';
 import DataTable from '@/components/common/table/table';
+import { PlanDataFeature } from './types';
 
-type PlanData = {
-  overview: string;
-  starter: boolean;
-  business: boolean;
-  enterprise: boolean;
-};
-
-const sectionData: Record<string, PlanData[]> = {
+const sectionData: Record<string, PlanDataFeature[]> = {
   'Pricing and Core Limits': [
     {
       overview: 'Cloud-Based',
@@ -140,7 +134,7 @@ const renderIcon = (value: boolean) =>
     <Icons.ri_close_circle_fill className="text-alert-prominent h-6 w-6" />
   );
 
-const columns: ColumnDef<PlanData>[] = [
+const columns: ColumnDef<PlanDataFeature>[] = [
   {
     accessorKey: 'overview',
     header: () => <span className="text-[16px] font-semibold">Overview</span>,

@@ -2,15 +2,7 @@
 
 import React from 'react';
 import { PlanCard } from './PlanCard';
-
-export type Plan = {
-  name: string;
-  price: number;
-  status: 'Active' | 'Expired';
-  note: string;
-  renewal: string;
-  company_name?: string;
-};
+import { Plan } from './types';
 
 const plans: Plan[] = [
   {

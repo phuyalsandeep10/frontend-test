@@ -2,22 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/ui/Icons';
 import Image from 'next/image';
 import React from 'react';
-
-type PlansComponentProps = {
-  title: string;
-  price: string;
-  subtitle: string;
-  buttonText: string;
-  description: string;
-  features: string[];
-  showImage?: boolean;
-  imageSrc?: string;
-  bgColor?: string;
-  prevPrice?: string;
-  className?: string;
-  buttonVariant?: React.ComponentProps<typeof Button>['variant'];
-  buttonOnClick?: () => void;
-};
+import { PlansComponentProps } from './types';
 
 const PlansComponent: React.FC<PlansComponentProps> = ({
   title,

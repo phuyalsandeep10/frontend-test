@@ -1,17 +1,7 @@
 import React, { useState } from 'react';
 import { Icons } from '@/components/ui/Icons';
 import { Checkbox } from '@/components/ui/checkbox';
-
-type FilterComponentProps = {
-  statusOptions: string[];
-  sortOptions: string[];
-  onStatusChange?: (selectedStatuses: string[]) => void;
-  onSortChange?: (selectedSort: string) => void;
-  statusLabel?: string;
-  sortLabel?: string;
-  className?: string;
-  getSortIcon?: (option: string, isSelected: boolean) => React.ReactNode;
-};
+import { FilterComponentProps } from './types';
 
 const FilterComponent: React.FC<FilterComponentProps> = ({
   statusOptions,
@@ -51,7 +41,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
     >
       <div className="w-[175px]">
         <div
-          className="border-grey-light text-theme-text-primary mb-2 flex cursor-pointer items-center justify-between rounded-[4px] border p-[10px] text-[12px] leading-[16px] font-semibold"
+          className="border-grey-light text-theme-text-primary mb-2 flex cursor-pointer items-center justify-between rounded-[4px] border p-[10px] text-xs leading-4 font-semibold"
           onClick={() => setIsStatusOpen((prev) => !prev)}
         >
           <span>{statusLabel}</span>
@@ -66,12 +56,12 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
             {statusOptions.map((status) => (
               <label
                 key={status}
-                className="flex cursor-pointer items-center gap-[16px] text-[12px]"
+                className="flex cursor-pointer items-center gap-4 text-xs"
               >
                 <Checkbox
                   checked={statusFilters.includes(status)}
                   onCheckedChange={() => toggleStatus(status)}
-                  className="border-grey-light data-[state=checked]:bg-brand-primary data-[state=checked]:border-brand-primary h-[22px] w-[20px] shadow-inner data-[state=checked]:text-white"
+                  className="border-grey-light data-[state=checked]:bg-brand-primary data-[state=checked]:border-brand-primary h-5.5 w-5 shadow-inner data-[state=checked]:text-white"
                 />
                 {status}
               </label>
@@ -83,7 +73,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
       <div className="bg-brand-light h-12 w-[1px]" />
       <div className="w-[178px]">
         <div
-          className="border-grey-light text-theme-text-primary mb-2 flex cursor-pointer items-center justify-between rounded border px-3 py-2 text-[12px] font-semibold"
+          className="border-grey-light text-theme-text-primary mb-2 flex cursor-pointer items-center justify-between rounded border px-3 py-2 text-xs font-semibold"
           onClick={() => setIsSortOpen((prev) => !prev)}
         >
           <span>{sortLabel}</span>
@@ -100,12 +90,12 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
               return (
                 <label
                   key={option}
-                  className="flex cursor-pointer items-center gap-3 text-[12px] leading-[17px]"
+                  className="flex cursor-pointer items-center gap-3 text-xs leading-4"
                 >
                   <Checkbox
                     checked={isSelected}
                     onCheckedChange={() => handleSortSelect(option)}
-                    className="border-grey-light data-[state=checked]:bg-brand-primary data-[state=checked]:border-brand-primary h-[22px] w-[20px] shadow-inner data-[state=checked]:text-white"
+                    className="border-grey-light data-[state=checked]:bg-brand-primary data-[state=checked]:border-brand-primary h-5.5 w-5 shadow-inner data-[state=checked]:text-white"
                   />
                   <span className="flex items-center gap-1">
                     {option}

@@ -2,15 +2,9 @@
 import React, { useMemo } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import DataTable from '@/components/common/table/table';
+import { PlanComparisonData } from './types';
 
-type PlanData = {
-  overview: string;
-  starter: string;
-  business: string;
-  enterprise: string;
-};
-
-const columns: ColumnDef<PlanData>[] = [
+const columns: ColumnDef<PlanComparisonData>[] = [
   {
     accessorKey: 'overview',
     header: 'Overview',
@@ -29,7 +23,7 @@ const columns: ColumnDef<PlanData>[] = [
   },
 ];
 
-const rawData: PlanData[] = [
+const rawData: PlanComparisonData[] = [
   {
     overview: 'User Limit',
     starter: '10',
