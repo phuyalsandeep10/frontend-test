@@ -16,6 +16,7 @@ import { StrongPasswordField } from '@/components/common/hook-form/StrongPasswor
 import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import SuccessScreen from './ForgotPasswordSuccess';
+import { ROUTES } from '@/routes/routes';
 
 const ForgotPasswordVerifyForm = () => {
   const { mutate: forgotPassVerify, isPending } = useForgotPasswordVerify();
@@ -111,6 +112,7 @@ const ForgotPasswordVerifyForm = () => {
           <SuccessScreen
             text="SUCCESSFUL"
             subText="You have changed your password"
+            redirectLink={ROUTES.LOGIN}
           />
         )}
       </div>

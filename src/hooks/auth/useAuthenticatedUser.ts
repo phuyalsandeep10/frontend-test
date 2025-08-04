@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import axiosInstance from '@/apiConfigs/axiosInstance';
 import { AuthService } from '@/services/auth/auth';
 
-interface User {
+export interface User {
   data: {
     user: {
       id: number;

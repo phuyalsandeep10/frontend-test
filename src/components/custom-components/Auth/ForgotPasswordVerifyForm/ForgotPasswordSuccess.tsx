@@ -7,8 +7,9 @@ import { Button } from '@/components/ui/button';
 interface SuccessScreenProps {
   text: string;
   subText: string;
+  redirectLink: string;
 }
-const SuccessScreen = ({ text, subText }: SuccessScreenProps) => {
+const SuccessScreen = ({ text, subText, redirectLink }: SuccessScreenProps) => {
   return (
     <div className="flex flex-col items-center pb-20 md:w-[489px]">
       <Image
@@ -27,7 +28,7 @@ const SuccessScreen = ({ text, subText }: SuccessScreenProps) => {
         {subText}
       </p>
 
-      <Link href="/login" passHref className="w-full">
+      <Link href={`${redirectLink}`} className="w-full">
         <Button variant="default" size="lg" className="w-full">
           Go to login
         </Button>

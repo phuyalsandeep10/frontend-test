@@ -20,6 +20,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import AuthenticatorModal from '@/components/modal/Authenticator/AuthenticatorModal';
+import { useAuthStore } from '@/store/AuthStore/useAuthStore';
 
 const DashboardPage = () => {
   const [openPasswordModal, setOpenPasswordModal] = useState(false);
@@ -37,16 +38,14 @@ const DashboardPage = () => {
   } = useGenerateTwoFaOtp();
 
   const { mutate: disable2Fa, isPending: disable2FaLoading } = useDisable2Fa();
-  const { data: authUserData } = useAuthenticatedUser();
-
+  const authData = useAuthStore((state) => state.authData);
+  const user = authData?.data?.user;
   useEffect(() => {
     if (twoFaGeneratedOtpData && !generate2faOtpLoading) {
       setOpen2FaAuthenticatorModal(true);
       setConfirm2FaModal(false);
     }
   }, [twoFaGeneratedOtpData, generate2faOtpLoading]);
-
-  const user = authUserData?.data?.user;
 
   useEffect(() => {
     if (user) {

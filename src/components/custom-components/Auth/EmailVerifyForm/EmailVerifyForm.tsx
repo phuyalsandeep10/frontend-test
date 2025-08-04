@@ -11,6 +11,7 @@ import OTP from '@/components/common/hook-form/OTP';
 import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import SuccessScreen from '../ForgotPasswordVerifyForm/ForgotPasswordSuccess';
+import { ROUTES } from '@/routes/routes';
 
 const EmailVerifyForm = () => {
   const [hasError, setHasError] = useState(false);
@@ -79,6 +80,7 @@ const EmailVerifyForm = () => {
         <SuccessScreen
           text="SUCCESSFUL"
           subText="Email Verification successful."
+          redirectLink={ROUTES.DASHBOARD}
         />
       )}
     </div>
