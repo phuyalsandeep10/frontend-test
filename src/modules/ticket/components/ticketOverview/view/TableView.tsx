@@ -15,6 +15,11 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Icons } from '@/components/ui/Icons';
 import Pagination from '@/components/common/pagination/Pagination';
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from '@/components/ui/tooltip';
 
 // Dummy ticket data - you can add more items here or fetch from API
 const tickets: TicketCardProps[] = [
@@ -150,23 +155,52 @@ const TableView = () => {
           </span>
 
           <div className="text-gray-primary flex items-center gap-4.5">
-            <button title="Archive">
-              <Icons.aiassistant className="h-6 w-6" />
-            </button>
-            <button title="Delete">
-              <Icons.danger className="h-6 w-6" />
-            </button>
-            <button title="Assign">
-              <Icons.aiassistant className="h-6 w-6" />
-            </button>
-            <button title="Tag">
-              <Icons.alert className="h-6 w-6" />
-            </button>
             {selectedCountInCurrentTab > 1 && (
-              <button title="More">
-                <Icons.more_vertical className="h-6 w-6" />
-              </button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button>
+                    <Icons.git_merge className="h-6 w-6 cursor-pointer" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="top">Merge</TooltipContent>
+              </Tooltip>
             )}
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button>
+                  <Icons.arrow_left_right className="h-6 w-6 cursor-pointer" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="top">Swap</TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button>
+                  <Icons.ri_user_fill className="h-6 w-6 cursor-pointer" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="top">Assign</TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button>
+                  <Icons.error_warning2 className="h-6 w-6 cursor-pointer" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="top">More</TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button>
+                  <Icons.delete_bin_fill className="h-6 w-6 cursor-pointer" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="top">Delete</TooltipContent>
+            </Tooltip>
           </div>
         </div>
       )}
@@ -181,7 +215,7 @@ const TableView = () => {
                     <Checkbox
                       checked={allChecked}
                       onCheckedChange={toggleSelectAll}
-                      className={`cursor-pointer ${
+                      className={`bg-gray-primary h-4 w-4 cursor-pointer ${
                         allChecked ? 'accent-brand-primary' : ''
                       }`}
                       ref={(el) => {
@@ -200,12 +234,12 @@ const TableView = () => {
           </TableHeader>
           <TableBody>
             {pagedTickets.map((ticket) => (
-              <TableRow key={ticket.id}>
+              <TableRow key={ticket.id} className="">
                 <TableCell>
                   <Checkbox
                     checked={selectedIds.includes(ticket.id!)}
                     onCheckedChange={() => toggleItem(ticket.id!)}
-                    className={`cursor-pointer ${
+                    className={`bg-gray-primary h-4 w-4 cursor-pointer ${
                       selectedIds.includes(ticket.id!)
                         ? 'accent-brand-primary'
                         : ''
@@ -214,16 +248,22 @@ const TableView = () => {
                 </TableCell>
                 <TableCell>
                   <div className="flex flex-col">
-                    <span className="font-semibold">{ticket.created_by}</span>
+                    <span className="font-outfit text-base font-normal text-black">
+                      {ticket.created_by}
+                    </span>
                     <span className="text-muted-foreground text-sm">
                       {ticket.title}
                     </span>
                   </div>
                 </TableCell>
-                <TableCell>{ticket.status}</TableCell>
-                <TableCell>{ticket.timeAgo}</TableCell>
+                <TableCell className="font-outfit text-sm font-normal">
+                  {ticket.status}
+                </TableCell>
+                <TableCell className="font-outfit text-base font-normal">
+                  {ticket.timeAgo}
+                </TableCell>
                 <TableCell>
-                  <Avatar className="h-8 w-8">
+                  <Avatar className="h-10 w-10">
                     <AvatarImage
                       src={ticket.avatarUrl || ''}
                       alt={ticket.created_by}
@@ -233,7 +273,11 @@ const TableView = () => {
                     </AvatarFallback>
                   </Avatar>
                 </TableCell>
-                <TableCell>{ticket.priority}</TableCell>
+                <TableCell className="font-outfit text-xs font-bold">
+                  <span className="bg-black px-2 py-2 text-white">
+                    {ticket.priority}
+                  </span>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

@@ -5,6 +5,11 @@ import { TicketCardProps } from '../../type';
 import TicketCard from '@/components/common/ticketCard/TicketCard';
 import TicketTabs from '@/components/common/ticketCard/TicketTabs';
 import { Icons } from '@/components/ui/Icons';
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from '@/components/ui/tooltip';
 
 const allTickets: TicketCardProps[] = [
   {
@@ -97,23 +102,52 @@ export default function CardView() {
           </span>
 
           <div className="text-gray-primary flex items-center gap-4.5">
-            <button title="Archive">
-              <Icons.aiassistant className="h-6 w-6" />
-            </button>
-            <button title="Delete">
-              <Icons.danger className="h-6 w-6" />
-            </button>
-            <button title="Assign">
-              <Icons.aiassistant className="h-6 w-6" />
-            </button>
-            <button title="Tag">
-              <Icons.alert className="h-6 w-6" />
-            </button>
             {selectedCountInCurrentTab > 1 && (
-              <button title="More">
-                <Icons.more_vertical className="h-6 w-6" />
-              </button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button>
+                    <Icons.git_merge className="h-6 w-6 cursor-pointer" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="top">Merge</TooltipContent>
+              </Tooltip>
             )}
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button>
+                  <Icons.arrow_left_right className="h-6 w-6 cursor-pointer" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="top">Swap</TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button>
+                  <Icons.ri_user_fill className="h-6 w-6 cursor-pointer" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="top">Assign</TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button>
+                  <Icons.error_warning2 className="h-6 w-6 cursor-pointer" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="top">More</TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button>
+                  <Icons.delete_bin_fill className="h-6 w-6 cursor-pointer" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="top">Delete</TooltipContent>
+            </Tooltip>
           </div>
         </div>
       )}

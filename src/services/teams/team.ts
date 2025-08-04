@@ -1,4 +1,3 @@
-// @/services/team/team.ts
 export interface Team {
   id: number;
   name: string;
@@ -12,4 +11,8 @@ export interface Team {
   deleted_at: string | null;
 }
 
-export type TeamResponse = Team[]; // Since your API returns an array
+export type TeamResponse = {
+  data: Team[];
+  message?: string;
+  success?: boolean;
+};

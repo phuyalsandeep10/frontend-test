@@ -16,8 +16,6 @@ import { getCroppedImg } from '@/lib/cropImage';
 import TerminateWorkspace from './TerminateWorkspace';
 import Information from './Information';
 import WorkSpaceDetails from './WorkSpaceDetails';
-import TicketOvervier from '@/modules/ticket/components/ticketOverview/TicketOverview';
-import TicketOverview from '@/modules/ticket/components/ticketOverview/TicketOverview';
 type Country = {
   code: string;
   name: string;
@@ -212,7 +210,6 @@ export default function WorkspaceInformation() {
         {/* Terminate Workspace */}
         <TerminateWorkspace />
       </div>
-      <TicketOverview />
       <ProfileImageModal
         // title="helolo"
         // changePhotoText="Change Photo1"

@@ -8,13 +8,13 @@ import KarbanView from './view/KarbanView';
 import TableView from './view/TableView';
 import { Icons } from '@/components/ui/Icons';
 
-export default function MainPage() {
+export default function TicketOverview() {
   const [activeTab, setActiveTab] = useState<'card' | 'table' | 'karban'>(
     'card',
   );
 
   return (
-    <div className="max-w-full pt-6">
+    <div className="max-w-full pt-11">
       {/* Full width header */}
       <h1 className="font-outfit text-brand-dark w-full text-xl leading-[30px] font-semibold">
         Ticket Overview

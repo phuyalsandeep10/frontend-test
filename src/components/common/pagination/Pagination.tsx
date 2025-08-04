@@ -21,10 +21,6 @@ export default function Pagination({
   const startItem = (currentPage - 1) * itemsPerPage + 1;
   const endItem = Math.min(currentPage * itemsPerPage, totalItems);
 
-  // Build page numbers with ellipsis
-  // Show up to 4 pages, then ellipsis, then last page (if totalPages > 6)
-  // If fewer pages, show all
-
   const pageNumbers: (number | string)[] = [];
 
   if (totalPages <= 6) {
@@ -64,8 +60,12 @@ export default function Pagination({
   return (
     <div className="font-outfit flex items-center justify-between py-8">
       {/* Left: Showing X - Y of Z */}
-      <div className="text-sm text-gray-600">
-        {startItem}-{endItem} of {totalItems}
+      <div className="text-gray-primary font-outfit text-base font-normal">
+        Showing{' '}
+        <span className="text-brand-primary">
+          {startItem}-{endItem}{' '}
+        </span>
+        of <span className="text-brand-primary">{totalItems}</span>
       </div>
 
       {/* Right: Pagination Buttons */}

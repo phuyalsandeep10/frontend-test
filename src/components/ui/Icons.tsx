@@ -91,6 +91,10 @@ import {
   RiMicrosoftFill,
   RiKanbanView2,
   RiTableFill,
+  RiDeleteBinLine,
+  RiErrorWarningFill,
+  RiArrowLeftRightLine,
+  RiGitMergeFill,
 } from '@remixicon/react';
 
 // register your icons here as your requirements
@@ -185,4 +189,8 @@ export const Icons = {
   microsofit_fill: RiMicrosoftFill,
   karaban_view: RiKanbanView2,
   table_view: RiTableFill,
+  delete_bin_fill: RiDeleteBinLine,
+  error_warning2: RiErrorWarningFill,
+  arrow_left_right: RiArrowLeftRightLine,
+  git_merge: RiGitMergeFill,
 };
