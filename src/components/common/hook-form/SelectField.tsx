@@ -18,7 +18,10 @@ type SelectFieldProps<T extends FieldValues> = {
   name: Path<T>;
   label?: string;
   required?: boolean;
-  options: { value: string; label: string }[];
+  options: {
+    value: string;
+    label: React.ReactNode;
+  }[];
   placeholder?: string;
   className?: string;
   colorMap?: Record<string, string>; // Add this prop for color mapping

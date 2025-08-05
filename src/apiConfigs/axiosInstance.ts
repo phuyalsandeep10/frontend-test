@@ -1,7 +1,8 @@
 import { AuthService } from '@/services/auth/auth';
 import axios from 'axios';
 
-export const baseURL = 'http://127.0.0.1:8000';
+// export const baseURL = 'http://127.0.0.1:8000';
+export const baseURL = 'http://192.168.1.17:8000';
 // export const baseURL = 'https://df3bkw8f-8000.inc1.devtunnels.ms';
 
 type FailedRequest = {
