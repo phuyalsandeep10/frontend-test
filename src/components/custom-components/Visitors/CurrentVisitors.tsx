@@ -2,14 +2,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-
-type CurrentVisitorsProps = {
-  title: string;
-  description: string;
-  highlightText: string;
-  buttonText: string;
-  buttonIcon?: React.ReactNode;
-};
+import { CurrentVisitorsProps } from './types';
 
 const CurrentVisitors: React.FC<CurrentVisitorsProps> = ({
   title,
@@ -19,25 +12,19 @@ const CurrentVisitors: React.FC<CurrentVisitorsProps> = ({
   buttonIcon,
 }) => {
   return (
-    <div className="mb-[40px]">
+    <div className="mb-10">
       <div className="flex items-center justify-between">
-        <p
-          className="text-brand-dark text-[20px] leading-[30px] font-semibold"
-          style={{ letterSpacing: '-0.001em' }}
-        >
+        <p className="text-brand-dark text-xl leading-7.5 font-semibold">
           {title}
         </p>
         <Button variant="success" leftIcon={buttonIcon}>
           {buttonText}
         </Button>
       </div>
-      <p
-        className="text-theme-text-primary mb-[8px] text-[12px] leading-[17px]"
-        style={{ letterSpacing: '0.002em' }}
-      >
+      <p className="text-theme-text-primary mb-2 text-xs leading-4.5">
         {description}
       </p>
-      <p className="text-brand-dark text-[14px] leading-[21px] font-semibold">
+      <p className="text-brand-dark text-[14px] leading-5 font-semibold">
         {highlightText}
       </p>
     </div>

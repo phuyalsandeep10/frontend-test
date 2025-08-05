@@ -26,6 +26,9 @@ type DataTableProps<TData> = {
   customFilterIcon?: React.ReactNode;
   placeholderText?: string;
   onFilterClick?: (e: React.MouseEvent) => void;
+  headerHeight?: string;
+  headerClassName?: string;
+  rowClassName?: string;
 };
 
 function DataTable<TData>({
@@ -36,6 +39,9 @@ function DataTable<TData>({
   customFilterIcon,
   placeholderText = 'Search by Visitor...',
   onFilterClick,
+  headerHeight = 'auto',
+  headerClassName = 'text-theme-text-primary border-none text-[14px] leading-[21px] font-semibold',
+  rowClassName = 'text-theme-text-primary border-none pl-[8px] text-[12px] leading-[17px]',
 }: DataTableProps<TData>) {
   const [globalFilter, setGlobalFilter] = useState('');
   const [filterActive, setFilterActive] = useState(false);
@@ -98,12 +104,10 @@ function DataTable<TData>({
               <TableRow
                 key={headerGroup.id}
                 className="bg-light hover:bg-light border-none"
+                style={{ height: headerHeight }}
               >
                 {headerGroup.headers.map((header) => (
-                  <TableHead
-                    key={header.id}
-                    className="text-theme-text-primary border-none text-[14px] leading-[21px] font-semibold"
-                  >
+                  <TableHead key={header.id} className={headerClassName}>
                     {flexRender(
                       header.column.columnDef.header,
                       header.getContext(),
@@ -119,10 +123,7 @@ function DataTable<TData>({
               table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id} className="border-none">
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell
-                      key={cell.id}
-                      className="text-theme-text-primary border-none pl-[8px] text-[12px] leading-[17px]"
-                    >
+                    <TableCell key={cell.id} className={rowClassName}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
@@ -135,7 +136,7 @@ function DataTable<TData>({
               <TableRow className="border-none">
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 border-none text-center"
+                  className={`h-24 border-none text-center ${rowClassName}`}
                 >
                   No results.
                 </TableCell>

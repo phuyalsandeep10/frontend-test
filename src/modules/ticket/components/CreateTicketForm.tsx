@@ -314,9 +314,6 @@ const CreateTicketForm = () => {
 
               <ImageUploader
                 onImageSelect={handleImage}
-                icon={
-                  <Icons.download_cloud className="text-brand-primary h-7 w-8" />
-                }
                 wrapperClassName="border-dashed border-2 border-gray-300 h-[122px] w-full flex items-center justify-center"
                 descriptionText=""
               />

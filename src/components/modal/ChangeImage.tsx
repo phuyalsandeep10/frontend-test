@@ -11,7 +11,7 @@ import {
 import { Button } from '@/components/ui/button';
 import React from 'react';
 
-interface ProfileImageModalProps {
+interface ProfileImageProps {
   open: boolean;
   onClose: () => void;
   onRemovePhoto: () => void;
@@ -21,7 +21,7 @@ interface ProfileImageModalProps {
   removePhotoText?: string;
 }
 
-const ProfileImageModal: React.FC<ProfileImageModalProps> = ({
+const ProfileImageModal: React.FC<ProfileImageProps> = ({
   open,
   onClose,
   onRemovePhoto,
@@ -34,7 +34,7 @@ const ProfileImageModal: React.FC<ProfileImageModalProps> = ({
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="font-outfit text-theme-text-primary text-xs leading-[16px] font-semibold">
+          <DialogTitle className="font-outfit text-theme-text-primary text-xs leading-4 font-semibold">
             {title}
           </DialogTitle>
         </DialogHeader>
@@ -43,14 +43,14 @@ const ProfileImageModal: React.FC<ProfileImageModalProps> = ({
           <Button
             variant="default"
             onClick={onOpenChangePhoto}
-            className="font-outfit cursor-pointer text-xs leading-[16px] font-semibold"
+            className="font-outfit cursor-pointer text-xs leading-4 font-semibold"
           >
             {changePhotoText}
           </Button>
           <Button
             variant="destructive"
             onClick={onRemovePhoto}
-            className="font-outfit cursor-pointer text-xs leading-[16px] font-semibold"
+            className="font-outfit cursor-pointer text-xs leading-4 font-semibold"
           >
             {removePhotoText}
           </Button>

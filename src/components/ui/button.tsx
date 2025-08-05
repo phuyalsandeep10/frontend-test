@@ -23,7 +23,7 @@ const buttonVariants = cva(
           text-[16px]
         `,
         destructive:
-          'bg-alert-prominent text-white focus:outline-none focus:ring-0 focus:ring-offset-0 font-semibold text-[12px]',
+          'bg-alert-prominent text-white focus:outline-none focus:ring-0 focus:ring-offset-0 font-semibold text-[16px]',
         outline: `
           border border-brand-primary
           bg-transparent
