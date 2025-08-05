@@ -175,9 +175,7 @@ const sectionTitles = [
 ];
 
 const PricingAndFeatures = () => {
-  const [activeSection, setActiveSection] = useState<string | null>(
-    'Pricing and Core Limits',
-  );
+  const [activeSection, setActiveSection] = useState<string | null>(null);
 
   const data = useMemo(() => {
     if (activeSection && sectionData[activeSection]) {

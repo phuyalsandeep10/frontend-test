@@ -105,6 +105,9 @@ import {
   RiArrowRightLongLine,
   RiLinksFill,
   RiSettings5Fill,
+  RiDownloadCloud2Line,
+  RiEyeLine,
+  RiDeleteBin6Fill,
 } from '@remixicon/react';
 
 // register your icons here as your requirements
@@ -214,4 +217,7 @@ export const Icons = {
   ri_arrow_right_long_line: RiArrowRightLongLine,
   ri_links_fill: RiLinksFill,
   ri_settings_5_fill: RiSettings5Fill,
+  ri_download_cloud_2_line: RiDownloadCloud2Line,
+  ri_eye_line: RiEyeLine,
+  ri_delete_bin_6_fill: RiDeleteBin6Fill,
 };

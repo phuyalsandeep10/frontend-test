@@ -9,10 +9,13 @@ const CreditCard: React.FC<CreditCardProps> = ({
   cardholderName,
   cardholderAddress,
   expiryDate,
+  isPrimary = false,
 }) => {
   return (
     <div
-      className="custom-gradient-2 h-[180px] w-[300px] rounded-[8px] px-7 py-6"
+      className={`custom-gradient-2 h-[180px] w-[300px] rounded-[8px] px-7 py-6 ${
+        isPrimary ? 'border-brand-primary border-[4px]' : ''
+      }`}
       style={{ boxShadow: '-3px 4px 4px 0px #6304824A' }}
     >
       <div className="mb-12.5">

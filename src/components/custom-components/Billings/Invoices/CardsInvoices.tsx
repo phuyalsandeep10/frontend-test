@@ -8,6 +8,8 @@ import mastercard from '@/assets/images/Mastercard-logo.svg';
 import stripe from '@/assets/images/stripe.svg';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/ui/Icons';
+import InvoiceTable from './InvoiceTable';
+import AddPaymentModal from './AddPaymentModal';
 
 const creditCardData = [
   {
@@ -40,14 +42,14 @@ const creditCardDetailsData = [
     buttonText: 'Default',
   },
   {
-    expiryYear: '7080',
+    expiryYear: '2019',
     expiryDate: '06/24',
     cardImage: stripe,
     buttonText: 'Default',
   },
 ];
 
-const Invoices = () => {
+const CardsInvoices = () => {
   return (
     <Settings>
       <div className="font-outfit">
@@ -58,28 +60,39 @@ const Invoices = () => {
         <div className="mb-10 flex gap-5">
           <div className="flex flex-col gap-6">
             {creditCardData.map((card, index) => (
-              <CreditCard key={index} {...card} />
+              <CreditCard key={index} {...card} isPrimary={index === 0} />
             ))}
           </div>
 
           <div className="flex flex-col gap-6">
             {creditCardDetailsData.map((details, index) => (
-              <CreditCardDetails key={index} {...details} />
+              <CreditCardDetails
+                key={index}
+                {...details}
+                isPrimary={index === 0}
+              />
             ))}
             <Button leftIcon={<Icons.ri_add_circle_line className="h-6 w-6" />}>
               Add Payment Option
             </Button>
           </div>
         </div>
-        <div className="flex flex-col gap-3">
+
+        <div className="mb-8 flex flex-col gap-3">
           <HeaderComponent heading="Billing History" className="text-xl" />
           <p className="text-theme-text-primary text-[16px] leading-6.5 font-normal">
             Invoices and their details are given below.
           </p>
+        </div>
+        <div>
+          <InvoiceTable />
+        </div>
+        <div className="mb-6">
+          <AddPaymentModal />
         </div>
       </div>
     </Settings>
   );
 };
 
-export default Invoices;
+export default CardsInvoices;
