@@ -49,8 +49,10 @@ jobs:
           script: |
             cd /var/www/chatboq_portal/chatboq-web
             git pull origin main
-            npm install --production
-            pm2 restart chatboq-web || pm2 start npm --name "chatboq-web" -- start
+            pm2 stop chatboq-web
+            npm install
+            PORT=3002 pm2 start npm --name chatboq-web -- run start
+            pm2 list
             echo "✅ Deployment completed successfully!"
 
       - name: Verify production site
