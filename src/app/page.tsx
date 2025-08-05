@@ -13,6 +13,7 @@ import ChangePasswordModal from '@/components/modal/ChangePassword/ChangePasswor
 import { Button } from '@/components/ui/button';
 import AuthenticatorModal from '@/components/modal/Authenticator/AuthenticatorModal';
 
+console.log("hii");
 export default function Home() {
   // const [croppedAreaPixels, setCroppedAreaPixels] = useState<{
   //   x: number;
