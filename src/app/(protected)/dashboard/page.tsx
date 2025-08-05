@@ -30,8 +30,8 @@ const DashboardPage = () => {
 
   useEffect(() => {
     if (twoFaGeneratedOtpData && !generate2faOtpLoading) {
-      // setOpen2FaAuthenticatorModal(true);
-      // setConfirm2FaModal(false);
+      setOpen2FaAuthenticatorModal(true);
+      setConfirm2FaModal(false);
     }
   }, [twoFaGeneratedOtpData, generate2faOtpLoading]);
 
@@ -39,11 +39,12 @@ const DashboardPage = () => {
     setConfirm2FaModal(true);
   };
 
-  useEffect(() => {
-    if (!authData?.email_verified_at) {
-      setOpenVerifyEmail(true);
-    }
-  }, [authData]);
+  //here we need to user in response
+  // useEffect(() => {
+  //   if (!authData?.email_verified_at) {
+  //     setOpenVerifyEmail(true);
+  //   }
+  // }, [authData]);
 
   console.log(openConfirm2FaModal);
 
@@ -90,7 +91,9 @@ const DashboardPage = () => {
       <AuthenticatorModal
         open={open2FaAuthenticatorModal}
         setOpen={setOpen2FaAuthenticatorModal}
-        otpauth_url={twoFaGeneratedOtpData?.['2fa_otp_auth_url'] || ''}
+        otpauth_url={twoFaGeneratedOtpData?.data?.['otp_auth_url'] || ''}
+        cancelButtonText="Cancel"
+        submitButtonText="Submit"
       />
       <VerifyEmailModal
         open={openEmailVerifyForm}

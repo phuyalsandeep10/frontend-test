@@ -1,4 +1,3 @@
-import { ROUTES } from '@/routes/routes';
 import { AuthService } from '@/services/auth/auth';
 import { VerifyEmailpayload } from '@/services/auth/types';
 import { useMutation } from '@tanstack/react-query';

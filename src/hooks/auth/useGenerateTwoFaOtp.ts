@@ -5,7 +5,8 @@ import { toast } from 'sonner';
 export const useGenerateTwoFaOtp = () => {
   return useMutation({
     mutationFn: AuthService.generate2FAOtp,
-    onSuccess: (data) => {
+    onSuccess: (response) => {
+      const data = response?.data;
       console.log(data);
       toast.success(
         data?.message || '2 Factor authentication otp generated  successfully',

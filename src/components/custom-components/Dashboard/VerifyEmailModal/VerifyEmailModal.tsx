@@ -48,6 +48,7 @@ const VerifyEmailModal = ({ open, setOpen }: VerifyEmailModalProps) => {
         setHasError(false);
         toast.success('Email Verified Successfully.');
         setOpen(false);
+        //TODO: Save response in localstorage
         // AuthService.setUserToLocalStorage()
       },
       onError: (error: any) => {

@@ -17,6 +17,7 @@ import { redirect } from 'next/navigation';
 export default function Home() {
   // redirect('/login')
 
+  console.log('success fully home page');
   // const [croppedAreaPixels, setCroppedAreaPixels] = useState<{
   //   x: number;
   //   y: number;

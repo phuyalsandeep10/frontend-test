@@ -72,8 +72,12 @@ const AuthenticatorModal: React.FC<AuthenticatorModalProps> = ({
   }, [otpauth_url]);
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="font-outfit w-[344px] gap-0">
+    <Dialog open={open} onOpenChange={() => {}}>
+      <DialogContent
+        className="font-outfit w-[344px] gap-0"
+        onInteractOutside={(e) => e.preventDefault()}
+        onEscapeKeyDown={(e) => e.preventDefault()}
+      >
         <DialogHeader>
           <DialogTitle>
             <div className="mb-5">
