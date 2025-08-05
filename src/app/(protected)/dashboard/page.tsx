@@ -1,40 +1,22 @@
 'use client';
 
-import AuthenticatorModal from '@/components/modal/Authenticator/AuthenticatorModal';
 import ChangePasswordModal from '@/components/modal/ChangePassword/ChangePasswordModal';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { useAuthenticatedUser } from '@/hooks/auth/useAuthenticatedUser';
-import { useDisable2Fa } from '@/hooks/auth/useDisable2Fa';
 import { useGenerateTwoFaOtp } from '@/hooks/auth/useGenerateTwoFaOtp';
-import dynamic from 'next/dynamic';
-import { useEffect, useState } from 'react';
-
-const TwoFactorAuthenticationDialog = dynamic(
-  () =>
-    import(
-      '@/components/custom-components/Auth/TwoFactorAuthentication/TwoFactorAuthenticationDialog/TwoFactorAuthenticationDialog'
-    ),
-  { ssr: false },
-);
+import { useDisable2Fa } from '@/hooks/auth/useDisable2Fa';
+import React, { useEffect, useState } from 'react';
+import AuthenticatorModal from '@/components/modal/Authenticator/AuthenticatorModal';
+import { useAuthStore } from '@/store/AuthStore/useAuthStore';
+import VerifyEmailModal from '@/components/custom-components/Dashboard/VerifyEmailModal/VerifyEmailModal';
+import ConfirmModal from '@/components/custom-components/Dashboard/ConfirmModal/ConfirmModal';
 
 const DashboardPage = () => {
   const [openPasswordModal, setOpenPasswordModal] = useState(false);
-  const [open2FaDialog, setOpen2FaDialog] = useState(false);
   const [openConfirm2FaModal, setConfirm2FaModal] = useState(false);
   const [open2FaAuthenticatorModal, setOpen2FaAuthenticatorModal] =
     useState(false);
-  const [is2FaEnabled, setIs2FaEnabled] = useState(false);
-  const [is2FaDisabled, setIs2FaDisabled] = useState(false);
+
+  const [openEmailVerifyForm, setOpenVerifyEmail] = useState(false);
 
   const {
     mutate: generate2FaOtp,
@@ -43,7 +25,8 @@ const DashboardPage = () => {
   } = useGenerateTwoFaOtp();
 
   const { mutate: disable2Fa, isPending: disable2FaLoading } = useDisable2Fa();
-  const { data: authUserData } = useAuthenticatedUser();
+  const authData = useAuthStore((state) => state.authData);
+  console.log(authData);
 
   useEffect(() => {
     if (twoFaGeneratedOtpData && !generate2faOtpLoading) {
@@ -52,14 +35,18 @@ const DashboardPage = () => {
     }
   }, [twoFaGeneratedOtpData, generate2faOtpLoading]);
 
-  const user = authUserData?.data?.user;
+  const openConfirmModal = () => {
+    setConfirm2FaModal(true);
+  };
 
-  useEffect(() => {
-    if (user) {
-      setIs2FaEnabled(user.two_fa_enabled);
-    }
-  }, [user]);
-  console.log({ twoFaGeneratedOtpData });
+  //here we need to user in response
+  // useEffect(() => {
+  //   if (!authData?.email_verified_at) {
+  //     setOpenVerifyEmail(true);
+  //   }
+  // }, [authData]);
+
+  console.log(openConfirm2FaModal);
 
   return (
     <div>
@@ -70,7 +57,7 @@ const DashboardPage = () => {
           Change Password
         </Button>
 
-        {user?.two_fa_enabled ? (
+        {authData?.two_fa_enabled ? (
           <Button
             onClick={() => disable2Fa()}
             variant="outline"
@@ -80,33 +67,13 @@ const DashboardPage = () => {
           </Button>
         ) : (
           <Button
-            onClick={() => generate2FaOtp()}
+            onClick={() => openConfirmModal()}
             variant="secondary"
             className="w-fit cursor-pointer"
           >
-            {generate2faOtpLoading ? 'Enabling...' : 'Enable 2FA'}
+            Enable 2FA
           </Button>
         )}
-
-        {/* {!user?.two_fa_enabled ? (
-          <div className="flex items-center space-x-2">
-            <Switch
-              id="enable2Fa"
-              checked={is2FaEnabled}
-              onCheckedChange={() => setConfirm2FaModal(true)}
-            />
-            <Label htmlFor="enable2Fa">Enable 2Fa</Label>
-          </div>
-        ) : (
-          <div className="flex items-center space-x-2">
-            <Switch
-              id="disable2Fa"
-              checked={is2FaDisabled}
-              onCheckedChange={() => setIs2FaDisabled(true)}
-            />
-            <Label htmlFor="disable2Fa">Disable 2Fa</Label>
-          </div>
-        )} */}
       </div>
 
       <ChangePasswordModal
@@ -114,39 +81,23 @@ const DashboardPage = () => {
         setOpen={setOpenPasswordModal}
       />
 
-      {/* <TwoFactorAuthenticationDialog
-        open={open2FaDialog}
-        closeModal={() => setOpen2FaDialog(false)}
-        otpauth_url={twoFaGeneratedOtpData?.['2fa_otp_auth_url'] || ''}
-        base32={twoFaGeneratedOtpData?.['2fa_secrete'] || ''}
-      /> */}
-
-      <AlertDialog open={openConfirm2FaModal} onOpenChange={setConfirm2FaModal}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action will enable two factor authentication
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setConfirm2FaModal(false)}>
-              No
-            </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => generate2FaOtp()}
-              disabled={generate2faOtpLoading}
-            >
-              Yes
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <ConfirmModal
+        open={openConfirm2FaModal}
+        setOpen={setConfirm2FaModal}
+        loading={generate2faOtpLoading}
+        onClick={() => generate2FaOtp()}
+      />
 
       <AuthenticatorModal
         open={open2FaAuthenticatorModal}
         setOpen={setOpen2FaAuthenticatorModal}
         otpauth_url={twoFaGeneratedOtpData?.data?.['otp_auth_url'] || ''}
+        cancelButtonText="Cancel"
+        submitButtonText="Submit"
+      />
+      <VerifyEmailModal
+        open={openEmailVerifyForm}
+        setOpen={setOpenVerifyEmail}
       />
     </div>
   );

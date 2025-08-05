@@ -105,6 +105,7 @@ export function ValidEmailInput({
         type="email"
         value={email}
         name={name}
+        required={required}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Enter your Email Address"
         aria-describedby="email-validation"

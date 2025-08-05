@@ -5,8 +5,8 @@ import AuthLayoutRightSection from './AuthLayoutRightSection';
 
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="font-outfit md:justify-center 2xl:flex 2xl:items-center">
-      <div className="box-border grid h-[1024px] w-full grid-cols-1 xl:grid-cols-2 2xl:max-w-[1440px]">
+    <div className="font-outfit md:justify-center 2xl:flex 2xl:h-screen 2xl:items-center 2xl:justify-center">
+      <div className="box-border grid h-[1024px] w-full grid-cols-1 lg:grid-cols-2 2xl:max-w-[1440px]">
         <AuthLayoutLeftSection />
         <AuthLayoutRightSection>{children}</AuthLayoutRightSection>
       </div>

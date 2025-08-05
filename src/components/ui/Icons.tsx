@@ -88,6 +88,16 @@ import {
   RiContactsBookLine,
   RiCloseCircleFill,
   RiTimeFill,
+  RiCheckFill,
+  RiDownload2Line,
+  RiAddCircleLine,
+  RiMicrosoftFill,
+  RiKanbanView2,
+  RiTableFill,
+  RiDeleteBinLine,
+  RiErrorWarningFill,
+  RiArrowLeftRightLine,
+  RiGitMergeFill,
 } from '@remixicon/react';
 
 // register your icons here as your requirements
@@ -179,4 +189,14 @@ export const Icons = {
   loader: Loader2,
   Eye: Eye,
   ri_time_fill: RiTimeFill, //added arrow down by rahul
+  ri_check_fill: RiCheckFill,
+  ri_download_2_line: RiDownload2Line,
+  ri_add_circle_line: RiAddCircleLine,
+  microsofit_fill: RiMicrosoftFill,
+  karaban_view: RiKanbanView2,
+  table_view: RiTableFill,
+  delete_bin_fill: RiDeleteBinLine,
+  error_warning2: RiErrorWarningFill,
+  arrow_left_right: RiArrowLeftRightLine,
+  git_merge: RiGitMergeFill,
 };

@@ -8,10 +8,11 @@ export const useResetPassword = () => {
     mutationFn: (payload: ResetPasswordpayload) =>
       AuthService.resetPassword(payload),
     onSuccess: (data) => {
-      toast.success(data?.message || 'Password reset successfully!');
+      toast.success(data?.data?.message || 'Password reset successfully!');
     },
     onError: (error: any) => {
-      toast.error(error?.response?.data?.detail || 'Password reset failed!');
+      console.log(error);
+      toast.error(error?.response?.data?.message || 'Password reset failed!');
     },
   });
 };

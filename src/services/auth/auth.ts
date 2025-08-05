@@ -190,6 +190,14 @@ export class AuthService {
       console.error('Error setting auth tokens', error);
     }
   }
+  // Set user to localStorage
+  static setUserToLocalStorage(user: any) {
+    try {
+      localStorage.setItem('user', JSON.stringify(user));
+    } catch (error) {
+      console.error('Error setting auth tokens', error);
+    }
+  }
 
   // Clear Tokens
   static clearAuthTokens() {

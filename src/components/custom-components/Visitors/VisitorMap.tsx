@@ -1,133 +1,17 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
-import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import countriesData from '@/data/countries.json';
-import { pointInPolygon } from 'geometric';
-
-type Visitor = {
-  lat: number;
-  lng: number;
-  count: number;
-};
+import { useVisitorMapLogic } from './useVisitorMapLogic';
+import { Visitor } from './types';
 
 type VisitorMapProps = {
   visitors: Visitor[];
 };
 
 const VisitorMap: React.FC<VisitorMapProps> = ({ visitors }) => {
-  const [geoData, setGeoData] = useState<any>(null);
-
-  useEffect(() => {
-    setGeoData(countriesData);
-  }, []);
-
-  const getCountryCodeFromCoords = (
-    lat: number,
-    lng: number,
-  ): string | null => {
-    if (!geoData) return null;
-
-    for (const feature of geoData.features) {
-      const geometry = feature.geometry;
-      const isoCode = feature.properties?.['ISO3166-1-Alpha-3'];
-
-      const coordinates =
-        geometry.type === 'MultiPolygon'
-          ? geometry.coordinates
-          : [geometry.coordinates];
-
-      for (const polygon of coordinates) {
-        for (const ring of polygon) {
-          const polygonPoints = ring.map(([lng, lat]: [number, number]) => [
-            lng,
-            lat,
-          ]);
-          if (pointInPolygon([lng, lat], polygonPoints)) {
-            return isoCode;
-          }
-        }
-      }
-    }
-    return null;
-  };
-
-  const normalizedVisitors = visitors.reduce(
-    (acc, { lat, lng, count }) => {
-      const isoCode = getCountryCodeFromCoords(lat, lng);
-      if (isoCode) {
-        acc[isoCode] = (acc[isoCode] || 0) + count;
-      }
-      return acc;
-    },
-    {} as { [key: string]: number },
-  );
-
-  const countryStyle = (feature: any): L.PathOptions => {
-    const isoCode = feature?.properties?.['ISO3166-1-Alpha-3'];
-    const isVisited = isoCode && normalizedVisitors[isoCode] !== undefined;
-
-    return {
-      fillColor: isVisited ? '#9500FF' : '#ffffff',
-      fillOpacity: 0.8,
-      weight: 1,
-      color: '#D4D4D4',
-    };
-  };
-
-  const userFillSvg = `
-  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="22" fill="#71717A" viewBox="0 0 24 24" class="inline-block">
-    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-  </svg>
-`;
-
-  const onEachCountry = (feature: any, layer: L.Layer) => {
-    const isoAlpha3 = feature.properties?.['ISO3166-1-Alpha-3'];
-    const isoAlpha2 = feature.properties?.['ISO3166-1-Alpha-2'];
-    const countryName = feature.properties?.name || 'Unknown';
-    const count =
-      isoAlpha3 && normalizedVisitors[isoAlpha3]
-        ? normalizedVisitors[isoAlpha3]
-        : 0;
-
-    const flagUrl = isoAlpha2
-      ? `https://flagcdn.com/w40/${isoAlpha2.toLowerCase()}.png`
-      : null;
-
-    layer.on('click', (e) => {
-      e.originalEvent.stopPropagation();
-    });
-
-    const tooltipContent = `
-      <div class="flex gap-[10px] items-center" style="min-width: 150px; max-width: max-content;">
-        ${
-          flagUrl
-            ? `<div class="border border-grey-light p-[2px] rounded-[6px] flex items-center justify-center w-[40px] h-[40px] shrink-0">
-                <img src="${flagUrl}" alt="${countryName} flag" class="w-[20px] h-[22px] block" />
-              </div>`
-            : ''
-        }
-        <div class="flex flex-col justify-center">
-          <div class="font-semibold leading-[29px] text-[18px] whitespace-nowrap">
-            ${countryName}
-          </div>
-          <div class="font-bold flex items-center gap-[4px] whitespace-nowrap">
-               ${userFillSvg}
-            <span class="leading-[29px] font-medium text-[18px] text-theme-text-primary">${count}</span>
-          </div>
-        </div>
-      </div>
-    `;
-
-    layer.bindTooltip(tooltipContent, {
-      sticky: true,
-      direction: 'auto',
-      opacity: 0.9,
-      permanent: false,
-    });
-  };
+  const { geoData, countryStyle, onEachCountry } = useVisitorMapLogic(visitors);
 
   return (
     <div

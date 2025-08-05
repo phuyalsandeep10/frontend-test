@@ -69,7 +69,7 @@ const TerminateWorkspace = () => {
               </p>
 
               <div className={cn('mt-6 space-y-7.5')}>
-                <div>
+                <div className="flex flex-col gap-2.5">
                   <label
                     htmlFor="workspace-id"
                     className={cn(

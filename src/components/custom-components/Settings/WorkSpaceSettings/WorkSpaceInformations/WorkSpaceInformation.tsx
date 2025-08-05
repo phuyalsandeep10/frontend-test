@@ -10,7 +10,7 @@ import CountrySelect from '@/shared/CountrySelect';
 import { cn } from '@/lib/utils';
 import { Icons } from '@/components/ui/Icons';
 import ContactForm from './ContractForm';
-import ProfileImageModal from '@/components/modal/ChnageImage';
+import ProfileImageModal from '@/components/modal/ChangeImage';
 import ZoomImageModal from '@/components/modal/ZoomImageModal';
 import { getCroppedImg } from '@/lib/cropImage';
 import TerminateWorkspace from './TerminateWorkspace';

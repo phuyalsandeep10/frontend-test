@@ -16,6 +16,8 @@ import { StrongPasswordField } from '@/components/common/hook-form/StrongPasswor
 import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import SuccessScreen from './ForgotPasswordSuccess';
+import { ROUTES } from '@/routes/routes';
+import { toast } from 'sonner';
 
 const ForgotPasswordVerifyForm = () => {
   const { mutate: forgotPassVerify, isPending } = useForgotPasswordVerify();
@@ -34,13 +36,16 @@ const ForgotPasswordVerifyForm = () => {
   async function onSubmit(
     values: z.infer<typeof forgotPasswordVerifyFormSchema>,
   ) {
+    if (!token || !email) {
+      toast.error('Token or email is missing');
+      return;
+    }
     const forgotPassVerifyData = {
       new_password: values.new_password,
-      token,
-      email,
+      token: token as string,
+      email: email as string,
     };
-    console.log(forgotPassVerifyData);
-    forgotPassVerify(values, {
+    forgotPassVerify(forgotPassVerifyData, {
       onSuccess: () => {
         setVerifySuccess(true);
       },
@@ -71,7 +76,7 @@ const ForgotPasswordVerifyForm = () => {
               }
             />
 
-            <div className="flex h-screen pt-[40px]">
+            <div className="flex pt-[40px]">
               <Form {...form}>
                 <form
                   onSubmit={form.handleSubmit(onSubmit)}
@@ -111,6 +116,7 @@ const ForgotPasswordVerifyForm = () => {
           <SuccessScreen
             text="SUCCESSFUL"
             subText="You have changed your password"
+            redirectLink={ROUTES.LOGIN}
           />
         )}
       </div>

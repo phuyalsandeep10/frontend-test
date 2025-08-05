@@ -13,7 +13,6 @@ import {
 } from '@/components/ui/dialog';
 
 import { Form } from '@/components/ui/form';
-import HeadingSubHeadingTypography from '@/components/custom-components/Auth/RegisterForm/HeadingSubHeadingTypography';
 import { Button } from '@/components/ui/button';
 import OTP from '@/components/common/hook-form/OTP';
 import { AuthenticatorSchema } from './AuthenticatorHelpter';
@@ -39,14 +38,9 @@ interface AuthenticatorModalProps {
 }
 
 const AuthenticatorModal: React.FC<AuthenticatorModalProps> = ({
-  heading = 'Authenticator Setup',
-  subHeading = 'Set authentication via authenticator app',
-  headingClassName = 'text-black font-medium text-[16px] leading-[26px]',
-  subHeadingClassName = 'text-black text-[12px] leading-[17px] font-normal',
-  headingContainerClassName = 'mb-[20px]',
-  cancelButtonText = 'Cancel',
-  submitButtonText = 'Verify',
-  submitPendingText = 'Verifying...',
+  cancelButtonText,
+  submitButtonText,
+  submitPendingText,
   open,
   setOpen,
   otpauth_url,
@@ -78,22 +72,29 @@ const AuthenticatorModal: React.FC<AuthenticatorModalProps> = ({
   }, [otpauth_url]);
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="w-[344px] gap-0">
+    <Dialog open={open} onOpenChange={() => {}}>
+      <DialogContent
+        className="font-outfit w-[344px] gap-0"
+        onInteractOutside={(e) => e.preventDefault()}
+        onEscapeKeyDown={(e) => e.preventDefault()}
+      >
         <DialogHeader>
           <DialogTitle>
-            <HeadingSubHeadingTypography
-              heading={heading}
-              subHeading={subHeading}
-              headingClassName={headingClassName}
-              subHeadingClassName={subHeadingClassName}
-              containerClassName={headingContainerClassName}
-            />
+            <div className="mb-5">
+              <h1 className="text-[16px] leading-6.5 font-medium text-black">
+                Authenticator Setup
+              </h1>
+              <p className="text-xs leading-4.5 font-normal text-black">
+                Set authentication via authenticator app
+              </p>
+            </div>
           </DialogTitle>
           <DialogClose className="absolute top-4 right-4" />
         </DialogHeader>
-
-        <div className="flex justify-center py-2">
+        <p className="text-center text-sm font-medium text-black">
+          Scan the QR to setup authentication
+        </p>
+        <div className="flex justify-center">
           {qrcodeUrl ? (
             <Image
               src={qrcodeUrl}

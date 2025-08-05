@@ -15,8 +15,8 @@ export const useTeams = () => {
       setError(null);
       try {
         const res = await axiosInstance.get<TeamResponse>('/teams');
-        setTeams(res.data);
-        return res.data;
+        setTeams(res.data.data);
+        return res.data.data;
       } catch (error: any) {
         setError(error.message || 'Failed to fetch teams');
         throw error;
@@ -24,6 +24,6 @@ export const useTeams = () => {
         setLoading(false);
       }
     },
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    staleTime: 1000 * 60 * 5,
   });
 };

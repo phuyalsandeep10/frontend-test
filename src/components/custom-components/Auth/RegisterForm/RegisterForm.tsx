@@ -32,7 +32,6 @@ const RegisterForm = () => {
   const [isAgreeError, setisAgreeError] = useState('');
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [validEmail, setValidEmail] = useState('');
-  const [otpError, setOtpError] = useState<string | null>(null);
 
   const { mutate: register } = useRegisterUser();
   const form = useForm<z.infer<typeof registerFormSchema>>({
@@ -45,7 +44,7 @@ const RegisterForm = () => {
 
   const onSubmit = (values: z.infer<typeof registerFormSchema>) => {
     const registerFormData = { ...values, email: validEmail };
-    console.log(registerFormData);
+    console.log(registerFormData, isEmailValid);
     if (!isAgreed) {
       setisAgreeError('You must agree to the Terms and Conditions to proceed.');
       return;
@@ -163,7 +162,6 @@ const RegisterForm = () => {
           <VerifyEmailViaOtpForm
             email={validEmail}
             setCurrentStep={setCurrentStep}
-            setOtpError={setOtpError}
           />
         )}
         {currentStep === 2 && <BusinessRegisterForm />}

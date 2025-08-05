@@ -1,5 +1,4 @@
 'use client';
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,10 +10,12 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 import { Icons } from '@/components/ui/Icons';
 import { useLogout } from '@/hooks/auth/useLogout';
+import { useAuthStore } from '@/store/AuthStore/useAuthStore';
 
 const SidebarFooterMenu = () => {
   const { mutate: logout, isPending } = useLogout();
-  console.log('Loging out');
+  const { authData, clearAuthData } = useAuthStore((state) => state);
+  console.log(authData);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -47,14 +48,14 @@ const SidebarFooterMenu = () => {
                 'text-theme-text-dark font-outfit text-lg font-medium',
               )}
             >
-              Yubesh here
+              {authData?.name}
             </span>
             <span
               className={cn(
                 'text-theme-text-primary font-outfit text-xs font-normal',
               )}
             >
-              yubeshkoira@mail.com
+              {authData?.email}
             </span>
           </div>
 
@@ -73,8 +74,8 @@ const SidebarFooterMenu = () => {
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => {
-            console.log('Clicked...');
             logout();
+            clearAuthData();
           }}
           className={cn('hover:bg-muted w-full cursor-pointer text-sm')}
         >
