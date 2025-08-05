@@ -3,5 +3,5 @@ export interface createOrganizationPayload {
   description?: string;
   logo?: string;
   purpose: string;
-  website: string;
+  domain: string;
 }

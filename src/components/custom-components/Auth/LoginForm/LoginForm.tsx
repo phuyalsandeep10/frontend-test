@@ -18,6 +18,8 @@ import Button from '@/components/common/hook-form/Button';
 import ReCAPTCHA from 'react-google-recaptcha';
 import Image from 'next/image';
 import googleIcon from '@/assets/images/google.svg';
+import { toast } from 'sonner';
+import { useAuthStore } from '@/store/AuthStore/useAuthStore';
 
 const LoginForm = () => {
   const [isNotARobot, setIsNotARobot] = useState(false);
@@ -29,6 +31,8 @@ const LoginForm = () => {
 
   const { mutate: login, isPending } = useLoginUser();
 
+  const setAuthData = useAuthStore((state) => state.setAuthData);
+
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -38,12 +42,30 @@ const LoginForm = () => {
   });
 
   async function onSubmit(values: z.infer<typeof loginFormSchema>) {
-    if (!isNotARobot) {
-      setCaptchaError('Please verify that you are not a robot.');
-      return;
-    }
+    // if (!isNotARobot) {
+    //   setCaptchaError('Please verify that you are not a robot.');
+    //   return;
+    // }
     setCaptchaError('');
-    login(values);
+    login(values, {
+      onSuccess: (data) => {
+        console.log(data);
+        const authToken = {
+          accessToken: data?.data?.access_token,
+          refreshToken: data?.data?.refresh_token,
+        };
+        AuthService.setAuthTokens(authToken);
+        toast.success(data?.message || 'Logged in successfully');
+        const user = data?.data?.user;
+        AuthService.setUserToLocalStorage(user);
+
+        setAuthData(data);
+        router.replace(ROUTES.DASHBOARD);
+      },
+      onError: (error: any) => {
+        toast.error(error?.response?.data?.message || 'Login failed');
+      },
+    });
   }
 
   const onCaptchaSuccess = (value: string | null) => {

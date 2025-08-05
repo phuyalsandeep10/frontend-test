@@ -24,7 +24,7 @@ const BusinessRegisterForm = () => {
     resolver: zodResolver(businessRegisterFormSchema),
     defaultValues: {
       name: '',
-      website: '',
+      domain: '',
       purpose: '',
     },
   });
@@ -52,7 +52,7 @@ const BusinessRegisterForm = () => {
 
           <InputField
             control={businessRegisterForm.control}
-            name="website"
+            name="domain"
             label="Enter your Business's Domain"
             type="text"
             placeholder="www.businessname.com"

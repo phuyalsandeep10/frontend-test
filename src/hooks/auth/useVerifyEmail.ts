@@ -11,18 +11,5 @@ export const useVerifyEmail = () => {
   return useMutation({
     mutationFn: (payload: VerifyEmailpayload) =>
       AuthService.verifyEmail(payload),
-    onSuccess: (data) => {
-      toast.success(data?.message || 'Email verified successfully');
-      const authToken = {
-        accessToken: data?.access_token,
-        refreshToken: data?.refresh_token,
-      };
-      AuthService.setAuthTokens(authToken);
-      console.log('Verify email success:', data);
-    },
-    onError: (error: any) => {
-      toast.error(error?.response?.data?.detail || 'Email verification failed');
-      console.error('Verify email error:', error);
-    },
   });
 };

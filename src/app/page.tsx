@@ -12,8 +12,11 @@ import ZoomImageModal from '@/components/modal/ZoomImageModal';
 import ChangePasswordModal from '@/components/modal/ChangePassword/ChangePasswordModal';
 import { Button } from '@/components/ui/button';
 import AuthenticatorModal from '@/components/modal/Authenticator/AuthenticatorModal';
+import { redirect } from 'next/navigation';
 
 export default function Home() {
+  // redirect('/login')
+
   // const [croppedAreaPixels, setCroppedAreaPixels] = useState<{
   //   x: number;
   //   y: number;

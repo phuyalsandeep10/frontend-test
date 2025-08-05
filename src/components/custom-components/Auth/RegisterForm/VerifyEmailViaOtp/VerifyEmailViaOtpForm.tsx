@@ -7,17 +7,17 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import OTP from '@/components/common/hook-form/OTP';
 import Button from '@/components/common/hook-form/Button';
 import { useVerifyEmail } from '@/hooks/auth/useVerifyEmail';
+import { toast } from 'sonner';
+import { AuthService } from '@/services/auth/auth';
 
 interface VerifyEmailViaOtpProps {
   email: string;
   setCurrentStep: React.Dispatch<SetStateAction<number>>;
-  setOtpError: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const VerifyEmailViaOtpForm = ({
   email,
   setCurrentStep,
-  setOtpError,
 }: VerifyEmailViaOtpProps) => {
   const [hasError, setHasError] = useState(false);
   const { mutate: verifyEmail, isPending: verifyEmailPending } =
@@ -30,16 +30,24 @@ const VerifyEmailViaOtpForm = ({
   });
 
   const onSubmit = (values: any) => {
-    const data = { ...values, email };
-    verifyEmail(data, {
-      onSuccess: () => {
+    const registerData = { ...values, email };
+    verifyEmail(registerData, {
+      onSuccess: (data) => {
+        console.log(data);
         setHasError(false);
         setCurrentStep(2);
+        toast.success(data?.message || 'Email verified successfully');
+        const authToken = {
+          accessToken: data?.data?.access_token,
+          refreshToken: data?.data?.refresh_token,
+        };
+        AuthService.setAuthTokens(authToken);
+        console.log('Verify email success:', data);
       },
-      onError: (error) => {
+      onError: (error: any) => {
         setHasError(true);
-        setOtpError(
-          "We couldn't validate the code you provided. Kindly recheck and enter it again.",
+        toast.error(
+          error?.response?.data?.message || 'Email verification failed',
         );
         console.log(error);
       },

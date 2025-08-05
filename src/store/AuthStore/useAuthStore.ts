@@ -2,7 +2,7 @@ import { User } from '@/hooks/auth/useAuthenticatedUser';
 import { create } from 'zustand';
 
 interface AuthState {
-  authData: User | null;
+  authData: any;
   setAuthData: (data: User) => void;
   clearAuthData: () => void;
 }

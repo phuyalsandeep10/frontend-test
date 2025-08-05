@@ -2,9 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { ROUTES } from '@/routes/routes';
 import { AuthService } from '@/services/auth/auth';
-import { useAuthenticatedUser } from '@/hooks/auth/useAuthenticatedUser';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import CustomSidebar from '@/components/custom-components/CustomSidebar/CustomSidebar';
 import { useAuthStore } from '@/store/AuthStore/useAuthStore';
@@ -14,35 +12,18 @@ export default function ProtectedDashboardLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { data: authData, isLoading } = useAuthenticatedUser();
   const router = useRouter();
   const authTokens = AuthService.getAuthTokens();
   const setAuthData = useAuthStore((state) => state.setAuthData);
 
   useEffect(() => {
-    if (!authTokens) {
-      router.replace(ROUTES.LOGIN);
+    const storedUser = localStorage.getItem('user');
+    const parsedUser = storedUser ? JSON.parse(storedUser) : null;
+    console.log(storedUser, parsedUser);
+    if (parsedUser) {
+      setAuthData(parsedUser);
     }
-    if (!isLoading) {
-      const user = authData?.data?.user;
-      const is2FaEnabled = user?.two_fa_enabled;
-      const is2FaVerified = authData?.data?.is_2fa_verified;
-      if (!user) {
-        router.replace(ROUTES.LOGIN);
-      } else if (!user?.email_verified_at) {
-        router.replace(`${ROUTES.VERIFY_EMAIL}?email=${user?.email}`);
-      } else if (!is2FaEnabled && !is2FaVerified) {
-        router.replace(ROUTES.DASHBOARD);
-      } else if (is2FaEnabled && !is2FaVerified) {
-        router.replace(ROUTES.VERIFY_TWO_FA_TOKEN);
-      }
-    }
-    if (authData?.data?.user) {
-      setAuthData(authData);
-    }
-  }, [authData, isLoading, router, authTokens]);
-
-  if (isLoading || !authData) return <p>Loading...</p>;
+  }, [router, authTokens]);
 
   return (
     <SidebarProvider>
