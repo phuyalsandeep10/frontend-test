@@ -23,6 +23,7 @@ interface MultiSelectFieldProps {
   label?: string;
   options: Option[];
   placeholder?: string;
+  LabelClassName?: string;
 }
 
 export const MultiSelectField = ({
@@ -30,6 +31,7 @@ export const MultiSelectField = ({
   control,
   label,
   options,
+  LabelClassName,
   placeholder = 'Select options',
 }: MultiSelectFieldProps) => {
   const [open, setOpen] = useState(false);
@@ -37,9 +39,7 @@ export const MultiSelectField = ({
   return (
     <div className="">
       <div className="pb-1">
-        {label && (
-          <label className="font-outfit text-sm font-semibold">{label}</label>
-        )}
+        {label && <label className={cn(` ${LabelClassName} `)}>{label}</label>}
       </div>
       <Controller
         name={name}
@@ -64,7 +64,12 @@ export const MultiSelectField = ({
                   aria-expanded={open}
                   className="border-gray-light font-outfit h-9 w-full justify-between font-normal text-black"
                 >
-                  <span className={cn(selectedValues.length === 0 && '')}>
+                  <span
+                    className={cn(
+                      selectedValues.length === 0 &&
+                        'font-outfit text-gray-primary text-sm',
+                    )}
+                  >
                     {selectedValues.length > 0
                       ? options
                           .filter((option) =>

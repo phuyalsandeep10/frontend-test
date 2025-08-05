@@ -24,7 +24,6 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
-// import { Command } from 'lucide-react';
 import {
   Command,
   CommandEmpty,
@@ -33,6 +32,7 @@ import {
   CommandItem,
 } from '@/components/ui/command';
 import { useCustomers } from '../hooks/useCustomers';
+import { InputField } from '@/components/common/hook-form/InputField';
 
 const CreateTicketForm = () => {
   const [emailPopoverOpen, setEmailPopoverOpen] = useState(false);
@@ -136,7 +136,6 @@ const CreateTicketForm = () => {
     return (
       <div className="text-alert-prominent text-base">
         {error && <p>Error loading : {String(error)}</p>}
-        {/* {teamsError && <p>Error loading teams</p>} */}
       </div>
     );
   }
@@ -178,38 +177,25 @@ const CreateTicketForm = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid grid-cols-3 gap-x-5 gap-y-5">
             {/* Ticket Topic */}
-            <div>
-              <Label
-                htmlFor="ticket"
-                required
-                className={cn(
-                  'text-brand-dark font-outfit pb-2 text-sm font-semibold',
-                )}
-              >
-                Ticket Topic
-              </Label>
-              <input
-                type="text"
-                id="ticket"
-                placeholder="Your Precise Topic"
-                {...register('ticket')}
-                className={cn(
-                  'border-gray-light placeholder:text-gray-primary focus:ring-gray-primary h-9 w-full rounded-md border px-4 py-2 placeholder:text-sm focus:ring focus:outline-none',
-                )}
-              />
-              {errors.ticket && (
-                <p className="text-alert-prominent mt-1 text-sm">
-                  {errors.ticket.message}
-                </p>
+            <InputField
+              control={control}
+              name="ticket"
+              label="Ticket Topic"
+              placeholder="Write a ticket topic"
+              required
+              inputClassName={cn(
+                'border-gray-light placeholder:text-gray-primary focus:ring-gray-primary h-9 w-full rounded-md border px-4 py-2 placeholder:text-sm focus:ring focus:outline-none',
               )}
-            </div>
-
+              labelClassName={cn(
+                'text-brand-dark font-outfit text-sm font-semibold',
+              )}
+            />
             {/* Email */}
             <div>
               <Label
                 htmlFor="email"
                 required
-                className="text-brand-dark font-outfit pb-2 text-sm font-semibold"
+                className="text-brand-dark font-outfit pb-1 text-sm font-semibold"
               >
                 Customer&apos;s Mail
               </Label>
@@ -236,7 +222,7 @@ const CreateTicketForm = () => {
                         <Button
                           variant="outline"
                           role="combobox"
-                          className="border-gray-light h-9 w-full justify-between text-black"
+                          className="border-gray-light font-outfit h-9 w-full justify-between font-normal text-black"
                         >
                           {field.value || 'Select email'}
                           <Icons.chevron_down className="text-gray-primary ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -286,9 +272,7 @@ const CreateTicketForm = () => {
                 </p>
               )}
             </div>
-
             {/* Priority */}
-
             <SelectField<TicketFormData>
               control={control}
               LabelClassName="text-brand-dark font-outfit font-semibold text-sm"
@@ -313,101 +297,72 @@ const CreateTicketForm = () => {
                 };
               })}
             />
-
             {isAddingNewEmail && (
               <>
                 {/* Customer Name */}
-                <div>
-                  <Label
-                    htmlFor="customerName"
-                    className="text-brand-dark font-outfit pb-2 text-sm font-semibold"
-                  >
-                    Full Name
-                  </Label>
-                  <input
-                    type="text"
-                    id="customerName"
-                    placeholder="Customer full Name here"
-                    {...register('customerName')}
-                    className={cn(
-                      'border-gray-light placeholder:text-gray-primary focus:ring-gray-primary h-9 w-full rounded-md border px-4 py-2 placeholder:text-sm focus:ring focus:outline-none',
-                    )}
-                  />
-                </div>
+
+                <InputField
+                  control={control}
+                  name="customerName"
+                  label="Full Name"
+                  placeholder="Full Name"
+                  required
+                  inputClassName={cn(
+                    'border-gray-light placeholder:text-gray-primary focus:ring-gray-primary h-9 w-full rounded-md border px-4 py-2 placeholder:text-sm focus:ring focus:outline-none',
+                  )}
+                  labelClassName={cn(
+                    'text-brand-dark font-outfit text-sm font-semibold',
+                  )}
+                />
 
                 {/* Customer Phone */}
-                <div>
-                  <Label
-                    htmlFor="customerPhone"
-                    className="text-brand-dark font-outfit pb-2 text-sm font-semibold"
-                  >
-                    Phone Number
-                  </Label>
-                  <input
-                    inputMode="numeric"
-                    pattern="\d*"
-                    id="customerPhone"
-                    placeholder="Customer Phone Number"
-                    {...register('customerPhone')}
-                    onInput={(e) => {
-                      e.currentTarget.value = e.currentTarget.value.replace(
-                        /[^0-9]/g,
-                        '',
-                      );
-                    }}
-                    className={cn(
-                      'border-gray-light placeholder:text-gray-primary focus:ring-gray-primary h-9 w-full rounded-md border px-4 py-2 placeholder:text-sm focus:ring focus:outline-none',
-                    )}
-                  />
-                </div>
+
+                <InputField
+                  control={control}
+                  name="customerPhone"
+                  label="Phone Number"
+                  placeholder="Enter your number"
+                  required
+                  inputClassName={cn(
+                    'border-gray-light placeholder:text-gray-primary focus:ring-gray-primary h-9 w-full rounded-md border px-4 py-2 placeholder:text-sm focus:ring focus:outline-none',
+                  )}
+                  labelClassName={cn(
+                    'text-brand-dark font-outfit text-sm font-semibold',
+                  )}
+                />
 
                 {/* Customer Company */}
-                <div>
-                  <Label
-                    htmlFor="customerCompany"
-                    className="text-brand-dark font-outfit pb-2 text-sm font-semibold"
-                  >
-                    Address
-                  </Label>
-                  <input
-                    type="text"
-                    placeholder="Customer Address"
-                    id="customerCompany"
-                    {...register('customerCompany')}
-                    className={cn(
-                      'border-gray-light placeholder:text-gray-primary focus:ring-gray-primary h-9 w-full rounded-md border px-4 py-2 placeholder:text-sm focus:ring focus:outline-none',
-                    )}
-                  />
-                </div>
+
+                <InputField
+                  control={control}
+                  name="customerCompany"
+                  label="Address"
+                  placeholder="Enter your Address"
+                  required
+                  inputClassName={cn(
+                    'border-gray-light placeholder:text-gray-primary focus:ring-gray-primary h-9 w-full rounded-md border px-4 py-2 placeholder:text-sm focus:ring focus:outline-none',
+                  )}
+                  labelClassName={cn(
+                    'text-brand-dark font-outfit text-sm font-semibold',
+                  )}
+                />
               </>
             )}
-
             {/* Sender's Domain */}
-            <div>
-              <Label
-                htmlFor="sender"
-                required
-                className={cn(
-                  'text-brand-dark font-outfit pb-1 text-sm font-semibold',
-                )}
-              >
-                Sender&#39;s domain
-              </Label>
-              <input
-                type="text"
-                id="sender"
-                placeholder="Senders Domain Here"
-                {...register('sender')}
-                className={cn(
-                  'border-gray-light placeholder:text-gray-primary focus:ring-gray-primary h-9 w-full rounded-md border px-4 py-2 placeholder:text-sm focus:ring focus:outline-none',
-                )}
-              />
-              {errors.sender && (
-                <p className="text-alert-prominent mt-1 text-sm">
-                  {errors.sender.message}
-                </p>
+            <InputField
+              control={control}
+              name="sender"
+              label="Sender&#39;s domain"
+              placeholder="Senders Domain Here"
+              required
+              inputClassName={cn(
+                'border-gray-light placeholder:text-gray-primary focus:ring-gray-primary h-9 w-full rounded-md border px-4 py-2 placeholder:text-sm focus:ring focus:outline-none',
               )}
-            </div>
+              labelClassName={cn(
+                'text-brand-dark font-outfit text-sm font-semibold',
+              )}
+            />
+            {/* teams */}
             <SelectField<TicketFormData>
               control={control}
               LabelClassName="text-brand-dark font-outfit font-semibold text-sm"
@@ -423,6 +378,7 @@ const CreateTicketForm = () => {
             <MultiSelectField
               name="member"
               control={control}
+              LabelClassName="text-brand-dark font-outfit font-semibold text-sm"
               label="Suggested Member"
               placeholder={
                 membersLoading ? 'Loading members...' : 'Select Members'

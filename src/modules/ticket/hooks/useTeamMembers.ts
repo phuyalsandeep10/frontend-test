@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import axiosInstance from '@/services/priority/lib/axios';
+import axiosInstance from '@/apiConfigs/axiosInstance';
 
 export const useTeamMembers = (teamId?: string | number) => {
   return useQuery({

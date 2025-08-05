@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 
-import axiosInstance from '@/services/priority/lib/axios';
+// import axiosInstance from '@/services/priority/lib/axios';
 import { PriorityResponse } from '@/services/priority/priority';
 import { usePriorityStore } from '@/services/priority/usePriorityStore';
+import axiosInstance from '@/apiConfigs/axiosInstance';
 
 export const usePriorities = () => {
   const setPriorities = usePriorityStore((state) => state.setPriorities);
