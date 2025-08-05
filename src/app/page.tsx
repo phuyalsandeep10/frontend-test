@@ -15,6 +15,7 @@ import AuthenticatorModal from '@/components/modal/Authenticator/AuthenticatorMo
 
 console.log("hii");
 export default function Home() {
+  console.log("success fully home page")
   // const [croppedAreaPixels, setCroppedAreaPixels] = useState<{
   //   x: number;
   //   y: number;
