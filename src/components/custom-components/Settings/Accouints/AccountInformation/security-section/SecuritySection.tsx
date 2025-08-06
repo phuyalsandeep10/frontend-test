@@ -9,22 +9,22 @@ export default function SecuritySection() {
         Security
       </h3>
 
-      <div className="mt-11">
+      <div className="mt-6">
         <div className="flex items-center gap-4">
           <Switch
-            className="bg-[#6941C6] data-[state=checked]:bg-[#6941C6]"
+            className="bg-brand-primary-switch data-[state=checked]:bg-brand-primary-switch"
             defaultChecked
           />
-          <span className="text-brand-dark text-[16px] leading-[26px] font-medium tracking-[0%]">
+          <span className="text-brand-dark text-[16px] leading-[26px] font-medium">
             Two-factor authentication
           </span>
         </div>
 
-        <Card className="mt-5 h-12 w-full rounded-md border-zinc-500">
+        <Card className="border-theme-text-primary mt-[12px] h-12 w-[80%] rounded-md">
           <CardContent className="flex h-full items-center justify-between p-0">
             <div className="ml-[47px] flex items-center gap-2">
               <Icons.key className="h-5 w-5" />
-              <span className="text-brand-dark text-[16px] leading-[26px] font-normal tracking-[0%]">
+              <span className="text-brand-dark text-[16px] leading-[26px] font-normal">
                 Change Password
               </span>
             </div>
@@ -36,12 +36,12 @@ export default function SecuritySection() {
       </div>
 
       {/* Custom Signature Section */}
-      <div className="mt-10">
+      <div className="mt-6">
         <h3 className="text-brand-dark text-[16px] leading-[26px] font-medium tracking-[0%]">
           Custom Signature
         </h3>
 
-        <Card className="mt-5 h-12 w-full rounded-md border-zinc-500">
+        <Card className="mt-5 h-12 w-[80%] rounded-md border-zinc-500">
           <CardContent className="flex h-full items-center justify-between p-0">
             <div className="ml-[47px] flex items-center gap-2">
               <Icons.key className="h-5 w-5" />
