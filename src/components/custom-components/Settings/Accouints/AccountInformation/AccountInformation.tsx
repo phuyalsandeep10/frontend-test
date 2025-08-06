@@ -1,17 +1,31 @@
 'use client';
-import React, { useState } from 'react';
-// import CountrySelect, { Country } from '../../CountrySelect';
 
-import CountrySelect, { Country } from '@/shared/CountrySelect';
-import PhoneInput from '@/shared/PhoneInput';
+import ProfileSection from './profile-section/ProfileSection';
+import PersonalInformation from './personal-information/PersonalInformation';
+import PlansSection from './plans-section/PlansSection';
+import PublicProfile from './public-profile/PublicProfile';
+import DiscountBanner from './discount-banner/DiscountBanner';
 
 const AccountInformation = () => {
-  const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
   return (
-    <div>
-      AccountInformation
-      <CountrySelect value={selectedCountry} onChange={setSelectedCountry} />
-      <PhoneInput />
+    <div className="font-outfit w-full bg-white">
+      <ProfileSection
+        name="Yubesh Koirala"
+        email="koiralayubesh@gmail.com"
+        location="Rio de Janeiro"
+        phone="9842367186"
+        countryCode="+977"
+        profileImage="/profile.jpg"
+      />
+
+      <PublicProfile />
+
+      <div className="mt-[43px] grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-0">
+        <PersonalInformation />
+        <PlansSection />
+      </div>
+
+      <DiscountBanner />
     </div>
   );
 };

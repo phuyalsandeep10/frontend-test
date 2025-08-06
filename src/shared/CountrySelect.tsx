@@ -78,16 +78,18 @@ const CountrySelect: React.FC<CountrySelectProps> = ({
               {value ? (
                 <div className="flex items-center gap-2">
                   <Flag code={value.code} style={{ width: 24, height: 16 }} />
-                  <span>{value.name}</span>
+                  <span className="text-pure-black font-normal">
+                    {value.name}
+                  </span>
                 </div>
               ) : (
                 <span>Select Country</span>
               )}
-              <div className="ml-2">
+              <div className="text-gray-light ml-2">
                 {open ? (
-                  <Icons.chevron_up size={16} />
+                  <Icons.chevron_up size={12} />
                 ) : (
-                  <Icons.chevron_down size={16} />
+                  <Icons.chevron_down size={12} />
                 )}
               </div>
             </div>
