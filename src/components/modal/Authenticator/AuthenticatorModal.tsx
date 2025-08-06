@@ -20,6 +20,8 @@ import { z } from 'zod';
 import { useVerifyTwoFaOtp } from '@/hooks/auth/useVerifyTwoFaOtp';
 import Image from 'next/image';
 import { Skeleton } from '@/components/ui/skeleton';
+import { toast } from 'sonner';
+import { queryClient } from '@/providers/query-provider';
 
 type AuthenticatorFormValues = z.infer<typeof AuthenticatorSchema>;
 
@@ -54,9 +56,22 @@ const AuthenticatorModal: React.FC<AuthenticatorModalProps> = ({
   const { mutate: verify2faOtp, isPending } = useVerifyTwoFaOtp();
 
   const handleSubmit = async (values: AuthenticatorFormValues) => {
-    verify2faOtp({
-      token: values.token,
-    });
+    verify2faOtp(
+      {
+        token: values.token,
+      },
+      {
+        onSuccess: (data) => {
+          toast.success(data?.message || 'Otp verification successful');
+          queryClient.invalidateQueries({ queryKey: ['authUser'] });
+          setOpen(false);
+        },
+        onError: (error: any) => {
+          toast.error(error?.response?.data?.message || 'Failed to verify otp');
+          console.error('2fa otp verify error:', error);
+        },
+      },
+    );
   };
 
   const hasError = !!form.formState.errors.token;

@@ -19,7 +19,6 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import Image from 'next/image';
 import googleIcon from '@/assets/images/google.svg';
 import { toast } from 'sonner';
-import { useAuthStore } from '@/store/AuthStore/useAuthStore';
 
 const LoginForm = () => {
   const [isNotARobot, setIsNotARobot] = useState(false);
@@ -30,8 +29,6 @@ const LoginForm = () => {
   const refreshToken = searchParams.get('refresh_token');
 
   const { mutate: login, isPending } = useLoginUser();
-
-  const setAuthData = useAuthStore((state) => state.setAuthData);
 
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
@@ -56,10 +53,6 @@ const LoginForm = () => {
         };
         AuthService.setAuthTokens(authToken);
         toast.success(data?.message || 'Logged in successfully');
-        const user = data?.data?.user;
-        AuthService.setUserToLocalStorage(user);
-
-        setAuthData(data);
         router.replace(ROUTES.DASHBOARD);
       },
       onError: (error: any) => {
@@ -140,7 +133,7 @@ const LoginForm = () => {
             </div>
 
             {/* ReCAPTCHA */}
-            <div className="w-full pt-4">
+            {/* <div className="w-full pt-4">
               <ReCAPTCHA
                 sitekey={process.env.NEXT_PUBLIC_GOOGLE_RECAPTHA_SITE_KEY!}
                 onChange={onCaptchaSuccess}
@@ -148,7 +141,7 @@ const LoginForm = () => {
               {captchaError && (
                 <p className="mt-2 text-sm text-red-500">{captchaError}</p>
               )}
-            </div>
+            </div> */}
           </div>
 
           <Button

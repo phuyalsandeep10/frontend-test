@@ -48,14 +48,14 @@ const SidebarFooterMenu = () => {
                 'text-theme-text-dark font-outfit text-lg font-medium',
               )}
             >
-              {authData?.name}
+              {authData?.data?.user?.name}
             </span>
             <span
               className={cn(
                 'text-theme-text-primary font-outfit text-xs font-normal',
               )}
             >
-              {authData?.email}
+              {authData?.data?.user?.email}
             </span>
           </div>
 

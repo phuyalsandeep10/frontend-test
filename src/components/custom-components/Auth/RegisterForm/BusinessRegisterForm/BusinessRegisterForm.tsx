@@ -28,8 +28,6 @@ const BusinessRegisterForm = () => {
     },
   });
 
-  console.log(isError, error);
-
   async function submitRegisterForm(
     values: z.infer<typeof businessRegisterFormSchema>,
   ) {

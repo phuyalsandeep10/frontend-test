@@ -16,6 +16,8 @@ const DashboardPage = () => {
   const [open2FaAuthenticatorModal, setOpen2FaAuthenticatorModal] =
     useState(false);
 
+  const [openDisable2FaModal, setOpenDisable2FaModal] = useState(false);
+
   const [openEmailVerifyForm, setOpenVerifyEmail] = useState(false);
 
   const {
@@ -25,8 +27,8 @@ const DashboardPage = () => {
   } = useGenerateTwoFaOtp();
 
   const { mutate: disable2Fa, isPending: disable2FaLoading } = useDisable2Fa();
+
   const authData = useAuthStore((state) => state.authData);
-  console.log(authData);
 
   useEffect(() => {
     if (twoFaGeneratedOtpData && !generate2faOtpLoading) {
@@ -39,14 +41,11 @@ const DashboardPage = () => {
     setConfirm2FaModal(true);
   };
 
-  //here we need to user in response
   // useEffect(() => {
-  //   if (!authData?.email_verified_at) {
+  //   if (!authData?.data?.user?.email_verified_at) {
   //     setOpenVerifyEmail(true);
   //   }
   // }, [authData]);
-
-  console.log(openConfirm2FaModal);
 
   return (
     <div>
@@ -57,9 +56,9 @@ const DashboardPage = () => {
           Change Password
         </Button>
 
-        {authData?.two_fa_enabled ? (
+        {authData?.data?.user?.two_fa_enabled ? (
           <Button
-            onClick={() => disable2Fa()}
+            onClick={() => setOpenDisable2FaModal(true)}
             variant="outline"
             className="w-fit cursor-pointer"
           >
@@ -88,12 +87,22 @@ const DashboardPage = () => {
         onClick={() => generate2FaOtp()}
       />
 
+      <ConfirmModal
+        title="Are you sure ?"
+        subTitle="You want to disable 2 factor authentication"
+        open={openDisable2FaModal}
+        setOpen={setOpenDisable2FaModal}
+        onClick={() => disable2Fa()}
+        loading={disable2FaLoading}
+      />
+
       <AuthenticatorModal
         open={open2FaAuthenticatorModal}
         setOpen={setOpen2FaAuthenticatorModal}
         otpauth_url={twoFaGeneratedOtpData?.data?.['otp_auth_url'] || ''}
         cancelButtonText="Cancel"
         submitButtonText="Submit"
+        submitPendingText="Submiting..."
       />
       <VerifyEmailModal
         open={openEmailVerifyForm}
