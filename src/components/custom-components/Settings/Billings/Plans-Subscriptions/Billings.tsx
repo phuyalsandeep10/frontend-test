@@ -1,8 +1,8 @@
 'use client';
 import React from 'react';
-import HeaderComponent from '@/components/custom-components/Billings/Plans-Subscriptions/Header';
-import ActivePlansComponent from '@/components/custom-components/Billings/Plans-Subscriptions/ActivePlans';
 import Settings from '@/components/custom-components/Settings/Settings';
+import HeaderComponent from './Header';
+import ActivePlansComponent from './ActivePlans';
 
 const Billings = () => {
   return (

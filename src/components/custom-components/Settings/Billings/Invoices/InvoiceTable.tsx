@@ -62,6 +62,7 @@ const columns: ColumnDef<Invoice>[] = [
     id: 'select',
     header: ({ table }) => (
       <Checkbox
+        className="custom-checkbox"
         checked={
           table.getIsAllPageRowsSelected() ||
           (table.getIsSomePageRowsSelected() && 'indeterminate')
@@ -72,6 +73,7 @@ const columns: ColumnDef<Invoice>[] = [
     ),
     cell: ({ row }) => (
       <Checkbox
+        className="custom-checkbox"
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
         aria-label="Select row"

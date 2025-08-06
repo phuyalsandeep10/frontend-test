@@ -46,6 +46,8 @@ export type PlansComponentProps = {
   className?: string;
   buttonVariant?: React.ComponentProps<typeof Button>['variant'];
   buttonOnClick?: () => void;
+  size?: React.ComponentProps<typeof Button>['size'];
+  buttonClassName?: string;
 };
 
 export type PlanDataFeature = {

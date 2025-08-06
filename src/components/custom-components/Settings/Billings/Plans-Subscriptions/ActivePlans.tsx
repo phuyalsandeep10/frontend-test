@@ -14,9 +14,7 @@ const ActivePlansComponent = () => {
       label: (
         <>
           Yearly{' '}
-          <span className="text-[16px] leading-6.5 font-semibold">
-            (10% off)
-          </span>
+          <span className="text-[16px] leading-6.5 font-medium">(10% off)</span>
         </>
       ),
     },
@@ -39,7 +37,7 @@ const ActivePlansComponent = () => {
             <button
               key={key}
               onClick={() => handleClick(key)}
-              className={`min-h-[40px] min-w-[127px] rounded-full px-2 text-lg font-semibold whitespace-nowrap transition ${
+              className={`min-h-10 min-w-32 rounded-full px-2 text-lg font-semibold whitespace-nowrap transition ${
                 selected === key
                   ? 'bg-brand-primary text-white'
                   : 'text-theme-text-primary'

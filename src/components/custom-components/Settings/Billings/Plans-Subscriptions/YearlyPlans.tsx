@@ -25,6 +25,8 @@ const YearlyPlans = () => {
           bgColor="custom-gradient"
           className="flex-1"
           buttonOnClick={() => console.log('Starter plan clicked')}
+          buttonVariant="disabled"
+          size="sm"
         />
 
         <PlansComponent
@@ -44,9 +46,10 @@ const YearlyPlans = () => {
           showImage={true}
           imageSrc={FireFlame}
           bgColor="bg-white"
-          buttonVariant="default"
           className="flex-1"
           buttonOnClick={() => console.log('Business plan clicked')}
+          buttonVariant="default"
+          size="sm"
         />
 
         <PlansComponent
@@ -65,6 +68,8 @@ const YearlyPlans = () => {
           bgColor="bg-white"
           className="flex-1"
           buttonOnClick={() => console.log('Enterprise plan clicked')}
+          buttonVariant="outline"
+          size="sm"
         />
       </div>
 

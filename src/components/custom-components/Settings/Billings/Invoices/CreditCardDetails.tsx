@@ -3,6 +3,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { CreditCardDetailsProps } from './types';
 import { Icons } from '@/components/ui/Icons';
+import { cn } from '@/lib/utils';
 
 const CreditCardDetails: React.FC<CreditCardDetailsProps> = ({
   expiryYear,
@@ -14,17 +15,17 @@ const CreditCardDetails: React.FC<CreditCardDetailsProps> = ({
   const isExpired = parseInt(expiryYear) < currentYear;
 
   let buttonText = 'Set As Default';
-  let buttonVariant: 'default' | 'secondary' | 'destructive' = 'default';
+  let buttonVariant: React.ComponentProps<typeof Button>['variant'];
 
   if (isPrimary) {
     buttonText = 'Default';
-    buttonVariant = 'secondary';
+    buttonVariant = 'black';
   } else if (isExpired) {
     buttonText = 'Expired';
     buttonVariant = 'destructive';
   } else {
     buttonText = 'Set As Default';
-    buttonVariant = 'default';
+    buttonVariant = 'outline_black';
   }
 
   return (
@@ -46,8 +47,20 @@ const CreditCardDetails: React.FC<CreditCardDetailsProps> = ({
         </div>
       </div>
 
-      <div className="flex items-center gap-3.5">
-        <Button size="sm" variant={buttonVariant}>
+      <div
+        className={cn(
+          'flex min-w-[135px] items-center',
+          isPrimary ? 'justify-end' : 'justify-between',
+        )}
+      >
+        <Button
+          size="sm"
+          variant={buttonVariant}
+          className={cn(
+            'text-xs font-normal',
+            isExpired && 'border-theme-text-light text-theme-text-light border',
+          )}
+        >
           {buttonText}
         </Button>
 

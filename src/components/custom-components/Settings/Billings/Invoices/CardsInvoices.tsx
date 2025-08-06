@@ -1,7 +1,7 @@
-import React from 'react';
-import CreditCard from '@/components/custom-components/Billings/Invoices/CreditCard';
+'use client';
+
+import React, { useState } from 'react';
 import CreditCardDetails from './CreditCardDetails';
-import HeaderComponent from '@/components/custom-components/Billings/Plans-Subscriptions/Header';
 import Settings from '@/components/custom-components/Settings/Settings';
 import visacard from '@/assets/images/visa-card.svg';
 import mastercard from '@/assets/images/Mastercard-logo.svg';
@@ -10,6 +10,8 @@ import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/ui/Icons';
 import InvoiceTable from './InvoiceTable';
 import AddPaymentModal from './AddPaymentModal';
+import HeaderComponent from '../Plans-Subscriptions/Header';
+import CreditCard from './CreditCard';
 
 const creditCardData = [
   {
@@ -50,6 +52,8 @@ const creditCardDetailsData = [
 ];
 
 const CardsInvoices = () => {
+  const [modalOpen, setModalOpen] = useState(false);
+
   return (
     <Settings>
       <div className="font-outfit">
@@ -72,7 +76,11 @@ const CardsInvoices = () => {
                 isPrimary={index === 0}
               />
             ))}
-            <Button leftIcon={<Icons.ri_add_circle_line className="h-6 w-6" />}>
+            <Button
+              onClick={() => setModalOpen(true)}
+              leftIcon={<Icons.ri_add_circle_line className="h-6 w-6" />}
+              className="rounded-[4px] text-xs"
+            >
               Add Payment Option
             </Button>
           </div>
@@ -87,9 +95,7 @@ const CardsInvoices = () => {
         <div>
           <InvoiceTable />
         </div>
-        <div className="mb-6">
-          <AddPaymentModal />
-        </div>
+        <AddPaymentModal open={modalOpen} onOpenChange={setModalOpen} />
       </div>
     </Settings>
   );

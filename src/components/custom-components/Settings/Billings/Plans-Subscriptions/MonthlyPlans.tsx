@@ -11,7 +11,7 @@ const MonthlyPlans = () => {
       <div className="flex gap-6 pt-6">
         <PlansComponent
           title="Starter"
-          price="$20"
+          price="$0"
           subtitle="Best to check out features"
           buttonText="Current plan"
           description="This plan is perfect for individuals who want to explore AI capabilities without any commitment."
@@ -25,12 +25,14 @@ const MonthlyPlans = () => {
           bgColor="custom-gradient"
           className="flex-1"
           buttonOnClick={() => console.log('Starter plan clicked')}
+          buttonVariant="disabled"
+          size="sm"
         />
 
         <PlansComponent
           title="Business"
           prevPrice="$40"
-          price="$28"
+          price="$11"
           subtitle="Per agent / billed yearly"
           buttonText="Upgrade plan"
           description="Perfect for exploring AI features risk‑free and without commitment."
@@ -44,9 +46,10 @@ const MonthlyPlans = () => {
           showImage={true}
           imageSrc={FireFlame}
           bgColor="bg-white"
-          buttonVariant="default"
           className="flex-1"
           buttonOnClick={() => console.log('Business plan clicked')}
+          buttonVariant="default"
+          size="sm"
         />
 
         <PlansComponent
@@ -65,6 +68,8 @@ const MonthlyPlans = () => {
           bgColor="bg-white"
           className="flex-1"
           buttonOnClick={() => console.log('Enterprise plan clicked')}
+          buttonVariant="outline"
+          size="sm"
         />
       </div>
 

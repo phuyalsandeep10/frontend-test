@@ -16,14 +16,16 @@ const PlansComponent: React.FC<PlansComponentProps> = ({
   imageSrc,
   bgColor = '',
   className = '',
-  buttonVariant = 'outline',
+  buttonVariant,
   buttonOnClick,
+  size,
+  buttonClassName,
 }) => {
   return (
     <div
-      className={`border-grey-light flex gap-8 rounded-md border p-3 ${bgColor} ${className}`}
+      className={`border-grey-light grid gap-8 rounded-md border p-3 ${bgColor} ${className}`}
     >
-      <div className="flex flex-col gap-4">
+      <div className="flex min-w-[248px] flex-col gap-4">
         <div className="flex flex-col gap-2">
           <h1 className="text-brand-dark flex items-center gap-2 text-lg leading-7 font-medium">
             {showImage && imageSrc && (
@@ -42,14 +44,19 @@ const PlansComponent: React.FC<PlansComponentProps> = ({
           <p className="text-gray-primary text-xs leading-5 font-normal">
             {subtitle}
           </p>
-          <Button variant={buttonVariant} onClick={buttonOnClick}>
+          <Button
+            variant={buttonVariant}
+            size={size}
+            className={`${buttonClassName} w-full rounded-[4px] py-5 text-xs`}
+            onClick={buttonOnClick}
+          >
             {buttonText}
           </Button>
           <p className="text-theme-text-primary text-xs leading-5 font-normal">
             {description}
           </p>
         </div>
-        <div className="text-theme-text-primary text-sm leading-6 font-normal">
+        <div className="text-theme-text-primary text-sm leading-5 font-normal">
           {features.map((feature, index) => (
             <p key={index} className="flex items-center gap-2">
               <Icons.ri_check_fill className="text-theme-text-primary h-4 w-4" />

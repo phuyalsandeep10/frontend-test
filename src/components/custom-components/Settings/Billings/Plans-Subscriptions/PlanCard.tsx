@@ -22,7 +22,9 @@ export const PlanCard = ({
         <p className="text-brand-dark text-2xl leading-8.5 font-semibold">
           {plan.name}
         </p>
-        <p className={`${statusColor} text-[16px] leading-6.5 font-medium`}>
+        <p
+          className={`${statusColor} pr-6 text-[16px] leading-6.5 font-medium`}
+        >
           • {plan.status}
         </p>
       </div>
@@ -55,11 +57,21 @@ export const PlanCard = ({
           </div>
         </div>
 
-        <div className="flex shrink-0 items-center gap-3">
-          <Button variant="default" onClick={() => onChangePlan(plan.name)}>
+        <div className="flex shrink-0 items-center gap-3 self-center">
+          <Button
+            variant="default"
+            size="sm"
+            onClick={() => onChangePlan(plan.name)}
+            className="rounded-[4px] px-9.5 py-2.5 text-xs"
+          >
             Change Plan
           </Button>
-          <Button variant="destructive" onClick={() => onCancelPlan(plan.name)}>
+          <Button
+            variant="destructive"
+            size="sm"
+            className="rounded-[4px] px-4 py-2.5 text-xs"
+            onClick={() => onCancelPlan(plan.name)}
+          >
             Cancel plan
           </Button>
         </div>
