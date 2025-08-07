@@ -7,7 +7,7 @@ import SearchBox from './SearchBox';
 
 const InboxSubSidebar = () => {
   return (
-    <div className="font-outfit h-screen">
+    <div className="font-outfit">
       <div className="flex items-center justify-between">
         <p>Conversastion</p>
         <span>

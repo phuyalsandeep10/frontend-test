@@ -18,10 +18,15 @@ interface Message {
 
 interface MessageItemProps {
   message: Message;
+  onReply: (messageText: string) => void;
 }
 
-const MessageItem = ({ message }: MessageItemProps) => {
+const MessageItem = ({ message, onReply }: MessageItemProps) => {
   const [replyTo, setReplyTo] = useState(true);
+
+  const handleReplyClick = () => {
+    onReply(message.message);
+  };
 
   return (
     <div>
@@ -96,7 +101,10 @@ const MessageItem = ({ message }: MessageItemProps) => {
                 <DropdownMenuItem className="flex cursor-pointer items-center gap-2">
                   Create a ticket
                 </DropdownMenuItem>
-                <DropdownMenuItem className="flex cursor-pointer items-center gap-2">
+                <DropdownMenuItem
+                  className="flex cursor-pointer items-center gap-2"
+                  onClick={handleReplyClick}
+                >
                   Reply
                 </DropdownMenuItem>
                 <DropdownMenuItem className="text-error focus:text-error flex cursor-pointer items-center gap-2">

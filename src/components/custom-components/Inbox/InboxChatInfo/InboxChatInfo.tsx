@@ -11,12 +11,16 @@ import SocialMedia from './Informations/SocialMedia';
 import TitleReasonInfo from './Informations/TitleReasonInfo';
 import { Icons } from '@/components/ui/Icons';
 
-const InboxChatInfo = () => {
+interface InboxChatInfoProps {
+  onClose: () => void;
+}
+
+const InboxChatInfo: React.FC<InboxChatInfoProps> = ({ onClose }) => {
   return (
     <div>
       <div className="font-outfit max-h-screen overflow-y-auto border-l bg-white">
         {/* Header */}
-        <InboxChatInfoHeader />
+        <InboxChatInfoHeader onClose={onClose} />
 
         <div className="px-10 py-7">
           {/* Profile Section */}

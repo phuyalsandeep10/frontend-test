@@ -51,6 +51,42 @@ const ConversationsList = () => {
       status: 'Unresolved',
       agent: 'Agent Sarah',
     },
+    {
+      id: 6,
+      name: 'Eleanor Pena',
+      initials: 'EP',
+      message: 'Thanks for your help with the recent...',
+      time: '04:15 PM',
+      status: 'Unresolved',
+      agent: 'Agent Sarah',
+    },
+    {
+      id: 7,
+      name: 'Eleanor Pena',
+      initials: 'EP',
+      message: 'Thanks for your help with the recent...',
+      time: '04:15 PM',
+      status: 'Unresolved',
+      agent: 'Agent Sarah',
+    },
+    {
+      id: 8,
+      name: 'Eleanor Pena',
+      initials: 'EP',
+      message: 'Thanks for your help with the recent...',
+      time: '04:15 PM',
+      status: 'Unresolved',
+      agent: 'Agent Sarah',
+    },
+    {
+      id: 9,
+      name: 'Eleanor Pena',
+      initials: 'EP',
+      message: 'Thanks for your help with the recent...',
+      time: '04:15 PM',
+      status: 'Unresolved',
+      agent: 'Agent Sarah',
+    },
   ];
 
   const getStatusColor = (status: string) => {
@@ -65,15 +101,17 @@ const ConversationsList = () => {
         return 'bg-warning text-white';
     }
   };
+
   return (
-    <div className="mt-5 max-h-[100vh-]">
+    // <div className="mt-5 max-h-[100vh-]">
+    <div className="mt-5 max-h-[calc(100vh-155px)] min-h-[calc(100vh-155px)] overflow-y-auto">
       {conversations.map((conversation) => (
         <Link
           href={`/inbox/${conversation.id}`}
           key={conversation.id}
           className=""
         >
-          <div className="flex items-center space-x-3 py-4">
+          <div className="flex items-center py-4">
             <Avatar>
               <AvatarImage
                 src="https://github.com/shadcn.png"
