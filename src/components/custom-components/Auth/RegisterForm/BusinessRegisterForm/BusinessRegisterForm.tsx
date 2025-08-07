@@ -8,15 +8,19 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
 import { businessRegisterFormSchema } from './businessRegisterFormHelper';
+import { ROUTES } from '@/routes/routes';
+import { toast } from 'sonner';
+import React, { SetStateAction } from 'react';
+import { queryClient } from '@/providers/query-provider';
 
-const BusinessRegisterForm = () => {
+interface BusinessRegisterFormProps {
+  from?: 'dashboard' | 'register';
+  setOpen?: React.Dispatch<SetStateAction<boolean>>;
+}
+
+const BusinessRegisterForm = ({ from, setOpen }: BusinessRegisterFormProps) => {
   const router = useRouter();
-  const {
-    mutate: createOrganization,
-    isPending,
-    isError,
-    error,
-  } = useCreateOrganizations();
+  const { mutate: createOrganization, isPending } = useCreateOrganizations();
   const businessRegisterForm = useForm<
     z.infer<typeof businessRegisterFormSchema>
   >({
@@ -31,7 +35,22 @@ const BusinessRegisterForm = () => {
   async function submitRegisterForm(
     values: z.infer<typeof businessRegisterFormSchema>,
   ) {
-    createOrganization(values);
+    createOrganization(values, {
+      onSuccess: (data) => {
+        if (from === 'dashboard' && setOpen) {
+          setOpen(false);
+          queryClient.invalidateQueries({ queryKey: ['authUser'] });
+        } else {
+          router.push(ROUTES.DASHBOARD);
+        }
+        toast.success(data?.message || 'Organization created Successfully');
+      },
+      onError: (error: any) => {
+        toast.error(
+          error?.response?.data?.message || 'Failed to create Organizations',
+        );
+      },
+    });
   }
   return (
     <div className="w-[516px]">
@@ -66,14 +85,25 @@ const BusinessRegisterForm = () => {
               'I want to unify my inbox',
             ]}
           />
-          <Button
-            variant="default"
-            type="submit"
-            size="lg"
-            className="mt-4 w-full"
-          >
-            {isPending ? 'Signing...' : 'Signup with chatboq'}
-          </Button>
+          {from === 'dashboard' ? (
+            <Button
+              variant="default"
+              type="submit"
+              size="lg"
+              className="mt-4 w-full"
+            >
+              {isPending ? 'Creating...' : 'Create'}
+            </Button>
+          ) : (
+            <Button
+              variant="default"
+              type="submit"
+              size="lg"
+              className="mt-4 w-full"
+            >
+              {isPending ? 'Signing...' : 'Signup with chatboq'}
+            </Button>
+          )}
         </form>
       </Form>
     </div>

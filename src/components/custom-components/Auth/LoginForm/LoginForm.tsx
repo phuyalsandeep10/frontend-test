@@ -39,10 +39,10 @@ const LoginForm = () => {
   });
 
   async function onSubmit(values: z.infer<typeof loginFormSchema>) {
-    // if (!isNotARobot) {
-    //   setCaptchaError('Please verify that you are not a robot.');
-    //   return;
-    // }
+    if (!isNotARobot) {
+      setCaptchaError('Please verify that you are not a robot.');
+      return;
+    }
     setCaptchaError('');
     login(values, {
       onSuccess: (data) => {
@@ -133,7 +133,7 @@ const LoginForm = () => {
             </div>
 
             {/* ReCAPTCHA */}
-            {/* <div className="w-full pt-4">
+            <div className="w-full pt-4">
               <ReCAPTCHA
                 sitekey={process.env.NEXT_PUBLIC_GOOGLE_RECAPTHA_SITE_KEY!}
                 onChange={onCaptchaSuccess}
@@ -141,7 +141,7 @@ const LoginForm = () => {
               {captchaError && (
                 <p className="mt-2 text-sm text-red-500">{captchaError}</p>
               )}
-            </div> */}
+            </div>
           </div>
 
           <Button

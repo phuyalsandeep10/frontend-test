@@ -31,3 +31,8 @@ export type AuthTokens = {
   accessToken: string;
   refreshToken: string;
 };
+
+export interface resendOtpPayloads {
+  email: string | undefined;
+  type: 'forgot_password' | 'email_verification';
+}

@@ -81,6 +81,8 @@ axiosInstance.interceptors.response.use(
         tokens.refreshToken,
       );
 
+      console.log('Access tokens', newAccessToken);
+
       axiosInstance.defaults.headers.common['Authorization'] =
         `Bearer ${newAccessToken}`;
       processQueue(null, newAccessToken);

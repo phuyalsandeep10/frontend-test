@@ -7,12 +7,5 @@ export const useResetPassword = () => {
   return useMutation({
     mutationFn: (payload: ResetPasswordpayload) =>
       AuthService.resetPassword(payload),
-    onSuccess: (data) => {
-      toast.success(data?.data?.message || 'Password reset successfully!');
-    },
-    onError: (error: any) => {
-      console.log(error);
-      toast.error(error?.response?.data?.message || 'Password reset failed!');
-    },
   });
 };

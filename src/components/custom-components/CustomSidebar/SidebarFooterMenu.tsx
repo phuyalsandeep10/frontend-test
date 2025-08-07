@@ -11,11 +11,12 @@ import { cn } from '@/lib/utils';
 import { Icons } from '@/components/ui/Icons';
 import { useLogout } from '@/hooks/auth/useLogout';
 import { useAuthStore } from '@/store/AuthStore/useAuthStore';
+import Link from 'next/link';
+import { ROUTES } from '@/routes/routes';
 
 const SidebarFooterMenu = () => {
   const { mutate: logout, isPending } = useLogout();
   const { authData, clearAuthData } = useAuthStore((state) => state);
-  console.log(authData);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -30,13 +31,17 @@ const SidebarFooterMenu = () => {
               'from-theme-text-dark via-brand-text to-brand-primary font-outfit rounded-full bg-gradient-to-r p-[2px]',
             )}
           >
-            <div className={cn('rounded-full bg-white')}>
+            <div className={cn('min-h-8 min-w-8 rounded-full bg-white')}>
               <Image
-                src="/avatar.jpg"
+                src={
+                  authData?.data?.user?.image
+                    ? authData?.data?.user?.image
+                    : '/profile-placeholder.jpeg'
+                }
                 alt="User"
                 width={32}
                 height={32}
-                className={cn('rounded-full object-cover')}
+                className={cn('h-8 w-8 rounded-full object-cover')}
               />
             </div>
           </div>
@@ -70,12 +75,12 @@ const SidebarFooterMenu = () => {
         <DropdownMenuItem
           className={cn('hover:bg-muted w-full cursor-pointer text-sm')}
         >
-          Profile
+          <Link href={`${ROUTES.SETTINGS.ACCOUNT_INFORMATION}`}>Profile</Link>
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => {
             logout();
-            clearAuthData();
+            // clearAuthData();
           }}
           className={cn('hover:bg-muted w-full cursor-pointer text-sm')}
         >

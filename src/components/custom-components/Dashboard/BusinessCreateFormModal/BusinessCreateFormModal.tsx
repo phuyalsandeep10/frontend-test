@@ -1,23 +1,23 @@
 import {
   AlertDialog,
   AlertDialogContent,
+  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import React from 'react';
+import BusinessRegisterForm from '../../Auth/RegisterForm/BusinessRegisterForm/BusinessRegisterForm';
 
-interface VerifyEmailModalProps {
+interface BusinessCreateFormModalProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  children: React.ReactNode;
 }
 
 const BusinessCreateFormModal = ({
   open,
   setOpen,
-  children,
-}: VerifyEmailModalProps) => {
+}: BusinessCreateFormModalProps) => {
   return (
     <AlertDialog open={open} onOpenChange={() => {}}>
       <AlertDialogContent
@@ -30,7 +30,9 @@ const BusinessCreateFormModal = ({
           </AlertDialogTitle>
         </AlertDialogHeader>
 
-        <ScrollArea className="h-full w-full">{children}</ScrollArea>
+        <ScrollArea className="h-full w-full">
+          <BusinessRegisterForm from="dashboard" setOpen={setOpen} />
+        </ScrollArea>
       </AlertDialogContent>
     </AlertDialog>
   );

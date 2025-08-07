@@ -3,15 +3,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import QRCode from 'qrcode';
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-  DialogClose,
-} from '@/components/ui/dialog';
-
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import OTP from '@/components/common/hook-form/OTP';
@@ -22,6 +13,13 @@ import Image from 'next/image';
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
 import { queryClient } from '@/providers/query-provider';
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
 type AuthenticatorFormValues = z.infer<typeof AuthenticatorSchema>;
 
@@ -64,6 +62,7 @@ const AuthenticatorModal: React.FC<AuthenticatorModalProps> = ({
         onSuccess: (data) => {
           toast.success(data?.message || 'Otp verification successful');
           queryClient.invalidateQueries({ queryKey: ['authUser'] });
+          form.reset();
           setOpen(false);
         },
         onError: (error: any) => {
@@ -87,14 +86,13 @@ const AuthenticatorModal: React.FC<AuthenticatorModalProps> = ({
   }, [otpauth_url]);
 
   return (
-    <Dialog open={open} onOpenChange={() => {}}>
-      <DialogContent
+    <AlertDialog open={open} onOpenChange={() => {}}>
+      <AlertDialogContent
         className="font-outfit w-[344px] gap-0"
-        onInteractOutside={(e) => e.preventDefault()}
         onEscapeKeyDown={(e) => e.preventDefault()}
       >
-        <DialogHeader>
-          <DialogTitle>
+        <AlertDialogHeader>
+          <AlertDialogTitle>
             <div className="mb-5">
               <h1 className="text-[16px] leading-6.5 font-medium text-black">
                 Authenticator Setup
@@ -103,9 +101,8 @@ const AuthenticatorModal: React.FC<AuthenticatorModalProps> = ({
                 Set authentication via authenticator app
               </p>
             </div>
-          </DialogTitle>
-          <DialogClose className="absolute top-4 right-4" />
-        </DialogHeader>
+          </AlertDialogTitle>
+        </AlertDialogHeader>
         <p className="text-center text-sm font-medium text-black">
           Scan the QR to setup authentication
         </p>
@@ -138,8 +135,8 @@ const AuthenticatorModal: React.FC<AuthenticatorModalProps> = ({
               textSize="18px"
             />
 
-            <DialogFooter className="mt-4 flex gap-[34px]">
-              <Button
+            <AlertDialogFooter className="mt-4 flex gap-[34px]">
+              {/* <Button
                 type="button"
                 variant="secondary"
                 size="sm"
@@ -148,7 +145,7 @@ const AuthenticatorModal: React.FC<AuthenticatorModalProps> = ({
                 disabled={isPending}
               >
                 {cancelButtonText}
-              </Button>
+              </Button> */}
 
               <Button
                 type="submit"
@@ -159,11 +156,11 @@ const AuthenticatorModal: React.FC<AuthenticatorModalProps> = ({
               >
                 {isPending ? submitPendingText : submitButtonText}
               </Button>
-            </DialogFooter>
+            </AlertDialogFooter>
           </form>
         </Form>
-      </DialogContent>
-    </Dialog>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };
 

@@ -44,7 +44,6 @@ const RegisterForm = () => {
 
   const onSubmit = (values: z.infer<typeof registerFormSchema>) => {
     const registerFormData = { ...values, email: validEmail };
-    console.log(registerFormData, isEmailValid);
     if (!isAgreed) {
       setisAgreeError('You must agree to the Terms and Conditions to proceed.');
       return;

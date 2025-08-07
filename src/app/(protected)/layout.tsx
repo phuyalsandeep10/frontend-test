@@ -17,24 +17,20 @@ export default function ProtectedDashboardLayout({
   const { data: authData, isLoading } = useAuthenticatedUser();
   const router = useRouter();
   const authTokens = AuthService.getAuthTokens();
-  const setAuthData = useAuthStore((state) => state.setAuthData);
 
   useEffect(() => {
-    // if (!authTokens) {
-    //   router.replace(ROUTES.LOGIN);
-    // }
-    // if (!isLoading) {
-    //   const user = authData?.data?.user;
-    //   if (!user) {
-    //     router.replace(ROUTES.LOGIN);
-    //   }
-    // }
-    if (authData) {
-      setAuthData(authData);
+    if (!authTokens) {
+      router.replace(ROUTES.LOGIN);
     }
-  }, [authData, isLoading, router, authTokens, setAuthData]);
+    if (!isLoading) {
+      const user = authData?.data?.user;
+      if (!user) {
+        router.replace(ROUTES.LOGIN);
+      }
+    }
+  }, [authData, isLoading, router, authTokens]);
 
-  // if (isLoading || !authData) return <p>Loading...</p>;
+  if (isLoading || !authData) return <p>Loading...</p>;
 
   return (
     <SidebarProvider>

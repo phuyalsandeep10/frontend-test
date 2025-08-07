@@ -3,7 +3,6 @@ export interface ProfileSectionProps {
   email: string;
   location: string;
   phone: string;
-  countryCode: string;
   profileImage: string;
 }
 

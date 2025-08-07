@@ -46,10 +46,12 @@ const ForgotPasswordVerifyForm = () => {
       email: email as string,
     };
     forgotPassVerify(forgotPassVerifyData, {
-      onSuccess: () => {
+      onSuccess: (data) => {
         setVerifySuccess(true);
+        toast.success(data?.message || 'Password reset verified successfully');
       },
-      onError: () => {
+      onError: (error: any) => {
+        toast.error(error?.response?.data?.message || 'Verification failed');
         setVerifySuccess(false);
       },
     });

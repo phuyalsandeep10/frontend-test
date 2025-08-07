@@ -19,6 +19,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { useResendOtp } from '@/hooks/auth/useResendOtp';
+import { resendOtpPayloads } from '@/services/auth/types';
+import { queryClient } from '@/providers/query-provider';
 
 interface VerifyEmailModalProps {
   open: boolean;
@@ -30,6 +33,7 @@ const VerifyEmailModal = ({ open, setOpen }: VerifyEmailModalProps) => {
 
   const { mutate: verifyEmail, isPending: verifyEmailPending } =
     useVerifyEmail();
+  const { mutate: resendOtp, isPending: resendOtpIsPending } = useResendOtp();
   const authData = useAuthStore((state) => state.authData);
 
   console.log('Hello for Modal', authData);
@@ -50,8 +54,7 @@ const VerifyEmailModal = ({ open, setOpen }: VerifyEmailModalProps) => {
         setHasError(false);
         toast.success('Email Verified Successfully.');
         setOpen(false);
-        //TODO: Save response in localstorage
-        // AuthService.setUserToLocalStorage()
+        queryClient.invalidateQueries({ queryKey: ['authUser'] });
       },
       onError: (error: any) => {
         console.log(error);
@@ -62,7 +65,11 @@ const VerifyEmailModal = ({ open, setOpen }: VerifyEmailModalProps) => {
   };
 
   const sendOtp = () => {
-    console.log('sending otp...');
+    const resentOtpEmailData: resendOtpPayloads = {
+      email: authData?.data?.user?.email,
+      type: 'email_verification',
+    };
+    resendOtp(resentOtpEmailData);
   };
 
   return (
@@ -112,7 +119,7 @@ const VerifyEmailModal = ({ open, setOpen }: VerifyEmailModalProps) => {
               className="w-full"
               onClick={sendOtp}
             >
-              Resend OTP
+              {resendOtpIsPending ? 'Resending...' : 'Resend OTP'}
             </Button>
           </div>
         </ScrollArea>

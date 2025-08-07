@@ -1,5 +1,5 @@
 import { Icons } from '@/components/ui/Icons';
-import { MapPinIcon, EditIcon, PhoneIcon } from 'lucide-react';
+import { MapPinIcon, PhoneIcon } from 'lucide-react';
 import Image from 'next/image';
 import { ProfileSectionProps } from '../types';
 
@@ -8,7 +8,6 @@ export default function ProfileSection({
   email,
   location,
   phone,
-  countryCode,
   profileImage,
 }: ProfileSectionProps) {
   return (
@@ -24,7 +23,7 @@ export default function ProfileSection({
         <div className="flex items-center gap-6">
           <div className="relative h-[167px] w-[167px] overflow-hidden rounded-[175px]">
             <Image
-              src={profileImage}
+              src={profileImage ? profileImage : '/profile-placeholder.jpeg'}
               alt="Profile Image"
               fill
               className="object-cover"
@@ -41,16 +40,18 @@ export default function ProfileSection({
         </div>
 
         <div className="flex flex-col gap-0.5">
-          <div className="flex items-center justify-end gap-2">
-            <MapPinIcon className="h-3.5 w-3.5" />
-            <span className="text-right">{location}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <PhoneIcon className="h-3.5 w-3.5" />
-            <span className="text-right">
-              {countryCode} {phone}
-            </span>
-          </div>
+          {location && (
+            <div className="flex items-center justify-end gap-2">
+              <MapPinIcon className="h-3.5 w-3.5" />
+              <span className="text-right">{location}</span>
+            </div>
+          )}
+          {phone && (
+            <div className="flex items-center gap-2">
+              <PhoneIcon className="h-3.5 w-3.5" />
+              <span className="text-right">{phone}</span>
+            </div>
+          )}
         </div>
       </div>
     </>

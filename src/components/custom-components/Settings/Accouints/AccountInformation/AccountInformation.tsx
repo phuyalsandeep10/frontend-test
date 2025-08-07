@@ -5,17 +5,18 @@ import PersonalInformation from './personal-information/PersonalInformation';
 import PlansSection from './plans-section/PlansSection';
 import PublicProfile from './public-profile/PublicProfile';
 import DiscountBanner from './discount-banner/DiscountBanner';
+import { useAuthStore } from '@/store/AuthStore/useAuthStore';
 
 const AccountInformation = () => {
+  const authData = useAuthStore((state) => state.authData);
   return (
     <div className="font-outfit w-full bg-white">
       <ProfileSection
-        name="Yubesh Koirala"
-        email="koiralayubesh@gmail.com"
-        location="Rio de Janeiro"
-        phone="9842367186"
-        countryCode="+977"
-        profileImage="/profile.jpg"
+        name={authData?.data?.user?.name ?? ''}
+        email={authData?.data?.user?.email ?? ''}
+        location={authData?.data?.user.location ?? ''}
+        phone={authData?.data?.user?.phone ?? ''}
+        profileImage={authData?.data?.user?.image ?? ''}
       />
 
       <PublicProfile />
