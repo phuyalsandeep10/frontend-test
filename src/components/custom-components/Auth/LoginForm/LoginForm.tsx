@@ -19,6 +19,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import Image from 'next/image';
 import googleIcon from '@/assets/images/google.svg';
 import { toast } from 'sonner';
+import { useRedirectIfAuthenticated } from '@/hooks/auth/useRedirectIfAuthenticated';
 
 const LoginForm = () => {
   const [isNotARobot, setIsNotARobot] = useState(false);
@@ -81,6 +82,8 @@ const LoginForm = () => {
       router.replace(ROUTES.DASHBOARD);
     }
   }, [accessToken, refreshToken, router]);
+
+  // useRedirectIfAuthenticated()
 
   return (
     <div className="mt-[87px]">

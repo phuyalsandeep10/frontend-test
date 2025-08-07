@@ -25,6 +25,7 @@ import BusinessRegisterForm from './BusinessRegisterForm/BusinessRegisterForm';
 import { StrongPasswordField } from '@/components/common/hook-form/StrongPasswordField';
 import { ValidEmailInput } from '@/components/common/hook-form/ValidEmailInput';
 import ErrorText from '@/components/common/hook-form/ErrorText';
+import { useRedirectIfAuthenticated } from '@/hooks/auth/useRedirectIfAuthenticated';
 
 const RegisterForm = () => {
   const [currentStep, setCurrentStep] = useState<number>(0);
@@ -32,6 +33,8 @@ const RegisterForm = () => {
   const [isAgreeError, setisAgreeError] = useState('');
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [validEmail, setValidEmail] = useState('');
+
+  //  useRedirectIfAuthenticated()
 
   const { mutate: register } = useRegisterUser();
   const form = useForm<z.infer<typeof registerFormSchema>>({
@@ -58,7 +61,6 @@ const RegisterForm = () => {
   };
   return (
     <>
-      <div className="relative"></div>
       <div
         className={`${currentStep === 0 && 'mt-11'} ${currentStep === 1 && 'mt-[168px]'} ${currentStep === 2 && 'mt-16'} `}
       >
@@ -91,7 +93,7 @@ const RegisterForm = () => {
                 }}
                 name="email"
                 label="Enter your Email "
-                required
+                // required
               />
               <StrongPasswordField
                 control={form.control}
