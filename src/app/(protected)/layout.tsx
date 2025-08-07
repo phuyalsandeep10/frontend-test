@@ -30,7 +30,12 @@ export default function ProtectedDashboardLayout({
     }
   }, [authData, isLoading, router, authTokens]);
 
-  if (isLoading || !authData) return <p>Loading...</p>;
+  if (isLoading || !authData)
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <div>Loading...</div>
+      </div>
+    );
 
   return (
     <SidebarProvider>

@@ -35,6 +35,7 @@ interface AuthenticatorModalProps {
   open: boolean;
   setOpen: any;
   otpauth_url: string;
+  from?: 'dashboard' | 'profile';
 }
 
 const AuthenticatorModal: React.FC<AuthenticatorModalProps> = ({
@@ -44,6 +45,7 @@ const AuthenticatorModal: React.FC<AuthenticatorModalProps> = ({
   open,
   setOpen,
   otpauth_url,
+  from,
 }) => {
   const [qrcodeUrl, setQrCodeUrl] = useState('');
   const form = useForm<AuthenticatorFormValues>({
@@ -103,11 +105,15 @@ const AuthenticatorModal: React.FC<AuthenticatorModalProps> = ({
             </div>
           </AlertDialogTitle>
         </AlertDialogHeader>
-        <p className="text-center text-sm font-medium text-black">
-          Scan the QR to setup authentication
-        </p>
-        <div className="flex justify-center">
-          {qrcodeUrl ? (
+        {from !== 'dashboard' && (
+          <p className="text-center text-sm font-medium text-black">
+            Scan the QR to setup authentication
+          </p>
+        )}
+
+        {from !== 'dashboard' && (
+          <div className="flex justify-center">
+            (qrcodeUrl ? (
             <Image
               src={qrcodeUrl}
               alt="QR Code"
@@ -115,15 +121,16 @@ const AuthenticatorModal: React.FC<AuthenticatorModalProps> = ({
               height={160}
               width={160}
             />
-          ) : (
+            ) : (
             <Skeleton className="h-40 w-40" />
-          )}
-        </div>
+            ))
+          </div>
+        )}
 
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(handleSubmit)}
-            className="w-full space-y-[53px]"
+            className={`w-full ${from === 'dashboard' ? 'space-y-0' : 'space-y-[53px]'}`}
           >
             <OTP
               control={form.control}
@@ -133,6 +140,7 @@ const AuthenticatorModal: React.FC<AuthenticatorModalProps> = ({
               height="44px"
               gap="2"
               textSize="18px"
+              labelClassName={from === 'dashboard' ? 'mb-0' : 'mb-6'}
             />
 
             <AlertDialogFooter className="mt-4 flex gap-[34px]">

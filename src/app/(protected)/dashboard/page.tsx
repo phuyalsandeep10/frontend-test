@@ -52,6 +52,7 @@ const DashboardPage = () => {
         cancelButtonText="Cancel"
         submitButtonText="Submit"
         submitPendingText="Submitting..."
+        from="dashboard"
       />
 
       <VerifyEmailModal
