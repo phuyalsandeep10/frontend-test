@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import io from 'socket.io-client';
 import { useParams } from 'next/navigation';
-import ReplyMessage from './ReplyMessage';
+import { useUiStore } from '@/store/UiStore/useUiStore';
 
 const socket = io('http://localhost:4000');
 
@@ -23,8 +23,11 @@ interface Message {
 const Inbox = () => {
   const params = useParams();
   const chatId = params?.userId;
-  const inputRef = useRef<any>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   const [messages, setMessages] = useState<any[]>([]);
+  const [replyingTo, setReplyingTo] = useState<string | null>(null);
+
+  const { showChatInfo } = useUiStore();
 
   useEffect(() => {
     if (!chatId) return;
@@ -57,13 +60,23 @@ const Inbox = () => {
           minute: '2-digit',
         }),
         status: 'sent',
-        sender: 'customer',
+        sender: 'agent',
+        replyTo: replyingTo,
       };
 
       setMessages((prev) => [...prev, msg]);
       socket.emit('sendMessage', msg);
       if (inputRef.current) inputRef.current.value = '';
+      setReplyingTo(null);
     }
+  };
+
+  const handleReply = (messageText: string) => {
+    setReplyingTo(messageText);
+  };
+
+  const clearReply = () => {
+    setReplyingTo(null);
   };
 
   return (
@@ -75,23 +88,44 @@ const Inbox = () => {
       </SubSidebarContentWrapper>
 
       <div className="flex-1">
-        <InboxChatSection messages={messages} />
-
+        <InboxChatSection messages={messages} onReply={handleReply} />
         <div className="relative m-4">
-          <ReplyMessage />
-          <Textarea
-            placeholder="Enter your message here"
-            className="h-24"
-            ref={inputRef}
-          />
+          <div className="relative">
+            {replyingTo && (
+              <div className="bg bg-brand-disable absolute top-2 right-2 left-2 z-10 flex w-fit items-center justify-between rounded-md border px-4 py-2 text-black">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-black">Replying to:</span>
+                  <span className="text-theme-text-primary max-w-[200px] truncate text-xs font-medium">
+                    {replyingTo}
+                  </span>
+                </div>
+                <button
+                  onClick={clearReply}
+                  className="text-theme-text-primary hover:text-brand-dark ml-2 text-sm"
+                >
+                  ×
+                </button>
+              </div>
+            )}
+
+            <Textarea
+              placeholder="Enter your message here"
+              className={`h-24 resize-none ${replyingTo ? 'pt-14' : 'pt-3'}`}
+              ref={inputRef}
+            />
+          </div>
+
           <div className="mt-3 flex justify-end">
             <Button onClick={onSend}>{'Send'}</Button>
           </div>
         </div>
       </div>
-      <div className="w-[400px]">
-        <InboxChatInfo />
-      </div>
+
+      {showChatInfo && (
+        <div className="w-[400px]">
+          <InboxChatInfo />
+        </div>
+      )}
     </div>
   );
 };
