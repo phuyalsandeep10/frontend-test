@@ -25,10 +25,7 @@ export default function LanguageDropdown({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          className="border-brand-primary text-theme-text-dark flex items-center gap-2 rounded-lg border-1 bg-transparent px-4 py-2 text-base"
-        >
+        <Button variant={'outline'} className="text-gray-primary">
           <Globe className="text-gray-primary h-6 w-6" />
           <span className="font-medium">{selectedLanguage}</span>
           <ChevronDown className="text-theme-text-primary h-6 w-6" />

@@ -13,8 +13,10 @@ import { useLogout } from '@/hooks/auth/useLogout';
 import { useAuthStore } from '@/store/AuthStore/useAuthStore';
 import Link from 'next/link';
 import { ROUTES } from '@/routes/routes';
+import { useRouter } from 'next/navigation';
 
 const SidebarFooterMenu = () => {
+  const router = useRouter();
   const { mutate: logout, isPending } = useLogout();
   const { authData, clearAuthData } = useAuthStore((state) => state);
   return (
@@ -73,9 +75,13 @@ const SidebarFooterMenu = () => {
 
       <DropdownMenuContent side="top" className={cn('w-full')}>
         <DropdownMenuItem
+          onSelect={(e) => {
+            e.preventDefault();
+            router.push(ROUTES.SETTINGS.ACCOUNT_INFORMATION);
+          }}
           className={cn('hover:bg-muted w-full cursor-pointer text-sm')}
         >
-          <Link href={`${ROUTES.SETTINGS.ACCOUNT_INFORMATION}`}>Profile</Link>
+          Profile
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => {

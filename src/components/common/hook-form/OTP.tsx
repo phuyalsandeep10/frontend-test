@@ -61,7 +61,7 @@ const OTP: React.FC<OTPProps> = ({
                   id={`otp-${i}`}
                   index={i}
                   className={cn(
-                    'h-[60px] w-[60px] min-w-0 rounded-[8px] border-2 text-center text-3xl font-semibold',
+                    'h-[60px] w-[60px] min-w-0 rounded-[8px] border-1 text-center text-3xl font-semibold',
                     textSize,
                     hasError
                       ? 'border-alert-prominent text-grey-light'
