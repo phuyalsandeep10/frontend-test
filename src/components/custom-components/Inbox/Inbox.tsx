@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import io from 'socket.io-client';
 import { useParams } from 'next/navigation';
-import ReplyMessage from './ReplyMessage';
+import { useUiStore } from '@/store/UiStore/useUiStore';
 
 const socket = io('http://localhost:4000');
 
@@ -25,8 +25,9 @@ const Inbox = () => {
   const chatId = params?.userId;
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [messages, setMessages] = useState<any[]>([]);
-  const [showChatInfo, setShowChatInfo] = useState(true);
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
+
+  const { showChatInfo } = useUiStore();
 
   useEffect(() => {
     if (!chatId) return;
@@ -59,7 +60,7 @@ const Inbox = () => {
           minute: '2-digit',
         }),
         status: 'sent',
-        sender: 'customer',
+        sender: 'agent',
         replyTo: replyingTo,
       };
 
@@ -87,11 +88,7 @@ const Inbox = () => {
       </SubSidebarContentWrapper>
 
       <div className="flex-1">
-        <InboxChatSection
-          messages={messages}
-          onOpenChatInfo={() => setShowChatInfo(true)}
-          onReply={handleReply}
-        />
+        <InboxChatSection messages={messages} onReply={handleReply} />
         <div className="relative m-4">
           <div className="relative">
             {replyingTo && (
@@ -126,7 +123,7 @@ const Inbox = () => {
 
       {showChatInfo && (
         <div className="w-[400px]">
-          <InboxChatInfo onClose={() => setShowChatInfo(false)} />
+          <InboxChatInfo />
         </div>
       )}
     </div>
