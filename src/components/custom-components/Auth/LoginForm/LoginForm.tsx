@@ -19,7 +19,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import Image from 'next/image';
 import googleIcon from '@/assets/images/google.svg';
 import { toast } from 'sonner';
-import { useAuthStore } from '@/store/AuthStore/useAuthStore';
+import { useRedirectIfAuthenticated } from '@/hooks/auth/useRedirectIfAuthenticated';
 
 const LoginForm = () => {
   const [isNotARobot, setIsNotARobot] = useState(false);
@@ -31,8 +31,6 @@ const LoginForm = () => {
 
   const { mutate: login, isPending } = useLoginUser();
 
-  const setAuthData = useAuthStore((state) => state.setAuthData);
-
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -42,10 +40,10 @@ const LoginForm = () => {
   });
 
   async function onSubmit(values: z.infer<typeof loginFormSchema>) {
-    // if (!isNotARobot) {
-    //   setCaptchaError('Please verify that you are not a robot.');
-    //   return;
-    // }
+    if (!isNotARobot) {
+      setCaptchaError('Please verify that you are not a robot.');
+      return;
+    }
     setCaptchaError('');
     login(values, {
       onSuccess: (data) => {
@@ -56,10 +54,6 @@ const LoginForm = () => {
         };
         AuthService.setAuthTokens(authToken);
         toast.success(data?.message || 'Logged in successfully');
-        const user = data?.data?.user;
-        AuthService.setUserToLocalStorage(user);
-
-        setAuthData(data);
         router.replace(ROUTES.DASHBOARD);
       },
       onError: (error: any) => {
@@ -88,6 +82,8 @@ const LoginForm = () => {
       router.replace(ROUTES.DASHBOARD);
     }
   }, [accessToken, refreshToken, router]);
+
+  // useRedirectIfAuthenticated()
 
   return (
     <div className="mt-[87px]">
@@ -175,13 +171,7 @@ const LoginForm = () => {
                 height={20}
               />
             }
-            onClick={() =>
-              window.open(
-                `${baseURL}/auth/oauth/google`,
-                'google-auth',
-                'width=620,height=620',
-              )
-            }
+            onClick={() => window.open(`${baseURL}/auth/oauth/google`)}
           >
             Continue With Google
           </Button>

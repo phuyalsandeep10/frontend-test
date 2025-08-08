@@ -5,6 +5,7 @@ import {
   ForgotPasswordPayload,
   ForgotPasswordVerifyPayload,
   RegisterPayload,
+  resendOtpPayloads,
   ResetPasswordpayload,
   User,
   verify2FaPayload,
@@ -103,13 +104,25 @@ export class AuthService {
       throw error;
     }
   }
+  // Forgot Password Verify
+  static async resendOtp(payload: resendOtpPayloads) {
+    try {
+      const response = await axios.post(
+        `${baseURL}/auth/resend-verification-token`,
+        payload,
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
 
   //refresh tokens
   static async refreshAccessToken(refreshToken: string): Promise<string> {
     const res = await axios.post(`${baseURL}/auth/refresh-token`, {
       token: refreshToken,
     });
-    const { access_token } = res.data;
+    const { access_token } = res.data?.data;
 
     const currentTokens = this.getAuthTokens();
     if (!currentTokens) throw new Error('No tokens in localStorage');
@@ -118,6 +131,7 @@ export class AuthService {
       accessToken: access_token,
       refreshToken: currentTokens.refreshToken,
     };
+    console.log('New Tokesn:', newTokens);
     this.setAuthTokens(newTokens);
 
     return access_token;
@@ -186,14 +200,6 @@ export class AuthService {
   static setAuthTokens(tokens: AuthTokens) {
     try {
       localStorage.setItem('authTokens', JSON.stringify(tokens));
-    } catch (error) {
-      console.error('Error setting auth tokens', error);
-    }
-  }
-  // Set user to localStorage
-  static setUserToLocalStorage(user: any) {
-    try {
-      localStorage.setItem('user', JSON.stringify(user));
     } catch (error) {
       console.error('Error setting auth tokens', error);
     }

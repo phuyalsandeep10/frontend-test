@@ -98,6 +98,7 @@ import {
   RiErrorWarningFill,
   RiArrowLeftRightLine,
   RiGitMergeFill,
+  RiKey2Fill,
 } from '@remixicon/react';
 
 // register your icons here as your requirements
@@ -199,4 +200,5 @@ export const Icons = {
   error_warning2: RiErrorWarningFill,
   arrow_left_right: RiArrowLeftRightLine,
   git_merge: RiGitMergeFill,
+  key: RiKey2Fill,
 };

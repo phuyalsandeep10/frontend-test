@@ -1,10 +1,4 @@
 'use client';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useState } from 'react';
 
@@ -18,6 +12,16 @@ import { Button } from '@/components/ui/button';
 import { emailVerifyFormSchema } from '../../Auth/EmailVerifyForm/emailVerifyFormHelper';
 import { useAuthStore } from '@/store/AuthStore/useAuthStore';
 import { toast } from 'sonner';
+
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
+import { useResendOtp } from '@/hooks/auth/useResendOtp';
+import { resendOtpPayloads } from '@/services/auth/types';
+import { queryClient } from '@/providers/query-provider';
 import { AuthService } from '@/services/auth/auth';
 
 interface VerifyEmailModalProps {
@@ -30,7 +34,10 @@ const VerifyEmailModal = ({ open, setOpen }: VerifyEmailModalProps) => {
 
   const { mutate: verifyEmail, isPending: verifyEmailPending } =
     useVerifyEmail();
+  const { mutate: resendOtp, isPending: resendOtpIsPending } = useResendOtp();
   const authData = useAuthStore((state) => state.authData);
+
+  console.log('Hello for Modal', authData);
 
   const form = useForm<z.infer<typeof emailVerifyFormSchema>>({
     resolver: zodResolver(emailVerifyFormSchema),
@@ -40,7 +47,7 @@ const VerifyEmailModal = ({ open, setOpen }: VerifyEmailModalProps) => {
   });
 
   const onSubmit = (values: any) => {
-    const verifyEmailData = { ...values, email: authData?.email };
+    const verifyEmailData = { ...values, email: authData?.data?.user?.email };
 
     verifyEmail(verifyEmailData, {
       onSuccess: (data) => {
@@ -48,8 +55,13 @@ const VerifyEmailModal = ({ open, setOpen }: VerifyEmailModalProps) => {
         setHasError(false);
         toast.success('Email Verified Successfully.');
         setOpen(false);
-        //TODO: Save response in localstorage
-        // AuthService.setUserToLocalStorage()
+        const authToken = {
+          accessToken: data?.data?.access_token,
+          refreshToken: data?.data?.refresh_token,
+        };
+        AuthService.setAuthTokens(authToken);
+        console.log('Verify email success:', data);
+        queryClient.invalidateQueries({ queryKey: ['authUser'] });
       },
       onError: (error: any) => {
         console.log(error);
@@ -60,24 +72,29 @@ const VerifyEmailModal = ({ open, setOpen }: VerifyEmailModalProps) => {
   };
 
   const sendOtp = () => {
-    console.log('sending otp...');
+    const resentOtpEmailData: resendOtpPayloads = {
+      email: authData?.data?.user?.email,
+      type: 'email_verification',
+    };
+    resendOtp(resentOtpEmailData);
   };
 
   return (
-    <Dialog open={open} onOpenChange={() => {}}>
-      <DialogContent
+    <AlertDialog open={open} onOpenChange={() => {}}>
+      <AlertDialogContent
         className="w-full p-6 sm:max-w-[600px]"
-        onInteractOutside={(e) => e.preventDefault()}
         onEscapeKeyDown={(e) => e.preventDefault()}
       >
-        <DialogHeader>
-          <DialogTitle className="text-center">Verify Your Email</DialogTitle>
-        </DialogHeader>
+        <AlertDialogHeader>
+          <AlertDialogTitle className="text-center">
+            Verify Your Email
+          </AlertDialogTitle>
+        </AlertDialogHeader>
 
         <ScrollArea className="h-full w-full">
           <p className="text-muted-foreground mb-2 text-center text-sm">
             Please enter the 6-digit code sent to your email:{' '}
-            <strong>{authData?.email || 'your email'}</strong>
+            <strong>{authData?.data?.user?.email || 'your email'}</strong>
           </p>
 
           <Form {...form}>
@@ -109,12 +126,12 @@ const VerifyEmailModal = ({ open, setOpen }: VerifyEmailModalProps) => {
               className="w-full"
               onClick={sendOtp}
             >
-              Resend OTP
+              {resendOtpIsPending ? 'Resending...' : 'Resend OTP'}
             </Button>
           </div>
         </ScrollArea>
-      </DialogContent>
-    </Dialog>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };
 

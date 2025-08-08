@@ -74,7 +74,7 @@ const ForgotPasswordForm = () => {
               </Button>
 
               <div className="text-brand-primary mt-[16px] flex w-full justify-between text-[18px] leading-[29px] underline">
-                <Link href="/register">Return to Sign In</Link>
+                <Link href="/login">Return to Sign In</Link>
                 <Link href="/register">Don’t Have an Account</Link>
                 <p>Need Help?</p>
               </div>

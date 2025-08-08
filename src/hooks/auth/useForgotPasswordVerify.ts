@@ -10,14 +10,5 @@ export const useForgotPasswordVerify = () => {
   return useMutation({
     mutationFn: (payload: ForgotPasswordVerifyPayload) =>
       AuthService.forgotPasswordVerify(payload),
-    onSuccess: (data) => {
-      toast.success(data?.message || 'Password reset verified successfully');
-      router.replace(ROUTES.LOGIN);
-      console.log('Forgot Password Verify success:', data);
-    },
-    onError: (error: any) => {
-      toast.error(error?.response?.data?.detail || 'Verification failed');
-      console.error('Forgot Password Verify error:', error);
-    },
   });
 };

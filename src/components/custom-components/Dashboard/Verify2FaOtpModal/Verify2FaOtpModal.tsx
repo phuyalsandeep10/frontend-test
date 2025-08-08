@@ -16,7 +16,7 @@ const Verify2FaOtpModal = ({ open }: Verify2FaOtpModalProps) => {
       <AuthenticatorModal
         open={open2FaAuthenticatorModal}
         setOpen={setOpen2FaAuthenticatorModal}
-        otpauth_url={authData?.two_fa_auth_url || ''}
+        otpauth_url={authData?.data?.user?.two_fa_auth_url || ''}
       />
     </div>
   );

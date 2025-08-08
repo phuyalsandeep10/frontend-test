@@ -7,22 +7,25 @@ import Link from 'next/link';
 
 const AuthLayoutLeftSection = () => {
   return (
-    <div className="bg-light">
+    <div className="bg-light hidden lg:block">
       <div className="pb-6">
         <div className="flex justify-between ps-10 pt-10 pr-10">
           <Image src={Logo} className="h-[45px] w-[145px]" alt="Logo" />
-          <Button className="border-brand-primary text-theme-text-dark cursor-pointer rounded-lg border bg-transparent text-base font-semibold shadow-none hover:bg-transparent">
+          <Button
+            variant={'outline'}
+            className="hover:text-brand-primary hover:bg-transparent"
+          >
             Help & Support
           </Button>
         </div>
-        <div className="mt-[111px] mb-[66px]">
+        <div className="lg:mt-10 lg:mb-0 xl:mt-[111px] xl:mb-[66px]">
           <Image
             src={AuthLeftImage}
             alt=""
-            className="mx-auto h-[549px] object-cover"
+            className="mx-auto h-[300px] w-[300px] md:h-[300px] md:w-[300px] md:object-contain xl:h-[549px] xl:w-full xl:object-cover"
           />
         </div>
-        <h3 className="font-outfit text-brand-dark mx-auto w-full text-center text-[32px] leading-10 font-semibold md:w-[517px]">
+        <h3 className="font-outfit text-brand-dark mx-auto w-full text-center leading-10 font-semibold md:w-[517px] md:px-4 md:text-2xl xl:text-[32px]">
           AI Powered Chat like never seen before, Check Magic Reply.
         </h3>
         <div className="mt-[111px] flex items-center justify-center gap-1">
