@@ -8,7 +8,7 @@ interface StepperProps {
 const Stepper = ({ step }: StepperProps) => {
   return (
     <div className="mt-10 mb-10">
-      <div className="relative ml-[22px] box-border flex w-[494px] justify-between lg:ml-0">
+      <div className="md:0 relative box-border flex justify-between md:ml-0 md:w-full lg:ml-[22px] lg:w-[494px]">
         {[1, 2, 3].map((s) => (
           <div key={s}>
             <div
@@ -36,7 +36,7 @@ const Stepper = ({ step }: StepperProps) => {
         </div>
       </div>
 
-      <div className="mt-2.5 flex w-[560px] justify-between">
+      <div className="mt-2.5 flex justify-between md:w-full lg:w-[560px]">
         {['Account Information', 'Verification', 'Business Information'].map(
           (label, index) => (
             <p

@@ -11,7 +11,7 @@ import {
 import { useRegisterUser } from '@/hooks/auth/useRegisterUser';
 import HeadingSubHeadingTypography from './HeadingSubHeadingTypography';
 import Stepper from './Stepper';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import googleIcon from '@/assets/images/google.svg';
 
 import PrimaryCheckbox from '@/shared/PrimaryCheckbox';
@@ -26,6 +26,9 @@ import { StrongPasswordField } from '@/components/common/hook-form/StrongPasswor
 import { ValidEmailInput } from '@/components/common/hook-form/ValidEmailInput';
 import ErrorText from '@/components/common/hook-form/ErrorText';
 import { useRedirectIfAuthenticated } from '@/hooks/auth/useRedirectIfAuthenticated';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { AuthService } from '@/services/auth/auth';
+import { ROUTES } from '@/routes/routes';
 
 const RegisterForm = () => {
   const [currentStep, setCurrentStep] = useState<number>(0);
@@ -34,9 +37,15 @@ const RegisterForm = () => {
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [validEmail, setValidEmail] = useState('');
 
+  const router = useRouter();
+
+  const searchParams = useSearchParams();
+  const accessToken = searchParams.get('access_token');
+  const refreshToken = searchParams.get('refresh_token');
+
   //  useRedirectIfAuthenticated()
 
-  const { mutate: register } = useRegisterUser();
+  const { mutate: register, isPending: registerLoading } = useRegisterUser();
   const form = useForm<z.infer<typeof registerFormSchema>>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
@@ -59,6 +68,16 @@ const RegisterForm = () => {
       onError: () => {},
     });
   };
+  useEffect(() => {
+    if (accessToken && refreshToken) {
+      const authTokens = {
+        accessToken,
+        refreshToken,
+      };
+      AuthService.setAuthTokens(authTokens);
+      router.replace(ROUTES.DASHBOARD);
+    }
+  }, [accessToken, refreshToken, router]);
   return (
     <>
       <div
@@ -118,7 +137,7 @@ const RegisterForm = () => {
                 size="lg"
                 className="mt-4 w-full"
               >
-                Continue
+                {registerLoading ? 'Continuing...' : ' Continue'}
               </Button>
               <p className="align-center text-center font-medium">Or</p>
               <Button

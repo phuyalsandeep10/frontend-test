@@ -22,6 +22,7 @@ import {
 import { useResendOtp } from '@/hooks/auth/useResendOtp';
 import { resendOtpPayloads } from '@/services/auth/types';
 import { queryClient } from '@/providers/query-provider';
+import { AuthService } from '@/services/auth/auth';
 
 interface VerifyEmailModalProps {
   open: boolean;
@@ -54,6 +55,12 @@ const VerifyEmailModal = ({ open, setOpen }: VerifyEmailModalProps) => {
         setHasError(false);
         toast.success('Email Verified Successfully.');
         setOpen(false);
+        const authToken = {
+          accessToken: data?.data?.access_token,
+          refreshToken: data?.data?.refresh_token,
+        };
+        AuthService.setAuthTokens(authToken);
+        console.log('Verify email success:', data);
         queryClient.invalidateQueries({ queryKey: ['authUser'] });
       },
       onError: (error: any) => {

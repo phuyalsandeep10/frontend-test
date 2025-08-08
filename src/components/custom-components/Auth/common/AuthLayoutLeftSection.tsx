@@ -18,14 +18,14 @@ const AuthLayoutLeftSection = () => {
             Help & Support
           </Button>
         </div>
-        <div className="mt-[111px] mb-[66px]">
+        <div className="lg:mt-10 lg:mb-0 xl:mt-[111px] xl:mb-[66px]">
           <Image
             src={AuthLeftImage}
             alt=""
             className="mx-auto h-[300px] w-[300px] md:h-[300px] md:w-[300px] md:object-contain xl:h-[549px] xl:w-full xl:object-cover"
           />
         </div>
-        <h3 className="font-outfit text-brand-dark mx-auto w-full text-center text-[32px] leading-10 font-semibold md:w-[517px]">
+        <h3 className="font-outfit text-brand-dark mx-auto w-full text-center leading-10 font-semibold md:w-[517px] md:px-4 md:text-2xl xl:text-[32px]">
           AI Powered Chat like never seen before, Check Magic Reply.
         </h3>
         <div className="mt-[111px] flex items-center justify-center gap-1">
