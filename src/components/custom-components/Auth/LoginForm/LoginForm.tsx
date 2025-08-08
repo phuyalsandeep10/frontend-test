@@ -171,13 +171,7 @@ const LoginForm = () => {
                 height={20}
               />
             }
-            onClick={() =>
-              window.open(
-                `${baseURL}/auth/oauth/google`,
-                'google-auth',
-                'width=620,height=620',
-              )
-            }
+            onClick={() => window.open(`${baseURL}/auth/oauth/google`)}
           >
             Continue With Google
           </Button>
