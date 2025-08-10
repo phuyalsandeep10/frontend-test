@@ -53,7 +53,7 @@ const BusinessRegisterForm = ({ from, setOpen }: BusinessRegisterFormProps) => {
     });
   }
   return (
-    <div className={`${from === 'dashboard' ? 'w-full' : 'w-[516px]'}`}>
+    <div className={`pb-6 ${from === 'dashboard' ? 'w-full' : 'w-[516px]'}`}>
       <Form {...businessRegisterForm}>
         <form
           onSubmit={businessRegisterForm.handleSubmit(submitRegisterForm)}

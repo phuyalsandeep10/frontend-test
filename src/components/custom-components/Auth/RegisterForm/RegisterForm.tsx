@@ -81,7 +81,7 @@ const RegisterForm = () => {
   return (
     <>
       <div
-        className={`${currentStep === 0 && 'mt-11'} ${currentStep === 1 && 'mt-[168px]'} ${currentStep === 2 && 'mt-16'} `}
+        className={`pb-6 ${currentStep === 0 && 'mt-11'} ${currentStep === 1 && 'mt-[168px]'} ${currentStep === 2 && 'mt-16'} `}
       >
         <HeadingSubHeadingTypography
           heading={headingAndSubHeadingHelper[currentStep as 0 | 1 | 2].heading}

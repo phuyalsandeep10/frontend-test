@@ -11,7 +11,6 @@ import { cn } from '@/lib/utils';
 import { Icons } from '@/components/ui/Icons';
 import { useLogout } from '@/hooks/auth/useLogout';
 import { useAuthStore } from '@/store/AuthStore/useAuthStore';
-import Link from 'next/link';
 import { ROUTES } from '@/routes/routes';
 import { useRouter } from 'next/navigation';
 
