@@ -1,15 +1,16 @@
 'use client';
 
 import React, { useState } from 'react';
-import { TicketCardProps } from '../../type';
 import TicketCard from '@/components/common/ticketCard/TicketCard';
 import TicketTabs from '@/components/common/ticketCard/TicketTabs';
+import { useTicketStatuses } from '@/modules/ticket/hooks/useTicketStatus';
 import { Icons } from '@/components/ui/Icons';
 import {
   Tooltip,
   TooltipTrigger,
   TooltipContent,
 } from '@/components/ui/tooltip';
+import { TicketCardProps } from '../../type';
 
 const allTickets: TicketCardProps[] = [
   {
@@ -50,27 +51,30 @@ const allTickets: TicketCardProps[] = [
   },
 ];
 
-const tabs: { label: string; status: TicketCardProps['status'] | 'ALL' }[] = [
-  { label: 'Unassigned Tickets', status: 'Unassigned' },
-  { label: 'Assigned to me', status: 'Assigned' },
-  { label: 'Solved Tickets', status: 'Solved' },
-  { label: 'All Tickets', status: 'ALL' },
-  { label: 'Spams', status: 'Spam' },
-];
-
 export default function CardView() {
-  const [selectedStatus, setSelectedStatus] = useState<
-    TicketCardProps['status'] | 'Unassigned'
-  >('Unassigned');
+  const { data: statuses = [], isLoading, error } = useTicketStatuses();
+
+  const [selectedStatus, setSelectedStatus] =
+    useState<TicketCardProps['status']>('Assigned');
 
   const [checkedTickets, setCheckedTickets] = useState<Record<number, boolean>>(
     {},
   );
 
+  const tabs = [
+    ...statuses.map((s) => ({
+      label: s.name,
+      status: s.name as TicketCardProps['status'],
+    })),
+  ];
+
   const filteredTickets =
     selectedStatus === 'ALL'
       ? allTickets
-      : allTickets.filter((ticket) => ticket.status === selectedStatus);
+      : allTickets.filter(
+          (ticket): ticket is TicketCardProps =>
+            ticket.status !== undefined && ticket.status === selectedStatus,
+        );
 
   const handleCheckChange = (id: number, isChecked: boolean) => {
     setCheckedTickets((prev) => ({
@@ -79,10 +83,12 @@ export default function CardView() {
     }));
   };
 
-  // Count how many are selected
   const selectedCountInCurrentTab = filteredTickets.filter(
     (ticket) => ticket.id && checkedTickets[ticket.id],
   ).length;
+
+  if (isLoading) return <div className="p-4">Loading ticket statuses...</div>;
+  if (error) return <div className="p-4 text-red-500">Error loading tabs</div>;
 
   return (
     <div className="pt-6 pb-10">
@@ -158,9 +164,9 @@ export default function CardView() {
           <TicketCard
             key={ticket.id}
             {...ticket}
-            checked={checkedTickets[ticket.id!] || false}
+            checked={checkedTickets[ticket.id] || false}
             onCheckChange={(isChecked) =>
-              handleCheckChange(ticket.id!, isChecked)
+              handleCheckChange(ticket.id, isChecked)
             }
           />
         ))}

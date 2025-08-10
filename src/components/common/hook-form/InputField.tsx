@@ -16,6 +16,7 @@ type InputFieldProps<T extends FieldValues> = {
   type?: string;
   placeholder?: string;
   labelClassName?: string;
+  error?: string;
 };
 
 export function InputField<T extends FieldValues>({
@@ -28,6 +29,7 @@ export function InputField<T extends FieldValues>({
   type = 'text',
   placeholder,
   labelClassName,
+  error,
 }: InputFieldProps<T>) {
   const [showPassword, setShowPassword] = useState(false);
   const isPasswordField = type === 'password';
@@ -70,6 +72,7 @@ export function InputField<T extends FieldValues>({
                 )}
                 {...field}
               />
+              {error && <p className="text-alert-prominent">{error}</p>}
 
               {isPasswordField && (
                 <span

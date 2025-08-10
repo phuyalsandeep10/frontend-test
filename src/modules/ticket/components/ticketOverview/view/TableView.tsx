@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TicketTabs from '@/components/common/ticketCard/TicketTabs';
 import { TicketCardProps } from '../../type';
 import {
@@ -20,8 +20,9 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from '@/components/ui/tooltip';
+import { useTicketStatuses } from '@/modules/ticket/hooks/useTicketStatus';
 
-// Dummy ticket data - you can add more items here or fetch from API
+// Dummy ticket data - you can replace this with API data if needed
 const tickets: TicketCardProps[] = [
   {
     id: 1,
@@ -50,7 +51,6 @@ const tickets: TicketCardProps[] = [
     status: 'Solved',
     created_by: 'Charlie',
   },
-  // Add more tickets to test pagination (at least > 10)
   ...Array.from({ length: 100 }, (_, i) => ({
     id: 4 + i,
     email: `user${4 + i}@example.com`,
@@ -62,18 +62,9 @@ const tickets: TicketCardProps[] = [
   })),
 ];
 
-const tabs = [
-  { label: 'Unassigned Tasks', status: 'Unassigned' },
-  { label: 'Assigned to me ', status: 'Assigned' },
-  { label: 'Solved Tickets', status: 'Solved' },
-  { label: 'All Tickets', status: 'ALL' },
-  { label: 'Spams', status: 'Spam' },
-];
-
 const ITEMS_PER_PAGE = 10;
 
-// Table header labels
-// First is empty string for the checkbox column
+// Table headers
 const tableHeaders = [
   { key: 'checkbox', label: '' },
   { key: 'ticket', label: 'Ticket' },
@@ -84,11 +75,32 @@ const tableHeaders = [
 ];
 
 const TableView = () => {
-  const [selectedTab, setSelectedTab] = useState<
-    TicketCardProps['status'] | 'Unassigned'
-  >('Unassigned');
+  const { data: statuses = [], isLoading, error } = useTicketStatuses();
+
+  // Generate tabs dynamically from API
+  const tabs =
+    statuses.length > 0
+      ? [
+          ...statuses.map((s) => ({
+            label: s.name,
+            status: s.name as TicketCardProps['status'],
+          })),
+        ]
+      : [];
+
+  const [selectedTab, setSelectedTab] =
+    useState<TicketCardProps['status']>('Assigned');
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+
+  // Reset page when tab changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedTab]);
+
+  if (isLoading) return <div className="p-4">Loading statuses...</div>;
+  if (error)
+    return <div className="p-4 text-red-500">Failed to load statuses</div>;
 
   const filteredTickets =
     selectedTab === 'ALL'
@@ -97,7 +109,6 @@ const TableView = () => {
 
   const totalItems = filteredTickets.length;
 
-  // Slice tickets for current page
   const pagedTickets = filteredTickets.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE,
@@ -110,12 +121,10 @@ const TableView = () => {
 
   const toggleSelectAll = () => {
     if (allChecked) {
-      // Unselect only current page items
       setSelectedIds((prev) =>
         prev.filter((id) => !pagedTickets.some((ticket) => ticket.id === id)),
       );
     } else {
-      // Select current page items + keep previous selections
       setSelectedIds((prev) => [
         ...new Set([...prev, ...pagedTickets.map((t) => t.id!)]),
       ]);
@@ -128,18 +137,13 @@ const TableView = () => {
     );
   };
 
-  // Calculate selected count only for the current filtered tickets
   const selectedCountInCurrentTab = selectedIds.filter((id) =>
     filteredTickets.some((ticket) => ticket.id === id),
   ).length;
 
-  // When tab changes, reset page to 1
-  React.useEffect(() => {
-    setCurrentPage(1);
-  }, [selectedTab]);
-
   return (
-    <div className="p-6">
+    <div className="pt-6">
+      {/* Tabs */}
       <TicketTabs
         tabs={tabs}
         selected={selectedTab}
@@ -205,6 +209,7 @@ const TableView = () => {
         </div>
       )}
 
+      {/* Table */}
       <div className="mt-4 rounded-lg border shadow-sm">
         <Table>
           <TableHeader>
@@ -234,7 +239,7 @@ const TableView = () => {
           </TableHeader>
           <TableBody>
             {pagedTickets.map((ticket) => (
-              <TableRow key={ticket.id} className="">
+              <TableRow key={ticket.id}>
                 <TableCell>
                   <Checkbox
                     checked={selectedIds.includes(ticket.id!)}

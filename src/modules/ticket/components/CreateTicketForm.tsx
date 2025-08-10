@@ -3,46 +3,50 @@
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ticketSchema, TicketFormData } from '@/lib/ticket.schema';
-import Label from '@/components/common/hook-form/Label';
-import { showToast } from '@/shared/toast';
+import { createTicketSchema, TicketFormData } from '@/lib/ticket.schema';
 import { Icons } from '@/components/ui/Icons';
 import { cn } from '@/lib/utils';
 import { usePriorities } from '../hooks/usePriorities';
 import { TextAreaField } from '@/components/common/hook-form/TextAreaField';
 import { SelectField } from '@/components/common/hook-form/SelectField';
-import ImageUploader from '@/components/ImageUploader/imageUploader';
-import Image from 'next/image';
 import { useTeams } from '../hooks/useTeams';
 import { useTeamStore } from '@/services/teams/useTeamStore';
 import { useTeamMembers } from '../hooks/useTeamMembers';
 import { useWatch } from 'react-hook-form';
 import { MultiSelectField } from '@/components/common/hook-form/MultipleSelect';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import { Button } from '@/components/ui/button';
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from '@/components/ui/command';
+
 import { useCustomers } from '../hooks/useCustomers';
 import { InputField } from '@/components/common/hook-form/InputField';
-
+import { useCreateTicket } from '../hooks/createTicketPayload';
+import MultiImageUploader from './comman/MultipleImageuploader';
+import { EmailSelectorField } from './comman/EmailSection';
+import { useAuthStore } from '@/store/AuthStore/useAuthStore';
 const CreateTicketForm = () => {
+  const authData = useAuthStore((state) => state.authData);
+  const organizationId =
+    authData?.data?.user?.attributes?.organization_id || null;
   const [emailPopoverOpen, setEmailPopoverOpen] = useState(false);
-  const { data: customers = [], isLoading: customersLoading } = useCustomers(1);
+  const { data: customers = [], isLoading: customersLoading } =
+    useCustomers(organizationId);
   const [isAddingNewEmail, setIsAddingNewEmail] = useState(false);
+  const { mutate: createTicket, isPending: isCreating } = useCreateTicket();
+  const teams = useTeamStore((state) => state.teams);
+  const { data: priorities } = usePriorities();
+  const [previewImages, setPreviewImages] = useState<string[]>([]);
 
   const customerOptions = customers.map((customer: any) => ({
     label: customer.email,
     value: customer.email,
+    id: customer.id,
   }));
+
+  // const [isAddingNewEmail, setIsAddingNewEmail] = useState(false);
+
+  const ticketSchema = React.useMemo(
+    () => createTicketSchema(isAddingNewEmail),
+    [isAddingNewEmail],
+  );
+
   const {
     register,
     handleSubmit,
@@ -52,62 +56,36 @@ const CreateTicketForm = () => {
   } = useForm<TicketFormData>({
     resolver: zodResolver(ticketSchema),
     defaultValues: {
-      ticket: '',
-      email: '',
-      priority: '',
-      sender: '',
-      team: '',
-      member: '',
+      title: '',
       description: '',
+      sender_domain: '',
       notes: '',
+      attachment: [],
+      priority_id: '',
+      department_id: '',
+      customer_email: '',
+      customer_name: '',
+      customer_phone: '',
+      customer_location: '',
+      assignees: [],
     },
   });
 
-  const onSubmit = (data: TicketFormData) => {
-    console.log('Submitted:', data);
-    showToast({
-      title: 'Ticket Created',
-      description: 'Your ticket created successfully!',
-      variant: 'success',
-    });
-    reset({
-      ticket: '',
-      email: '',
-      priority: '',
-      sender: '',
-      team: '',
-      member: '',
-      description: '',
-      notes: '',
-    });
-  };
+  const selectedTeam = useWatch({ control, name: 'department_id' });
+  const selectedPriority = useWatch({ control, name: 'priority_id' });
+  const selectedMembers = useWatch({ control, name: 'assignees' });
+  const selectedEmail = useWatch({ control, name: 'customer_email' });
 
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const handleImage = (imageDataUrl: string) => {
-    setPreviewImage(imageDataUrl);
-  };
+  const selectedTeamObj = teams.find((t) => t.id.toString() === selectedTeam);
+  const selectedTeamId = selectedTeamObj?.id || 0;
 
-  const { data: priorities, isLoading, error } = usePriorities();
-  const { isLoading: teamsLoading, error: teamsError } = useTeams();
-  const teams = useTeamStore((state) => state.teams);
-
-  // watch the selected team
-  const selectedTeam = useWatch({ control, name: 'team' });
-
-  // get the team ID from team name
-  const selectedTeamObj = teams.find(
-    (t) => t.name.toLowerCase() === selectedTeam,
-  );
-  const selectedTeamId = selectedTeamObj?.id;
-
-  // fetch members for the selected team
   const { data: teamMembers = [], isLoading: membersLoading } =
     useTeamMembers(selectedTeamId);
 
   const priorityColorMap =
     priorities?.reduce<Record<string, { bg: string; fg: string }>>(
       (acc, item) => {
-        acc[item.name.toLowerCase()] = {
+        acc[item.id] = {
           bg: item.bg_color,
           fg: item.fg_color,
         };
@@ -118,11 +96,61 @@ const CreateTicketForm = () => {
 
   const priorityOptions =
     priorities?.map((p) => ({
-      value: p.name.toLowerCase(),
+      value: p.id.toString(),
       label: p.name.charAt(0).toUpperCase() + p.name.slice(1),
     })) ?? [];
 
-  const isFetching = isLoading || teamsLoading;
+  const onSubmit = (data: TicketFormData) => {
+    const selectedCustomer = customerOptions.find(
+      (opt: any) => opt.value === selectedEmail,
+    );
+    const priorityId = parseInt(selectedPriority);
+    const teamId = selectedTeamObj?.id || 0;
+    const memberIds = teamMembers
+      .filter((member: any) =>
+        selectedMembers?.includes(member.user?.name?.toLowerCase()),
+      )
+      .map((member: any) => member.user?.id || 0);
+    const customerId = selectedCustomer?.id || 0;
+
+    createTicket(
+      {
+        data,
+        teamId,
+        priorityId,
+        memberIds,
+        customerId,
+      },
+      {
+        onSuccess: () => {
+          reset({
+            title: '',
+            description: '',
+            sender_domain: '',
+            notes: '',
+            attachment: [],
+            priority_id: '',
+            department_id: '',
+            customer_email: '',
+            customer_name: '',
+            customer_phone: '',
+            customer_location: '',
+            assignees: [],
+          });
+          setIsAddingNewEmail(false);
+          setPreviewImages([]); // reset the array preview images here
+          setPreviewImage(null); // reset single preview image here, if you use it
+        },
+      },
+    );
+  };
+
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+
+  const { isLoading, error } = usePriorities();
+  const { isLoading: teamsLoading, error: teamsError } = useTeams();
+
+  const isFetching = isLoading || teamsLoading || isCreating;
 
   if (isFetching) {
     return (
@@ -135,32 +163,13 @@ const CreateTicketForm = () => {
   if (error || teamsError) {
     return (
       <div className="text-alert-prominent text-base">
-        {error && <p>Error loading : {String(error)}</p>}
+        {error && <p>Error loading: {String(error)}</p>}
       </div>
     );
   }
+
   return (
     <>
-      <div className="pb-10">
-        <h1
-          className={cn(
-            'font-outfit text-brand-dark flex items-center gap-2 text-3xl leading-[40px] font-semibold',
-          )}
-        >
-          Ticket
-          <span>
-            <Icons.danger />
-          </span>
-        </h1>
-        <p
-          className={cn(
-            'font-outfit text-gray-primary pt-2 text-xs leading-[17px] font-normal',
-          )}
-        >
-          Organize, assign, and monitor issues seamlessly.
-        </p>
-      </div>
-
       <div
         className={cn(
           'border-gray-primary shadow-gray-primary rounded-md px-9 pb-8 shadow-md',
@@ -176,13 +185,14 @@ const CreateTicketForm = () => {
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid grid-cols-3 gap-x-5 gap-y-5">
-            {/* Ticket Topic */}
+            {/* Ticket Title */}
             <InputField
               control={control}
-              name="ticket"
-              label="Ticket Topic"
-              placeholder="Write a ticket topic"
+              name="title"
+              label="Ticket Title"
+              placeholder="Write a ticket title"
               required
+              // error={errors.title?.message}
               inputClassName={cn(
                 'border-gray-light placeholder:text-gray-primary focus:ring-gray-primary h-9 w-full rounded-md border px-4 py-2 placeholder:text-sm focus:ring focus:outline-none',
               )}
@@ -190,93 +200,24 @@ const CreateTicketForm = () => {
                 'text-brand-dark font-outfit text-sm font-semibold',
               )}
             />
-            {/* Email */}
-            <div>
-              <Label
-                htmlFor="email"
-                required
-                className="text-brand-dark font-outfit pb-1 text-sm font-semibold"
-              >
-                Customer&apos;s Mail
-              </Label>
-
-              <Controller
-                name="email"
-                control={control}
-                render={({ field }) =>
-                  isAddingNewEmail ? (
-                    <input
-                      type="email"
-                      {...field}
-                      placeholder="Enter customer email"
-                      className={cn(
-                        'border-gray-light placeholder:text-gray-primary focus:ring-gray-primary h-9 w-full rounded-md border px-4 py-2 placeholder:text-sm focus:ring focus:outline-none',
-                      )}
-                    />
-                  ) : (
-                    <Popover
-                      open={emailPopoverOpen}
-                      onOpenChange={setEmailPopoverOpen}
-                    >
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          role="combobox"
-                          className="border-gray-light font-outfit h-9 w-full justify-between font-normal text-black"
-                        >
-                          {field.value || 'Select email'}
-                          <Icons.chevron_down className="text-gray-primary ml-2 h-4 w-4 shrink-0 opacity-50" />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="text-gray-primary w-full min-w-[var(--radix-popover-trigger-width)] p-0">
-                        <Command>
-                          <CommandInput placeholder="Search email..." />
-                          <CommandEmpty>No customer found.</CommandEmpty>
-                          <CommandGroup>
-                            {customerOptions.map(
-                              (option: { label: string; value: string }) => (
-                                <CommandItem
-                                  key={option.value}
-                                  onSelect={() => {
-                                    field.onChange(option.value);
-                                    setEmailPopoverOpen(false);
-                                  }}
-                                >
-                                  {option.label}
-                                </CommandItem>
-                              ),
-                            )}
-                          </CommandGroup>
-                          <div className="border-t p-2">
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              className="flex w-full items-center justify-start gap-2"
-                              onClick={() => {
-                                setEmailPopoverOpen(false);
-                                setIsAddingNewEmail(true); // enable manual input
-                              }}
-                            >
-                              <Icons.plus className="h-4 w-4" /> Add New Email
-                            </Button>
-                          </div>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
-                  )
-                }
-              />
-              {errors.email && (
-                <p className="text-alert-prominent mt-1 text-sm">
-                  {errors.email.message}
-                </p>
-              )}
-            </div>
+            {/* Customer Email */}
+            <EmailSelectorField
+              control={control}
+              name="customer_email"
+              label="Customer's Email"
+              required
+              options={customerOptions}
+              isAddingNew={isAddingNewEmail}
+              setIsAddingNew={setIsAddingNewEmail}
+              open={emailPopoverOpen}
+              setOpen={setEmailPopoverOpen}
+              error={errors.customer_email?.message}
+            />
             {/* Priority */}
             <SelectField<TicketFormData>
               control={control}
               LabelClassName="text-brand-dark font-outfit font-semibold text-sm"
-              name="priority"
+              name="priority_id"
               label="Priority"
               required
               options={priorityOptions.map((opt) => {
@@ -300,13 +241,12 @@ const CreateTicketForm = () => {
             {isAddingNewEmail && (
               <>
                 {/* Customer Name */}
-
                 <InputField
                   control={control}
-                  name="customerName"
+                  name="customer_name"
                   label="Full Name"
                   placeholder="Full Name"
-                  required
+                  error={errors.title?.message}
                   inputClassName={cn(
                     'border-gray-light placeholder:text-gray-primary focus:ring-gray-primary h-9 w-full rounded-md border px-4 py-2 placeholder:text-sm focus:ring focus:outline-none',
                   )}
@@ -314,15 +254,13 @@ const CreateTicketForm = () => {
                     'text-brand-dark font-outfit text-sm font-semibold',
                   )}
                 />
-
                 {/* Customer Phone */}
-
                 <InputField
                   control={control}
-                  name="customerPhone"
+                  name="customer_phone"
                   label="Phone Number"
-                  placeholder="Enter your number"
-                  required
+                  placeholder="Enter phone number"
+                  error={errors.title?.message}
                   inputClassName={cn(
                     'border-gray-light placeholder:text-gray-primary focus:ring-gray-primary h-9 w-full rounded-md border px-4 py-2 placeholder:text-sm focus:ring focus:outline-none',
                   )}
@@ -330,15 +268,13 @@ const CreateTicketForm = () => {
                     'text-brand-dark font-outfit text-sm font-semibold',
                   )}
                 />
-
-                {/* Customer Company */}
-
+                {/* Customer Location */}
                 <InputField
                   control={control}
-                  name="customerCompany"
-                  label="Address"
-                  placeholder="Enter your Address"
-                  required
+                  name="customer_location"
+                  label="Location"
+                  placeholder="Enter location"
+                  error={errors.title?.message}
                   inputClassName={cn(
                     'border-gray-light placeholder:text-gray-primary focus:ring-gray-primary h-9 w-full rounded-md border px-4 py-2 placeholder:text-sm focus:ring focus:outline-none',
                   )}
@@ -351,10 +287,11 @@ const CreateTicketForm = () => {
             {/* Sender's Domain */}
             <InputField
               control={control}
-              name="sender"
-              label="Sender&#39;s domain"
-              placeholder="Senders Domain Here"
+              name="sender_domain"
+              label="Sender&#39;s Domain"
+              placeholder="Sender's email"
               required
+              // error={errors.title?.message}
               inputClassName={cn(
                 'border-gray-light placeholder:text-gray-primary focus:ring-gray-primary h-9 w-full rounded-md border px-4 py-2 placeholder:text-sm focus:ring focus:outline-none',
               )}
@@ -362,24 +299,25 @@ const CreateTicketForm = () => {
                 'text-brand-dark font-outfit text-sm font-semibold',
               )}
             />
-            {/* teams */}
+            {/* Teams */}
             <SelectField<TicketFormData>
               control={control}
               LabelClassName="text-brand-dark font-outfit font-semibold text-sm"
-              name="team"
+              name="department_id"
               label="Teams"
               placeholder="Select Team"
               required
               options={teams.map((team) => ({
-                value: team.name.toLowerCase(),
+                value: team.id.toString(),
                 label: team.name,
               }))}
             />
+            {/* Assignees */}
             <MultiSelectField
-              name="member"
+              name="assignees"
               control={control}
               LabelClassName="text-brand-dark font-outfit font-semibold text-sm"
-              label="Suggested Member"
+              label="Assignees"
               placeholder={
                 membersLoading ? 'Loading members...' : 'Select Members'
               }
@@ -388,15 +326,17 @@ const CreateTicketForm = () => {
                 value: member.user?.name?.toLowerCase() || '',
               }))}
             />
+            {/* Description */}
             <TextAreaField
               control={control}
               name="description"
               labelClassName="text-brand-dark font-outfit font-semibold text-sm pb-2 leading-[21px]"
               textareaClassName="h-[122px] border-gray-light resize-none"
-              label="Ticket Remarks/Descriptiton"
-              placeholder="subject"
+              label="Ticket Remarks/Description"
+              placeholder="Description"
               required
             />
+            {/* Notes */}
             <TextAreaField
               control={control}
               name="notes"
@@ -405,41 +345,78 @@ const CreateTicketForm = () => {
               label="Internal Notes"
               placeholder="Note to Agent"
             />
+            {/* Attachment */}
             <div className="pt-2">
-              <Label
-                htmlFor="imageUploadInput"
-                className="text-brand-dark font-outfit pb-2 text-sm leading-[21px] font-semibold"
-              >
-                Add Attachment
-              </Label>
-
-              <ImageUploader
-                onImageSelect={handleImage}
-                wrapperClassName="border-dashed border-2 border-gray-300 h-[122px] w-full flex items-center justify-center"
-                descriptionText=""
-              />
-              {previewImage && (
-                <div className="mt-3">
-                  <Image
-                    height={128}
-                    width={128}
-                    src={previewImage}
-                    alt="Preview"
-                    className="max-h-[150px] rounded-md border"
+              <Controller
+                name="attachment"
+                control={control}
+                render={({ field }) => (
+                  <MultiImageUploader
+                    label="Add Attachment"
+                    onImagesSelect={(imageDataUrls) => {
+                      field.onChange(imageDataUrls);
+                      setPreviewImages(imageDataUrls);
+                    }}
+                    previewImages={previewImages}
+                    wrapperClassName="border-dashed border-2 border-gray-300 h-[122px] w-full flex items-center justify-center"
+                    descriptionText=""
                   />
-                </div>
-              )}
+                )}
+              />
             </div>
           </div>
+          <div className="items-cente flex justify-between">
+            <button
+              type="submit"
+              disabled={isCreating}
+              className={cn(
+                'bg-brand-primary font-outfit mt-4 h-12 w-[240px] cursor-pointer rounded-md px-6 py-2 text-base leading-[19px] font-semibold text-white',
+                isCreating && 'cursor-not-allowed opacity-50',
+              )}
+            >
+              {isCreating ? (
+                <Icons.loader className="mr-2 inline-block h-5 w-5 animate-spin" />
+              ) : null}
+              Create Ticket
+            </button>
+            <div className="mt-5 text-right text-sm font-medium">
+              {!isAddingNewEmail && selectedEmail ? (
+                <div className="flex flex-col items-end space-y-1">
+                  <span className="bg-info-light text-info font-outfit flex h-8 w-[164px] gap-2 rounded-md px-2 py-1.5 text-center text-sm font-semibold">
+                    <span className="h-6 w-6">
+                      <Icons.checbox_circle />
+                    </span>
+                    Existing customer
+                  </span>
+                  <span className="font-outfit text-info text-sm font-semibold">
+                    Cunstomer Since :{' '}
+                    {(() => {
+                      const customer = customers.find(
+                        (c: any) => c.email === selectedEmail,
+                      );
+                      if (!customer) return 'N/A';
+                      // Format date, e.g. "Aug 8, 2025"
+                      const createdDate = new Date(customer.created_at);
+                      return createdDate.toLocaleDateString(undefined, {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                      });
+                    })()}
+                  </span>
+                </div>
+              ) : null}
 
-          <button
-            type="submit"
-            className={cn(
-              'bg-brand-primary font-outfit mt-4 h-12 w-[240px] cursor-pointer rounded-md px-6 py-2 text-base leading-[19px] font-semibold text-white',
-            )}
-          >
-            Create Ticket
-          </button>
+              {isAddingNewEmail ? (
+                <span className="font-outfit text-warning-prominent bg-warning-prominent-bg flex items-center gap-2 rounded-md px-4 py-1 text-sm font-semibold">
+                  <span>
+                    <Icons.error_warning />
+                  </span>
+                  Non Existing Customer
+                </span>
+              ) : null}
+            </div>
+          </div>
         </form>
       </div>
     </>

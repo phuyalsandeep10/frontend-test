@@ -1,24 +1,45 @@
 import { z } from 'zod';
 
-export const ticketSchema = z.object({
-  ticket: z.string().min(1, 'Ticket topic is required'),
-  email: z
-    .string()
-    .regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Please enter a valid email address'),
-  priority: z.string().min(1, 'Priority is required'),
-  member: z.string().min(1, 'Member is required'),
-  team: z.string().min(1, 'Team are  required'),
-  sender: z.string().min(1, "Sender's domain is required"),
-  description: z.string().min(1, 'Description is required'),
-  notes: z.string().optional(),
-  customerName: z.string().optional(),
-  customerPhone: z
-    .string()
-    .min(7, { message: 'Phone number must be at least 7 digits' })
-    .max(15, { message: 'Phone number must be at most 15 digits' })
-    .regex(/^\d+$/, { message: 'Phone number must contain only digits' })
-    .optional(),
-  customerCompany: z.string().optional(),
-});
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-export type TicketFormData = z.infer<typeof ticketSchema>;
+export const createTicketSchema = (isAddingNewEmail: boolean) =>
+  z.object({
+    title: z.string().min(1, 'Ticket title is required'),
+    description: z.string().min(1, 'Description is required'),
+    sender_domain: z
+      .string()
+      .min(1, 'Sender email is required')
+      .regex(emailRegex, 'Invalid sender domain email'),
+    notes: z.string().optional(),
+    attachment: z.array(z.string().url('Invalid URL')).optional(),
+    priority_id: z.string().min(1, 'Priority is required'),
+    department_id: z.string().min(1, 'Team is required'),
+    customer_email: z
+      .string()
+      .email('Invalid email format')
+      .min(1, 'Customer email is required'),
+    customer_name: isAddingNewEmail
+      ? z.string().min(1, 'Customer name is required')
+      : z.string().optional(),
+    customer_phone: isAddingNewEmail
+      ? z
+          .string()
+          .min(1, 'Phone number is required')
+          .refine(
+            (val) => /^[0-9+-]+$/.test(val),
+            'Phone number must contain only numbers, +, or -',
+          )
+      : z
+          .string()
+          .optional()
+          .refine(
+            (val) => !val || /^[0-9+-]+$/.test(val),
+            'Phone number must contain only numbers, +, or -',
+          ),
+    customer_location: isAddingNewEmail
+      ? z.string().min(1, 'Location is required')
+      : z.string().optional(),
+    assignees: z.array(z.string()).optional(),
+  });
+
+export type TicketFormData = z.infer<ReturnType<typeof createTicketSchema>>;
