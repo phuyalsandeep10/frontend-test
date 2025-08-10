@@ -86,7 +86,7 @@ const LoginForm = () => {
   // useRedirectIfAuthenticated()
 
   return (
-    <div className="mt-[87px]">
+    <>
       <HeadingSubHeadingTypography
         heading={
           <>
@@ -187,7 +187,7 @@ const LoginForm = () => {
           </p>
         </form>
       </Form>
-    </div>
+    </>
   );
 };
 

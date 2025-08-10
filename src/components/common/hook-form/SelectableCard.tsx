@@ -9,6 +9,7 @@ type SelectableCardGroupProps = {
   required?: boolean;
   label?: string;
   options: string[];
+  labelClassName?: string;
 };
 
 const SelectableCardGroup: React.FC<SelectableCardGroupProps> = ({
@@ -17,6 +18,7 @@ const SelectableCardGroup: React.FC<SelectableCardGroupProps> = ({
   required = false,
   label,
   options,
+  labelClassName,
 }) => {
   return (
     <Controller
@@ -26,7 +28,11 @@ const SelectableCardGroup: React.FC<SelectableCardGroupProps> = ({
       render={({ field, fieldState }) => (
         <div className="w-full space-y-4">
           {label && (
-            <Label htmlFor={name} required={required} className="mb-6">
+            <Label
+              htmlFor={name}
+              required={required}
+              className={labelClassName}
+            >
               {label}
             </Label>
           )}

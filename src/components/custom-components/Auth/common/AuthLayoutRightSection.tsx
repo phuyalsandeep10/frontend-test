@@ -11,14 +11,16 @@ const AuthLayoutRightSection = ({
   console.log(selectedLanguage);
 
   return (
-    <div className="box-border pt-4 pr-4 pl-4 lg:pl-5 xl:pt-10 xl:pr-10 xl:pl-[60px]">
+    <div className="pt-4 pr-4 pl-4 lg:pl-5 xl:pt-10 xl:pr-10 xl:pl-[60px]">
       <div className="flex justify-end">
         <LanguageDropdown
           onValueChange={setSelectedLanguage}
           selectedLanguage={selectedLanguage}
         />
       </div>
-      {children}
+      <div className="flex h-[calc(100%-40px)] flex-col justify-center">
+        {children}
+      </div>
     </div>
   );
 };
