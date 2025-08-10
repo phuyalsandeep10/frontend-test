@@ -3,10 +3,13 @@ import { Switch } from '@/components/ui/switch';
 import { Card, CardContent } from '@/components/ui/card';
 import { Icons } from '@/components/ui/Icons';
 import ChangePasswordModal from '@/components/modal/ChangePassword/ChangePasswordModal';
-import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/AuthStore/useAuthStore';
-import ConfirmModal from '@/components/custom-components/Dashboard/ConfirmModal/ConfirmModal';
+
+import React, { useEffect, useRef, useState } from 'react';
 import AuthenticatorModal from '@/components/modal/Authenticator/AuthenticatorModal';
+import AlertDialogDemo, {
+  AlertDialogDemoRef,
+} from '@/components/modal/AlertModal';
 
 import { useGenerateTwoFaOtp } from '@/hooks/auth/useGenerateTwoFaOtp';
 import { useDisable2Fa } from '@/hooks/auth/useDisable2Fa';
@@ -15,8 +18,6 @@ export default function SecuritySection() {
   const [openChangePasswordModal, setOpenChangePasswordModal] = useState(false);
   const [open2FaAuthenticatorModal, setOpen2FaAuthenticatorModal] =
     useState(false);
-  const [openConfirm2FaModal, setConfirm2FaModal] = useState(false);
-  const [openDisable2FaModal, setOpenDisable2FaModal] = useState(false);
 
   const authData = useAuthStore((state) => state.authData);
 
@@ -26,14 +27,35 @@ export default function SecuritySection() {
     data: twoFaGeneratedOtpData,
   } = useGenerateTwoFaOtp();
 
-  const { mutate: disable2Fa, isPending: disable2FaLoading } = useDisable2Fa();
+  const {
+    mutate: disable2Fa,
+    isPending: disable2FaLoading,
+    isSuccess: disable2FaSuccess,
+  } = useDisable2Fa();
+
+  const confirm2FaModalRef = useRef<AlertDialogDemoRef>(null);
+  const disable2FaModalRef = useRef<AlertDialogDemoRef>(null);
 
   useEffect(() => {
     if (twoFaGeneratedOtpData && !generate2faOtpLoading) {
       setOpen2FaAuthenticatorModal(true);
-      setConfirm2FaModal(false);
+      confirm2FaModalRef.current?.close();
     }
   }, [twoFaGeneratedOtpData, generate2faOtpLoading]);
+
+  useEffect(() => {
+    if (disable2FaSuccess) {
+      disable2FaModalRef.current?.close();
+    }
+  }, [disable2FaSuccess]);
+
+  function handleTwoFaToggle(checked: boolean) {
+    if (checked) {
+      confirm2FaModalRef.current?.open();
+    } else {
+      disable2FaModalRef.current?.open();
+    }
+  }
 
   return (
     <>
@@ -46,13 +68,7 @@ export default function SecuritySection() {
           <div className="flex items-center gap-4">
             <Switch
               checked={authData?.data?.user?.two_fa_enabled}
-              onCheckedChange={(checked) => {
-                if (checked) {
-                  setConfirm2FaModal(true);
-                } else {
-                  setOpenDisable2FaModal(true);
-                }
-              }}
+              onCheckedChange={handleTwoFaToggle}
               className="bg-brand-primary-switch data-[state=checked]:bg-brand-primary-switch"
             />
             <span className="text-brand-dark text-[16px] leading-[26px] font-medium">
@@ -105,20 +121,49 @@ export default function SecuritySection() {
         setOpen={setOpenChangePasswordModal}
       />
 
-      <ConfirmModal
-        open={openConfirm2FaModal}
-        setOpen={setConfirm2FaModal}
-        loading={generate2faOtpLoading}
-        onClick={() => generate2FaOtp()}
+      <AlertDialogDemo
+        ref={confirm2FaModalRef}
+        heading="Are you sure?"
+        subheading="Turning on 2FA will add an extra layer of security to your account. This action will make your account more secure from attempts of unauthorized access."
+        cancelText="Cancel"
+        actionText="Turn On 2FA"
+        descriptionClassName="text-xs text-black"
+        onCancel={() => confirm2FaModalRef.current?.close()}
+        onAction={() => generate2FaOtp()}
+        actionClassName="py-2.5 px-8 text-xs"
+        cancelClassName="py-2.5 px-8 text-xs"
+        cancelButtonProps={{
+          variant: 'outline',
+          size: 'sm',
+        }}
+        actionButtonProps={{
+          variant: 'default',
+          size: 'sm',
+        }}
+        actionIsLoading={generate2faOtpLoading}
       />
 
-      <ConfirmModal
-        title="Are you sure?"
-        subTitle="You want to disable two-factor authentication"
-        open={openDisable2FaModal}
-        setOpen={setOpenDisable2FaModal}
-        onClick={() => disable2Fa()}
-        loading={disable2FaLoading}
+      <AlertDialogDemo
+        ref={disable2FaModalRef}
+        heading="Are you sure?"
+        subheading="Turning off 2FA will immediately remove an extra layer of security from your account. This action will make your account more vulnerable to unauthorized access."
+        cancelText="Cancel"
+        actionText="Turn off 2FA"
+        descriptionClassName="text-alert-prominent text-xs"
+        icon={<Icons.ri_alert_line className="text-alert-prominent h-5 w-5" />}
+        onCancel={() => disable2FaModalRef.current?.close()}
+        onAction={() => disable2Fa()}
+        cancelButtonProps={{
+          variant: 'secondary',
+          size: 'sm',
+        }}
+        actionButtonProps={{
+          variant: 'destructive',
+          size: 'sm',
+        }}
+        actionIsLoading={disable2FaLoading}
+        actionClassName="py-2.5 px-8 text-xs"
+        cancelClassName="py-2.5 px-8 text-xs"
       />
 
       <AuthenticatorModal
