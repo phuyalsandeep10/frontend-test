@@ -3,7 +3,7 @@ import { Label as ShadcnLabel } from '@/components/ui/label';
 
 type LabelProps = {
   htmlFor: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   required?: boolean;
   className?: string;
 };

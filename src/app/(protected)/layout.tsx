@@ -17,7 +17,6 @@ export default function ProtectedDashboardLayout({
   const { data: authData, isLoading } = useAuthenticatedUser();
   const router = useRouter();
   const authTokens = AuthService.getAuthTokens();
-  const setAuthData = useAuthStore((state) => state.setAuthData);
 
   useEffect(() => {
     if (!authTokens) {
@@ -25,24 +24,18 @@ export default function ProtectedDashboardLayout({
     }
     if (!isLoading) {
       const user = authData?.data?.user;
-      const is2FaEnabled = user?.two_fa_enabled;
-      const is2FaVerified = authData?.data?.is_2fa_verified;
       if (!user) {
         router.replace(ROUTES.LOGIN);
-      } else if (!user?.email_verified_at) {
-        router.replace(`${ROUTES.VERIFY_EMAIL}?email=${user?.email}`);
-      } else if (!is2FaEnabled && !is2FaVerified) {
-        router.replace(ROUTES.DASHBOARD);
-      } else if (is2FaEnabled && !is2FaVerified) {
-        router.replace(ROUTES.VERIFY_TWO_FA_TOKEN);
       }
-    }
-    if (authData?.data?.user) {
-      setAuthData(authData);
     }
   }, [authData, isLoading, router, authTokens]);
 
-  if (isLoading || !authData) return <p>Loading...</p>;
+  if (isLoading || !authData)
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <div>Loading...</div>
+      </div>
+    );
 
   return (
     <SidebarProvider>

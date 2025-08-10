@@ -5,6 +5,7 @@ import {
   ForgotPasswordPayload,
   ForgotPasswordVerifyPayload,
   RegisterPayload,
+  resendOtpPayloads,
   ResetPasswordpayload,
   User,
   verify2FaPayload,
@@ -103,13 +104,25 @@ export class AuthService {
       throw error;
     }
   }
+  // Forgot Password Verify
+  static async resendOtp(payload: resendOtpPayloads) {
+    try {
+      const response = await axios.post(
+        `${baseURL}/auth/resend-verification-token`,
+        payload,
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
 
   //refresh tokens
   static async refreshAccessToken(refreshToken: string): Promise<string> {
     const res = await axios.post(`${baseURL}/auth/refresh-token`, {
       token: refreshToken,
     });
-    const { access_token } = res.data;
+    const { access_token } = res.data?.data;
 
     const currentTokens = this.getAuthTokens();
     if (!currentTokens) throw new Error('No tokens in localStorage');
@@ -118,6 +131,7 @@ export class AuthService {
       accessToken: access_token,
       refreshToken: currentTokens.refreshToken,
     };
+    console.log('New Tokesn:', newTokens);
     this.setAuthTokens(newTokens);
 
     return access_token;
@@ -135,7 +149,7 @@ export class AuthService {
   // Verify 2fa otp
   static async verify2FAOtp(payload: verify2FaPayload) {
     try {
-      const response = await axiosInstance.post('/auth/2fa-verfiy', payload);
+      const response = await axiosInstance.post('/auth/2fa-verify', payload);
       return response.data;
     } catch (error) {
       throw error;

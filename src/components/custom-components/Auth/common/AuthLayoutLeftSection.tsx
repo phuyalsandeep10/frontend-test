@@ -7,25 +7,25 @@ import Link from 'next/link';
 
 const AuthLayoutLeftSection = () => {
   return (
-    <div className="bg-light">
-      <div className="pb-6">
-        <div className="flex justify-between ps-10 pt-10 pr-10">
-          <Image src={Logo} className="h-[45px] w-[145px]" alt="Logo" />
-          <Button className="border-brand-primary text-theme-text-dark cursor-pointer rounded-lg border bg-transparent text-base font-semibold shadow-none hover:bg-transparent">
-            Help & Support
-          </Button>
-        </div>
-        <div className="mt-[111px] mb-[66px]">
-          <Image
-            src={AuthLeftImage}
-            alt=""
-            className="mx-auto h-[549px] object-cover"
-          />
-        </div>
-        <h3 className="font-outfit text-brand-dark mx-auto w-full text-center text-[32px] leading-10 font-semibold md:w-[517px]">
+    <div className="bg-light hidden flex-col justify-between pb-6 lg:flex">
+      <div className="flex justify-between ps-10 pt-10 pr-10">
+        <Image src={Logo} className="h-[45px] w-[145px]" alt="Logo" />
+        <Button
+          variant={'outline'}
+          size={'sm'}
+          className="hover:text-brand-primary hover:bg-transparent"
+        >
+          Help & Support
+        </Button>
+      </div>
+      <div className="">
+        <Image src={AuthLeftImage} alt="" className="flex-1" />
+      </div>
+      <div>
+        <h3 className="font-outfit text-brand-dark mx-auto w-full text-center leading-10 font-semibold md:w-[517px] md:px-4 md:text-2xl xl:text-[32px]">
           AI Powered Chat like never seen before, Check Magic Reply.
         </h3>
-        <div className="mt-[111px] flex items-center justify-center gap-1">
+        <div className="flex items-center justify-center gap-1 md:mt-0 xl:mt-[40px]">
           <Link
             href={''}
             className="text-theme-text-primary hover:text-brand-dark cursor-pointer text-xs font-normal"

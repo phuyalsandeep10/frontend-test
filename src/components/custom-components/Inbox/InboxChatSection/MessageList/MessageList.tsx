@@ -2,11 +2,16 @@ import React from 'react';
 import MessageItem from './MessageItem';
 import { Message } from '../InboxChatSection';
 
-const MessageList = ({ messages }: { messages: Message[] }) => {
+interface MessageListProps {
+  messages: Message[];
+  onReply: (messageText: string) => void;
+}
+
+const MessageList = ({ messages, onReply }: MessageListProps) => {
   return (
     <div className="flex-1 space-y-4 p-4">
       {messages.map((msg) => (
-        <MessageItem key={msg.id} message={msg} />
+        <MessageItem key={msg.id} message={msg} onReply={onReply} />
       ))}
     </div>
   );

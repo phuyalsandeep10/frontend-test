@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import axiosInstance from '@/apiConfigs/axiosInstance';
 import { AuthService } from '@/services/auth/auth';
+import { useAuthStore } from '@/store/AuthStore/useAuthStore';
 
 export interface User {
   data: {
@@ -19,6 +20,8 @@ export interface User {
       two_fa_auth_url: string;
       two_fa_enabled: boolean;
       is_2fa_verified: boolean;
+      location?: string;
+      phone?: string;
       created_at: string;
       updated_at: string;
     };
@@ -30,12 +33,16 @@ export interface User {
 
 export const useAuthenticatedUser = () => {
   const tokens = AuthService.getAuthTokens();
+  const setAuthData = useAuthStore((state) => state.setAuthData);
 
   return useQuery<User | null>({
     queryKey: ['authUser'],
     queryFn: async () => {
       if (!tokens?.accessToken) return null;
       const res = await axiosInstance.get('/auth/me');
+      if (res.data) {
+        setAuthData(res.data);
+      }
       return res.data;
     },
     // refetchInterval:5000,

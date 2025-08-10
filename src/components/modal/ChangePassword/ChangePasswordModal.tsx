@@ -7,7 +7,6 @@ import { z } from 'zod';
 
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -21,6 +20,7 @@ import HeadingSubHeadingTypography from '@/components/custom-components/Auth/Reg
 import { StrongPasswordField } from '@/components/common/hook-form/StrongPasswordField';
 import { Button } from '@/components/ui/button';
 import { useResetPassword } from '@/hooks/auth/useResetPassword';
+import { toast } from 'sonner';
 
 type ChangePasswordFormValues = z.infer<typeof changePasswordModalSchema>;
 
@@ -66,10 +66,24 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({
   const { mutate: resetPassword, isPending, isSuccess } = useResetPassword();
 
   const handleSubmit = async (values: ChangePasswordFormValues) => {
-    resetPassword({
-      old_password: values.old_password,
-      new_password: values.new_password,
-    });
+    resetPassword(
+      {
+        old_password: values.old_password,
+        new_password: values.new_password,
+      },
+      {
+        onSuccess: (data) => {
+          setOpen(false);
+          toast.success(data?.data?.message || 'Password reset successfully!');
+        },
+        onError: (error: any) => {
+          console.log(error);
+          toast.error(
+            error?.response?.data?.message || 'Password reset failed!',
+          );
+        },
+      },
+    );
   };
 
   return (

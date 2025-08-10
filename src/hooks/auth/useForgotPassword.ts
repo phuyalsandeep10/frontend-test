@@ -13,7 +13,7 @@ export const useForgotPassword = () => {
     },
     onError: (error: any) => {
       toast.error(
-        error?.response?.data?.detail ||
+        error?.response?.data?.message ||
           'Failed to submit forgot password request',
       );
       console.error('Forgot Password error:', error);

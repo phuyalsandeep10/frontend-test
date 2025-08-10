@@ -10,16 +10,5 @@ export const useCreateOrganizations = () => {
   return useMutation({
     mutationFn: (payload: createOrganizationPayload) =>
       OrganizationsService.createOrganizations(payload),
-    onSuccess: (data) => {
-      router.push(ROUTES.DASHBOARD);
-      toast.success(data?.message || 'Organization created Successfully');
-      console.log('Organization created Successfully', data);
-    },
-    onError: (error: any) => {
-      toast.error(
-        error?.response?.data?.message || 'Failed to create Organizations',
-      );
-      console.error('Error in organization creation:', error);
-    },
   });
 };

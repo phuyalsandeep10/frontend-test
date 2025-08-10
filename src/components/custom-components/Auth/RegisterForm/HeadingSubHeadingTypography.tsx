@@ -12,8 +12,8 @@ interface HeadingSubHeadingTypographyProps {
 const HeadingSubHeadingTypography = ({
   heading,
   subHeading,
-  headingClassName = 'font-outfit text-[40px] leading-[48px] font-bold text-black',
-  subHeadingClassName = 'text-theme-text-primary text-[18px] leading-[29px] font-normal',
+  headingClassName = 'font-outfit md:text-2xl xl:text-[40px] xl:leading-[48px] font-bold text-black',
+  subHeadingClassName = 'text-theme-text-primary text-base lg:text-[18px] leading-[29px] font-normal',
   containerClassName = 'flex flex-col gap-2',
 }: HeadingSubHeadingTypographyProps) => {
   return (

@@ -52,7 +52,7 @@ export function ValidEmailInput({
       return;
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
     if (!emailRegex.test(debouncedEmail)) {
       setLocalValidation({
         valid: false,

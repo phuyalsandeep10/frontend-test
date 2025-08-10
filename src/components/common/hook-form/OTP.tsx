@@ -22,6 +22,7 @@ type OTPProps = {
   height?: string;
   gap?: string;
   textSize?: string;
+  labelClassName?: string;
 };
 
 const OTP: React.FC<OTPProps> = ({
@@ -35,6 +36,7 @@ const OTP: React.FC<OTPProps> = ({
   height = '60px',
   gap = '8',
   textSize,
+  labelClassName,
 }) => {
   return (
     <Controller
@@ -43,7 +45,7 @@ const OTP: React.FC<OTPProps> = ({
       defaultValue=""
       render={({ field, fieldState }) => (
         <div className="w-full space-y-4">
-          <Label htmlFor="otp-0" required={required} className="mb-6">
+          <Label htmlFor="otp-0" required={required} className={labelClassName}>
             {label}
           </Label>
 
@@ -59,7 +61,7 @@ const OTP: React.FC<OTPProps> = ({
                   id={`otp-${i}`}
                   index={i}
                   className={cn(
-                    'h-[60px] w-[60px] min-w-0 rounded-[8px] border-2 text-center text-3xl font-semibold',
+                    'h-[60px] w-[60px] min-w-0 rounded-[8px] border-1 text-center text-3xl font-semibold',
                     textSize,
                     hasError
                       ? 'border-alert-prominent text-grey-light'

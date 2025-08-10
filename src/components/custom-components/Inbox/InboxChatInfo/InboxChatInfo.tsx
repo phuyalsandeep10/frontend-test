@@ -10,14 +10,16 @@ import RecentActivityInfo from './Informations/RecentActivityInfo';
 import SocialMedia from './Informations/SocialMedia';
 import TitleReasonInfo from './Informations/TitleReasonInfo';
 import { Icons } from '@/components/ui/Icons';
+import { useUiStore } from '@/store/UiStore/useUiStore';
 
-const InboxChatInfo = () => {
+const InboxChatInfo: React.FC = () => {
+  const { closeChatInfo } = useUiStore();
+
   return (
     <div>
       <div className="font-outfit max-h-screen overflow-y-auto border-l bg-white">
         {/* Header */}
-        <InboxChatInfoHeader />
-
+        <InboxChatInfoHeader onClose={closeChatInfo} />
         <div className="px-10 py-7">
           {/* Profile Section */}
           <InboxChatInfoProfileInfo />

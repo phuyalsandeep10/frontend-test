@@ -1,43 +1,59 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { businessRegisterFormSchema } from './businessRegisterFormHelper';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Form } from '@/components/ui/form';
-import z from 'zod';
+import Button from '@/components/common/hook-form/Button';
 import { InputField } from '@/components/common/hook-form/InputField';
 import SelectableCardGroup from '@/components/common/hook-form/SelectableCard';
-import Button from '@/components/common/hook-form/Button';
+import { Form } from '@/components/ui/form';
 import { useCreateOrganizations } from '@/hooks/organizations/useCreateOrganizations';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import z from 'zod';
+import { businessRegisterFormSchema } from './businessRegisterFormHelper';
+import { ROUTES } from '@/routes/routes';
+import { toast } from 'sonner';
+import React, { SetStateAction } from 'react';
+import { queryClient } from '@/providers/query-provider';
 
-const BusinessRegisterForm = () => {
+interface BusinessRegisterFormProps {
+  from?: 'dashboard' | 'register';
+  setOpen?: React.Dispatch<SetStateAction<boolean>>;
+}
+
+const BusinessRegisterForm = ({ from, setOpen }: BusinessRegisterFormProps) => {
   const router = useRouter();
-  const {
-    mutate: createOrganization,
-    isPending,
-    isError,
-    error,
-  } = useCreateOrganizations();
+  const { mutate: createOrganization, isPending } = useCreateOrganizations();
   const businessRegisterForm = useForm<
     z.infer<typeof businessRegisterFormSchema>
   >({
     resolver: zodResolver(businessRegisterFormSchema),
     defaultValues: {
       name: '',
-      website: '',
+      domain: '',
       purpose: '',
     },
   });
 
-  console.log(isError, error);
-
   async function submitRegisterForm(
     values: z.infer<typeof businessRegisterFormSchema>,
   ) {
-    createOrganization(values);
+    createOrganization(values, {
+      onSuccess: (data) => {
+        if (from === 'dashboard' && setOpen) {
+          setOpen(false);
+          queryClient.invalidateQueries({ queryKey: ['authUser'] });
+        } else {
+          router.push(ROUTES.DASHBOARD);
+        }
+        toast.success(data?.message || 'Organization created Successfully');
+      },
+      onError: (error: any) => {
+        toast.error(
+          error?.response?.data?.message || 'Failed to create Organizations',
+        );
+      },
+    });
   }
   return (
-    <div className="w-[516px]">
+    <div className={`pb-6 ${from === 'dashboard' ? 'w-full' : 'w-[516px]'}`}>
       <Form {...businessRegisterForm}>
         <form
           onSubmit={businessRegisterForm.handleSubmit(submitRegisterForm)}
@@ -52,9 +68,9 @@ const BusinessRegisterForm = () => {
 
           <InputField
             control={businessRegisterForm.control}
-            name="website"
+            name="domain"
             label="Enter your Business's Domain"
-            type="text"
+            type="url"
             placeholder="www.businessname.com"
             required
           />
@@ -69,14 +85,25 @@ const BusinessRegisterForm = () => {
               'I want to unify my inbox',
             ]}
           />
-          <Button
-            variant="default"
-            type="submit"
-            size="lg"
-            className="mt-4 w-full"
-          >
-            {isPending ? 'Signing...' : 'Signup with chatboq'}
-          </Button>
+          {from === 'dashboard' ? (
+            <Button
+              variant="default"
+              type="submit"
+              size="lg"
+              className="mt-4 w-full"
+            >
+              {isPending ? 'Creating...' : 'Create'}
+            </Button>
+          ) : (
+            <Button
+              variant="default"
+              type="submit"
+              size="lg"
+              className="mt-4 w-full"
+            >
+              {isPending ? 'Signing...' : 'Signup with chatboq'}
+            </Button>
+          )}
         </form>
       </Form>
     </div>

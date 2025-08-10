@@ -20,10 +20,9 @@ export interface ForgotPasswordPayload {
   email: string;
 }
 export interface ForgotPasswordVerifyPayload {
-  token?: string;
-  email?: string;
+  token: string;
+  email: string;
   new_password: string;
-  confirm_password: string;
 }
 export interface verify2FaPayload {
   token: string;
@@ -32,3 +31,8 @@ export type AuthTokens = {
   accessToken: string;
   refreshToken: string;
 };
+
+export interface resendOtpPayloads {
+  email: string | undefined;
+  type: 'forgot_password' | 'email_verification';
+}

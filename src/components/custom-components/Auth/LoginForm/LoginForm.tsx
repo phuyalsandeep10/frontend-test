@@ -18,6 +18,8 @@ import Button from '@/components/common/hook-form/Button';
 import ReCAPTCHA from 'react-google-recaptcha';
 import Image from 'next/image';
 import googleIcon from '@/assets/images/google.svg';
+import { toast } from 'sonner';
+import { useRedirectIfAuthenticated } from '@/hooks/auth/useRedirectIfAuthenticated';
 
 const LoginForm = () => {
   const [isNotARobot, setIsNotARobot] = useState(false);
@@ -43,7 +45,21 @@ const LoginForm = () => {
       return;
     }
     setCaptchaError('');
-    login(values);
+    login(values, {
+      onSuccess: (data) => {
+        console.log(data);
+        const authToken = {
+          accessToken: data?.data?.access_token,
+          refreshToken: data?.data?.refresh_token,
+        };
+        AuthService.setAuthTokens(authToken);
+        toast.success(data?.message || 'Logged in successfully');
+        router.replace(ROUTES.DASHBOARD);
+      },
+      onError: (error: any) => {
+        toast.error(error?.response?.data?.message || 'Login failed');
+      },
+    });
   }
 
   const onCaptchaSuccess = (value: string | null) => {
@@ -66,6 +82,8 @@ const LoginForm = () => {
       router.replace(ROUTES.DASHBOARD);
     }
   }, [accessToken, refreshToken, router]);
+
+  // useRedirectIfAuthenticated()
 
   return (
     <div className="mt-[87px]">
@@ -124,7 +142,7 @@ const LoginForm = () => {
                 onChange={onCaptchaSuccess}
               />
               {captchaError && (
-                <p className="mt-2 text-sm text-red-500">{captchaError}</p>
+                <p className="text-error mt-2 text-sm">{captchaError}</p>
               )}
             </div>
           </div>
@@ -153,13 +171,7 @@ const LoginForm = () => {
                 height={20}
               />
             }
-            onClick={() =>
-              window.open(
-                `${baseURL}/auth/oauth/google`,
-                'google-auth',
-                'width=620,height=620',
-              )
-            }
+            onClick={() => window.open(`${baseURL}/auth/oauth/google`)}
           >
             Continue With Google
           </Button>

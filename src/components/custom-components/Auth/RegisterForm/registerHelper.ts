@@ -9,7 +9,8 @@ export const registerFormSchema = z.object({
     .regex(/[0-9]/, { message: 'Password must include at least one number' }),
   name: z
     .string()
-    .min(3, { message: 'Username must be at least 3 characters long' }),
+    .min(3, { message: 'Username must be at least 3 characters long' })
+    .max(30, { message: 'Username must be less than 30 characters' }),
 });
 
 export const headingAndSubHeadingHelper = {
