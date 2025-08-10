@@ -11,7 +11,7 @@ interface SuccessScreenProps {
 }
 const SuccessScreen = ({ text, subText, redirectLink }: SuccessScreenProps) => {
   return (
-    <div className="flex flex-col items-center pb-20 md:w-[489px]">
+    <div className="mx-auto flex flex-col items-center pb-20 lg:mx-0 lg:w-[489px]">
       <Image
         src={passwordChanged}
         height={300}

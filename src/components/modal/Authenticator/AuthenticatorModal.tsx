@@ -113,17 +113,17 @@ const AuthenticatorModal: React.FC<AuthenticatorModalProps> = ({
 
         {from !== 'dashboard' && (
           <div className="flex justify-center">
-            (qrcodeUrl ? (
-            <Image
-              src={qrcodeUrl}
-              alt="QR Code"
-              className="h-40 w-40"
-              height={160}
-              width={160}
-            />
+            {qrcodeUrl ? (
+              <Image
+                src={qrcodeUrl}
+                alt="QR Code"
+                className="h-40 w-40"
+                height={160}
+                width={160}
+              />
             ) : (
-            <Skeleton className="h-40 w-40" />
-            ))
+              <Skeleton className="h-40 w-40" />
+            )}
           </div>
         )}
 

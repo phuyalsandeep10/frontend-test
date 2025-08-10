@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import io from 'socket.io-client';
 import { useParams } from 'next/navigation';
 import { useUiStore } from '@/store/UiStore/useUiStore';
+import ChatEmptyScreen from './ChatEmptyScreen/ChatEmptyScreen';
 
 const socket = io('http://localhost:4000');
 
@@ -105,51 +106,56 @@ const Inbox = () => {
         </div>
       </SubSidebarContentWrapper>
 
-      <div className="flex-1">
-        <InboxChatSection messages={messages} onReply={handleReply} />
-        <div className="relative m-4">
-          <div className="relative">
-            {replyingTo && (
-              <div className="bg bg-brand-disable absolute top-2 right-2 left-2 z-10 flex w-fit items-center justify-between rounded-md border px-4 py-2 text-black">
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-black">Replying to:</span>
-                  <span className="text-theme-text-primary max-w-[200px] truncate text-xs font-medium">
-                    {replyingTo}
-                  </span>
-                </div>
-                <button
-                  onClick={clearReply}
-                  className="text-theme-text-primary hover:text-brand-dark ml-2 text-sm"
-                >
-                  ×
-                </button>
+      {chatId ? (
+        <>
+          <div className="flex-1">
+            <InboxChatSection messages={messages} onReply={handleReply} />
+            <div className="relative m-4">
+              <div className="relative">
+                {replyingTo && (
+                  <div className="bg bg-brand-disable absolute top-2 right-2 left-2 z-10 flex w-fit items-center justify-between rounded-md border px-4 py-2 text-black">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-black">Replying to:</span>
+                      <span className="text-theme-text-primary max-w-[200px] truncate text-xs font-medium">
+                        {replyingTo}
+                      </span>
+                    </div>
+                    <button
+                      onClick={clearReply}
+                      className="text-theme-text-primary hover:text-brand-dark ml-2 text-sm"
+                    >
+                      ×
+                    </button>
+                  </div>
+                )}
+
+                <Textarea
+                  placeholder="Enter your message here"
+                  className={`h-24 resize-none ${replyingTo ? 'pt-14' : 'pt-3'}`}
+                  ref={inputRef}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      const text = inputRef.current?.value || '';
+                      onSend();
+                    }
+                  }}
+                />
               </div>
-            )}
 
-            <Textarea
-              placeholder="Enter your message here"
-              className={`h-24 resize-none ${replyingTo ? 'pt-14' : 'pt-3'}`}
-              ref={inputRef}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                  e.preventDefault();
-                  const text = inputRef.current?.value || '';
-                  onSend();
-                }
-              }}
-            />
+              <div className="mt-3 flex justify-end">
+                <Button onClick={onSend}>{'Send'}</Button>
+              </div>
+            </div>
           </div>
-
-          <div className="mt-3 flex justify-end">
-            <Button onClick={onSend}>{'Send'}</Button>
-          </div>
-        </div>
-      </div>
-
-      {showChatInfo && (
-        <div className="w-[400px]">
-          <InboxChatInfo />
-        </div>
+          {showChatInfo && (
+            <div className="w-[400px]">
+              <InboxChatInfo />
+            </div>
+          )}
+        </>
+      ) : (
+        <ChatEmptyScreen />
       )}
     </div>
   );

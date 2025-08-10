@@ -53,7 +53,7 @@ const BusinessRegisterForm = ({ from, setOpen }: BusinessRegisterFormProps) => {
     });
   }
   return (
-    <div className="w-[516px]">
+    <div className={`pb-6 ${from === 'dashboard' ? 'w-full' : 'w-[516px]'}`}>
       <Form {...businessRegisterForm}>
         <form
           onSubmit={businessRegisterForm.handleSubmit(submitRegisterForm)}
@@ -70,7 +70,7 @@ const BusinessRegisterForm = ({ from, setOpen }: BusinessRegisterFormProps) => {
             control={businessRegisterForm.control}
             name="domain"
             label="Enter your Business's Domain"
-            type="text"
+            type="url"
             placeholder="www.businessname.com"
             required
           />
