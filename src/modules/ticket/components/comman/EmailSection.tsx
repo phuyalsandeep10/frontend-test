@@ -98,6 +98,7 @@ export function EmailSelectorField<T extends FieldValues>({
                           field.onChange(opt.value);
                           setOpen(false);
                         }}
+                        className="font-outfit mb-2 border-b text-base font-normal text-black"
                       >
                         {opt.label}
                       </CommandItem>
@@ -107,7 +108,7 @@ export function EmailSelectorField<T extends FieldValues>({
                     <Button
                       type="button"
                       variant="ghost"
-                      className="flex w-full items-center justify-start gap-2"
+                      className="bg-brand-primary hover:bg-brand-primary font-outfit justify-centergap-1 flex w-full cursor-pointer items-center text-center text-base font-medium text-white"
                       onClick={() => {
                         setOpen(false);
                         setIsAddingNew(true);

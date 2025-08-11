@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axiosInstance from '@/apiConfigs/axiosInstance';
 import { showToast } from '@/shared/toast';
-import { TicketFormData } from '@/lib/ticket.schema';
+import { TicketFormData } from '@/modules/ticket/types/ticket.schema';
 
 interface TicketState {
   createTicket: (

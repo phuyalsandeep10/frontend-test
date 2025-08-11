@@ -6,6 +6,10 @@ export type TicketCardProps = {
   timeAgo: string;
   title: string;
   priority: string;
+  priority_fg_color: string;
+  priority_bg_color: string;
+  status_fg_color: string;
+  status_bg_color: string;
   status: Status;
   avatarUrl?: string;
   created_by?: string;
@@ -14,7 +18,7 @@ export type TicketCardProps = {
 };
 
 import { z } from 'zod';
-import { createTicketSchema } from '@/lib/ticket.schema';
+import { createTicketSchema } from '@/modules/ticket/types/ticket.schema';
 
 // Form data type inferred from Zod schema
 export type TicketFormData = z.infer<typeof createTicketSchema>;

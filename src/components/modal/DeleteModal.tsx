@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/dialog';
 import { Icons } from '../ui/Icons';
 import { Button, type ButtonProps } from '../ui/button';
+import { cn } from '@/lib/utils';
 interface DeleteModalProps {
   trigger?: React.ReactNode;
   open: boolean;
@@ -23,9 +24,11 @@ interface DeleteModalProps {
   onCancel?: () => void;
   onConfirm?: () => void;
   icon?: React.ReactNode;
+  DescriptionIcons?: React.ReactNode;
   iconBgColor?: string;
   iconColor?: string;
   descriptionColor?: string;
+  TitleclassName?: string;
 }
 const DeleteModal: React.FC<DeleteModalProps> = ({
   trigger,
@@ -45,6 +48,8 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
   descriptionColor,
   onCancel,
   onConfirm,
+  TitleclassName,
+  DescriptionIcons,
 }) => {
   const handleCancel = () => {
     onCancel?.();
@@ -57,33 +62,35 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-      <DialogContent className="flex w-[326px] flex-col items-center text-center">
+      <DialogContent className={cn(`${TitleclassName} flex-colflex w-[568px]`)}>
         <DialogTitle className="sr-only">{title}</DialogTitle>
 
-        <div
-          className={`flex h-[52px] w-[52px] items-center justify-center rounded-full ${iconBgColor ?? 'bg-error-light'}`}
-        >
-          {icon ?? (
+        {icon ?? (
+          <div
+            className={`flex h-[52px] w-[52px] items-center justify-center rounded-full ${iconBgColor ?? 'bg-error-light'}`}
+          >
             <Icons.ri_delete_bin_7_fill
               className={iconColor ?? 'text-alert-prominent'}
             />
-          )}
-        </div>
+          </div>
+        )}
         <div>
           <p className="mb-2 text-[16px] leading-[26px] font-medium">{title}</p>
+
           <p
-            className={`text-xs leading-4 ${descriptionColor ?? 'text-alert-prominent'}`}
+            className={`flex text-xs leading-4 ${descriptionColor ?? 'text-alert-prominent'}`}
           >
+            <span>{DescriptionIcons ?? <Icons.alert className="mr-2" />}</span>
             {description}
           </p>
         </div>
-        <div className="w-full">
-          <div className="flex justify-between gap-4">
+        <div className="flex justify-end">
+          <div className="flex w-[272px] justify-between gap-4">
             <Button
               variant={cancelVariant}
               size={cancelSize}
               onClick={handleCancel}
-              className="flex-1"
+              className="ring-brand-primary text-brand-primary font-outfit flex-1 cursor-pointer text-xs font-semibold ring-1"
             >
               {cancelText}
             </Button>
@@ -91,7 +98,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
               variant={confirmVariant}
               size={confirmSize}
               onClick={handleConfirm}
-              className="flex-1"
+              className="flex-1 cursor-pointer"
             >
               {confirmText}
             </Button>

@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import TicketTabs from '@/components/common/ticketCard/TicketTabs';
-import { TicketCardProps } from '../../type';
+import TicketTabs from '@/modules/ticket/components/comman/ticketCard/TicketTabs';
+import { TicketCardProps } from '../../../types/type';
 import {
   Table,
   TableBody,
@@ -22,46 +22,6 @@ import {
 } from '@/components/ui/tooltip';
 import { useTicketStatuses } from '@/modules/ticket/hooks/useTicketStatus';
 
-// Dummy ticket data - you can replace this with API data if needed
-const tickets: TicketCardProps[] = [
-  {
-    id: 1,
-    email: 'user1@example.com',
-    timeAgo: '2h ago',
-    title: 'Login issue',
-    priority: 'High',
-    status: 'Assigned',
-    created_by: 'Alice',
-  },
-  {
-    id: 2,
-    email: 'user2@example.com',
-    timeAgo: '4h ago',
-    title: 'Page not loading',
-    priority: 'Medium',
-    status: 'Unassigned',
-    created_by: 'Bob',
-  },
-  {
-    id: 3,
-    email: 'user3@example.com',
-    timeAgo: '1d ago',
-    title: 'Bug in checkout',
-    priority: 'Low',
-    status: 'Solved',
-    created_by: 'Charlie',
-  },
-  ...Array.from({ length: 100 }, (_, i) => ({
-    id: 4 + i,
-    email: `user${4 + i}@example.com`,
-    timeAgo: `${i + 5}h ago`,
-    title: `Ticket ${4 + i}`,
-    priority: ['Low', 'Medium', 'High'][i % 3],
-    status: ['Assigned', 'Unassigned', 'Solved'][i % 3],
-    created_by: ['Alice', 'Bob', 'Charlie'][i % 3],
-  })),
-];
-
 const ITEMS_PER_PAGE = 10;
 
 // Table headers
@@ -74,22 +34,20 @@ const tableHeaders = [
   { key: 'priority', label: 'Priority' },
 ];
 
-const TableView = () => {
+const TableView = ({ tickets }: { tickets: TicketCardProps[] }) => {
   const { data: statuses = [], isLoading, error } = useTicketStatuses();
 
-  // Generate tabs dynamically from API
-  const tabs =
-    statuses.length > 0
-      ? [
-          ...statuses.map((s) => ({
-            label: s.name,
-            status: s.name as TicketCardProps['status'],
-          })),
-        ]
-      : [];
+  // Generate tabs dynamically from API (add 'ALL' tab at start)
+  const tabs = [
+    { label: 'ALL', status: 'ALL' as TicketCardProps['status'] },
+    ...statuses.map((s) => ({
+      label: s.name,
+      status: s.name as TicketCardProps['status'],
+    })),
+  ];
 
   const [selectedTab, setSelectedTab] =
-    useState<TicketCardProps['status']>('Assigned');
+    useState<TicketCardProps['status']>('ALL');
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -102,6 +60,7 @@ const TableView = () => {
   if (error)
     return <div className="p-4 text-red-500">Failed to load statuses</div>;
 
+  // Filter tickets by selected tab status
   const filteredTickets =
     selectedTab === 'ALL'
       ? tickets
@@ -109,11 +68,13 @@ const TableView = () => {
 
   const totalItems = filteredTickets.length;
 
+  // Paginate filtered tickets
   const pagedTickets = filteredTickets.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE,
   );
 
+  // Checkbox states
   const allChecked =
     pagedTickets.length > 0 &&
     pagedTickets.every((ticket) => selectedIds.includes(ticket.id!));
@@ -121,10 +82,12 @@ const TableView = () => {
 
   const toggleSelectAll = () => {
     if (allChecked) {
+      // Unselect all visible tickets
       setSelectedIds((prev) =>
         prev.filter((id) => !pagedTickets.some((ticket) => ticket.id === id)),
       );
     } else {
+      // Select all visible tickets
       setSelectedIds((prev) => [
         ...new Set([...prev, ...pagedTickets.map((t) => t.id!)]),
       ]);
@@ -150,7 +113,7 @@ const TableView = () => {
         onSelect={setSelectedTab}
       />
 
-      {/* Selected Count and icons */}
+      {/* Selected Count and action icons */}
       {selectedCountInCurrentTab > 0 && (
         <div className="font-outfit mt-4 flex items-center justify-between text-base font-medium text-black">
           <span>
