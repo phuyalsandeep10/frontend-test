@@ -7,7 +7,7 @@ interface StepperProps {
 
 const Stepper = ({ step }: StepperProps) => {
   return (
-    <div className="mt-10 mb-10">
+    <div className="my-4">
       <div className="md:0 relative box-border flex justify-between md:ml-0 md:w-full lg:ml-[22px] lg:w-[494px]">
         {[1, 2, 3].map((s) => (
           <div key={s}>

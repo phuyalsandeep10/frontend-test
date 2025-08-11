@@ -86,7 +86,7 @@ const LoginForm = () => {
   // useRedirectIfAuthenticated()
 
   return (
-    <div className="mt-[87px]">
+    <>
       <HeadingSubHeadingTypography
         heading={
           <>
@@ -142,7 +142,7 @@ const LoginForm = () => {
                 onChange={onCaptchaSuccess}
               />
               {captchaError && (
-                <p className="mt-2 text-sm text-red-500">{captchaError}</p>
+                <p className="text-error mt-2 text-sm">{captchaError}</p>
               )}
             </div>
           </div>
@@ -187,7 +187,7 @@ const LoginForm = () => {
           </p>
         </form>
       </Form>
-    </div>
+    </>
   );
 };
 

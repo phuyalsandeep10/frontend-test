@@ -11,7 +11,6 @@ import { cn } from '@/lib/utils';
 import { Icons } from '@/components/ui/Icons';
 import { useLogout } from '@/hooks/auth/useLogout';
 import { useAuthStore } from '@/store/AuthStore/useAuthStore';
-import Link from 'next/link';
 import { ROUTES } from '@/routes/routes';
 import { useRouter } from 'next/navigation';
 
@@ -21,7 +20,7 @@ const SidebarFooterMenu = () => {
   const { authData, clearAuthData } = useAuthStore((state) => state);
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger asChild className="w-full">
         <div
           className={cn(
             'corsor transition-colors-pointer flex w-full cursor-pointer items-center gap-3 rounded-md',
@@ -49,17 +48,17 @@ const SidebarFooterMenu = () => {
           </div>
 
           {/* Name & Email */}
-          <div className={cn('flex flex-col text-left leading-[29px]')}>
+          <div className={cn('flex w-full flex-col')}>
             <span
               className={cn(
-                'text-theme-text-dark font-outfit text-lg font-medium',
+                'text-theme-text-dark font-outfit text-lg font-medium text-wrap',
               )}
             >
               {authData?.data?.user?.name}
             </span>
             <span
               className={cn(
-                'text-theme-text-primary font-outfit text-xs font-normal',
+                'text-theme-text-primary font-outfit text-xs font-normal text-wrap',
               )}
             >
               {authData?.data?.user?.email}

@@ -201,4 +201,5 @@ export const Icons = {
   arrow_left_right: RiArrowLeftRightLine,
   git_merge: RiGitMergeFill,
   key: RiKey2Fill,
+  ri_alert_line: RiAlertLine,
 };

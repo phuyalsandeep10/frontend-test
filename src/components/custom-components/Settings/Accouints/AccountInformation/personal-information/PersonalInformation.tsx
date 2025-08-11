@@ -7,12 +7,15 @@ import { ContactNumberSection } from './ContactNumberSection';
 import { CountySection } from './CountySection';
 import LanguageSection from './LanguageSection';
 import { FormValues } from '../types';
+import { useAuthStore } from '@/store/AuthStore/useAuthStore';
 
 export default function PersonalInformation() {
+  const authData = useAuthStore((state) => state.authData);
   const { control } = useForm<FormValues>({
     defaultValues: {
-      fullName: 'Yubesh Koirala',
+      fullName: authData?.data?.user?.name,
       address: 'Rio de Janeiro',
+      email: authData?.data?.user?.email,
       country: '',
       language: 'English',
     },
@@ -43,7 +46,7 @@ export default function PersonalInformation() {
           control={control}
           name="email"
           label="Email"
-          placeholder="yubeshkoirala11@gmail.com"
+          placeholder="Your Email"
           required
           inputClassName="w-[80%]"
           labelClassName="mt-6 text-[16px] font-medium"
