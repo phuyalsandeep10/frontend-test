@@ -33,7 +33,6 @@ const EmailVerifyForm = () => {
 
   const onSubmit = (values: any) => {
     const verifyEmailData = { ...values, email };
-    console.log(verifyEmailData);
     verifyEmail(verifyEmailData, {
       onSuccess: () => {
         setHasError(false);

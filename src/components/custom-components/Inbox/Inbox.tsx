@@ -36,7 +36,6 @@ const Inbox = () => {
     socket.emit('joinChat', chatId);
 
     const handleNewMessage = (msg: any) => {
-      console.log('Message from server', msg);
       setMessages((prev) => [...prev, msg]);
     };
 

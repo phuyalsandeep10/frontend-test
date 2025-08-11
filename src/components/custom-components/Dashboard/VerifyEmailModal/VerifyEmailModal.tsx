@@ -37,8 +37,6 @@ const VerifyEmailModal = ({ open, setOpen }: VerifyEmailModalProps) => {
   const { mutate: resendOtp, isPending: resendOtpIsPending } = useResendOtp();
   const authData = useAuthStore((state) => state.authData);
 
-  console.log('Hello for Modal', authData);
-
   const form = useForm<z.infer<typeof emailVerifyFormSchema>>({
     resolver: zodResolver(emailVerifyFormSchema),
     defaultValues: {
@@ -51,7 +49,6 @@ const VerifyEmailModal = ({ open, setOpen }: VerifyEmailModalProps) => {
 
     verifyEmail(verifyEmailData, {
       onSuccess: (data) => {
-        console.log(data);
         setHasError(false);
         toast.success('Email Verified Successfully.');
         setOpen(false);
@@ -60,7 +57,6 @@ const VerifyEmailModal = ({ open, setOpen }: VerifyEmailModalProps) => {
           refreshToken: data?.data?.refresh_token,
         };
         AuthService.setAuthTokens(authToken);
-        console.log('Verify email success:', data);
         queryClient.invalidateQueries({ queryKey: ['authUser'] });
       },
       onError: (error: any) => {

@@ -11,7 +11,6 @@ export const useLogout = () => {
     mutationFn: AuthService.logoutUser,
     onSuccess: (data) => {
       AuthService.clearAuthTokens();
-      console.log(data);
       toast.success(data?.message || 'Logged out successfully');
       router.replace(ROUTES.LOGIN);
     },
