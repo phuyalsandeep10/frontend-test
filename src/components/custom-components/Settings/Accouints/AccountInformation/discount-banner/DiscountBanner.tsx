@@ -27,6 +27,7 @@ export default function DiscountBanner() {
 
         <Button
           variant="outline"
+          size={'sm'}
           className="border-pure-white text-pure-white h-9 rounded-xl text-xs leading-4 font-semibold"
         >
           Switch to Yearly

@@ -22,7 +22,7 @@ export function InputField<T extends FieldValues>({
   control,
   name,
   label,
-  required = false,
+  required,
   className,
   inputClassName,
   type = 'text',

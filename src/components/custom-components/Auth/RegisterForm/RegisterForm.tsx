@@ -80,106 +80,99 @@ const RegisterForm = () => {
   }, [accessToken, refreshToken, router]);
   return (
     <>
-      <div
-        className={`pb-6 ${currentStep === 0 && 'mt-11'} ${currentStep === 1 && 'mt-[168px]'} ${currentStep === 2 && 'mt-16'} `}
-      >
-        <HeadingSubHeadingTypography
-          heading={headingAndSubHeadingHelper[currentStep as 0 | 1 | 2].heading}
-          subHeading={
-            headingAndSubHeadingHelper[currentStep as 0 | 1 | 2].subHeading
-          }
-        />
-        <Stepper step={currentStep} />
+      <HeadingSubHeadingTypography
+        heading={headingAndSubHeadingHelper[currentStep as 0 | 1 | 2].heading}
+        subHeading={
+          headingAndSubHeadingHelper[currentStep as 0 | 1 | 2].subHeading
+        }
+      />
+      <Stepper step={currentStep} />
 
-        {currentStep === 0 && (
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="w-full space-y-4"
+      {currentStep === 0 && (
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="w-full space-y-2"
+          >
+            <InputField
+              control={form.control}
+              name="name"
+              label="Enter your full name"
+              placeholder="Full Name"
+              required
+            />
+
+            <ValidEmailInput
+              onValidityChange={(valid, email) => {
+                setIsEmailValid(valid);
+                setValidEmail(email);
+              }}
+              name="email"
+              label="Enter your Email "
+              // required
+            />
+            <StrongPasswordField
+              control={form.control}
+              name="password"
+              label="Password"
+              placeholder="Enter your password"
+              required
+            />
+            <PrimaryCheckbox
+              isAgreed={isAgreed}
+              setIsAreed={setIsAreed}
+              redirectLink="/"
+              labelText="I have read and I accept Chatboq’s terms and use."
+              redirectLinkText="Read Terms"
+              error={!!isAgreeError}
+            />
+            {isAgreeError && <ErrorText error={isAgreeError} />}
+
+            <Button
+              variant="default"
+              type="submit"
+              size="lg"
+              className="mt-2 w-full"
             >
-              <InputField
-                control={form.control}
-                name="name"
-                label="Enter your full name"
-                placeholder="Full Name"
-                required
-              />
+              {registerLoading ? 'Continuing...' : ' Continue'}
+            </Button>
+            <p className="align-center text-center font-medium">Or</p>
+            <Button
+              variant="outline"
+              type="button"
+              size="lg"
+              className="w-full"
+              leftIcon={
+                <Image
+                  src={googleIcon}
+                  alt="Google icon"
+                  width={20}
+                  height={20}
+                />
+              }
+              onClick={() => window.open(`${baseURL}/auth/oauth/google`)}
+            >
+              Continue With Google
+            </Button>
+          </form>
 
-              <ValidEmailInput
-                onValidityChange={(valid, email) => {
-                  setIsEmailValid(valid);
-                  setValidEmail(email);
-                }}
-                name="email"
-                label="Enter your Email "
-                // required
-              />
-              <StrongPasswordField
-                control={form.control}
-                name="password"
-                label="Password"
-                placeholder="Enter your password"
-                required
-              />
-              <PrimaryCheckbox
-                isAgreed={isAgreed}
-                setIsAreed={setIsAreed}
-                redirectLink="/"
-                labelText="I have read and I accept Chatboq’s terms and use."
-                redirectLinkText="Read Terms"
-                error={!!isAgreeError}
-              />
-              {isAgreeError && <ErrorText error={isAgreeError} />}
+          <p className="lead mt-2 text-left text-[18px] font-normal text-black">
+            Already have an account?
+            <Link href={'/login'} className="text-brand-primary cursor-pointer">
+              {' '}
+              Login
+            </Link>
+          </p>
+        </Form>
+      )}
 
-              <Button
-                variant="default"
-                type="submit"
-                size="lg"
-                className="mt-4 w-full"
-              >
-                {registerLoading ? 'Continuing...' : ' Continue'}
-              </Button>
-              <p className="align-center text-center font-medium">Or</p>
-              <Button
-                variant="outline"
-                type="button"
-                size="lg"
-                className="w-full"
-                leftIcon={
-                  <Image
-                    src={googleIcon}
-                    alt="Google icon"
-                    width={20}
-                    height={20}
-                  />
-                }
-                onClick={() => window.open(`${baseURL}/auth/oauth/google`)}
-              >
-                Continue With Google
-              </Button>
-            </form>
-
-            <p className="lead mt-8 text-left text-[18px] font-normal text-black">
-              Already have an account?
-              <Link
-                href={'/login'}
-                className="text-brand-primary cursor-pointer"
-              >
-                {' '}
-                Login
-              </Link>
-            </p>
-          </Form>
-        )}
-
-        {currentStep === 1 && (
-          <VerifyEmailViaOtpForm
-            email={validEmail}
-            setCurrentStep={setCurrentStep}
-          />
-        )}
-        {currentStep === 2 && <BusinessRegisterForm />}
-      </div>
+      {currentStep === 1 && (
+        <VerifyEmailViaOtpForm
+          email={validEmail}
+          setCurrentStep={setCurrentStep}
+        />
+      )}
+      {currentStep === 2 && <BusinessRegisterForm />}
     </>
   );
 };
