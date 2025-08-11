@@ -33,7 +33,6 @@ const VerifyEmailViaOtpForm = ({
     const registerData = { ...values, email };
     verifyEmail(registerData, {
       onSuccess: (data) => {
-        console.log(data);
         setHasError(false);
         setCurrentStep(2);
         toast.success(data?.message || 'Email verified successfully');
@@ -42,7 +41,6 @@ const VerifyEmailViaOtpForm = ({
           refreshToken: data?.data?.refresh_token,
         };
         AuthService.setAuthTokens(authToken);
-        console.log('Verify email success:', data);
       },
       onError: (error: any) => {
         setHasError(true);

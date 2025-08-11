@@ -7,7 +7,6 @@ export const useDisable2Fa = () => {
   return useMutation({
     mutationFn: AuthService.disable2Fa,
     onSuccess: (data) => {
-      console.log(data);
       toast.success(
         data?.message || 'Two Factor authentication disabled successfully',
       );
