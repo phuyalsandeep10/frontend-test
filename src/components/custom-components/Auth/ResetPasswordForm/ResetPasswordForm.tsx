@@ -27,7 +27,6 @@ const ResetPasswordForm = () => {
       new_password: '',
     },
   });
-  console.log(isSuccess);
   async function onSubmit(values: z.infer<typeof resetPasswordFormSchema>) {
     resetPassword(values);
     form.reset();

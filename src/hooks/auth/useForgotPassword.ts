@@ -9,7 +9,6 @@ export const useForgotPassword = () => {
       AuthService.forgotPassword(payload),
     onSuccess: (data) => {
       toast.success(data?.message || 'Password reset email sent successfully');
-      console.log('Forgot Password success:', data);
     },
     onError: (error: any) => {
       toast.error(

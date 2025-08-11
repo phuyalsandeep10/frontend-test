@@ -15,7 +15,6 @@ const DashboardPage = () => {
   const authData = useAuthStore((state) => state.authData);
 
   useEffect(() => {
-    console.log('authData:', authData);
     if (!authData?.data?.user?.email_verified_at) {
       setOpenVerifyEmail(true);
     } else {
