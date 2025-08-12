@@ -25,7 +25,9 @@ export const metadata: Metadata = {
   title: 'Chatboq',
   description: 'Chatboq',
   icons: {
-    icon: '/chatboq-logo.png',
+    icon: '/favicon.png',
+    shortcut: '/favicon.png',
+    apple: '/favicon.png',
   },
 };
 
