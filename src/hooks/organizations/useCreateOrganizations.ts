@@ -3,7 +3,6 @@ import { OrganizationsService } from '@/services/organizations/organizations';
 import { createOrganizationPayload } from '@/services/organizations/types';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
 
 export const useCreateOrganizations = () => {
   const router = useRouter();
