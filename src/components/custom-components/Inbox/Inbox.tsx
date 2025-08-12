@@ -11,7 +11,7 @@ import { useParams } from 'next/navigation';
 import { useUiStore } from '@/store/UiStore/useUiStore';
 import ChatEmptyScreen from './ChatEmptyScreen/ChatEmptyScreen';
 
-const socket = io('http://localhost:4000');
+// const socket = io('http://localhost:4000');
 
 interface Message {
   id: number;
@@ -50,17 +50,17 @@ const Inbox = () => {
   useEffect(() => {
     if (!chatId) return;
 
-    socket.emit('joinChat', chatId);
+    // socket.emit('joinChat', chatId);
 
     const handleNewMessage = (msg: any) => {
       setMessages((prev) => [...prev, msg]);
     };
 
-    socket.on('newMessage', handleNewMessage);
+    // socket.on('newMessage', handleNewMessage);
 
-    return () => {
-      socket.off('newMessage', handleNewMessage);
-    };
+    // return () => {
+    //   socket.off('newMessage', handleNewMessage);
+    // };
   }, [chatId]);
 
   const onSend = () => {
@@ -83,7 +83,7 @@ const Inbox = () => {
       };
 
       setMessages((prev) => [...prev, msg]);
-      socket.emit('sendMessage', msg);
+      // socket.emit('sendMessage', msg);
       if (inputRef.current) inputRef.current.value = '';
       setReplyingTo(null);
     }

@@ -111,7 +111,7 @@ const ConversationsList = () => {
           key={conversation.id}
           className=""
         >
-          <div className="border-gray-light flex items-center rounded-sm border-y-1 py-4">
+          <div className="border-gray-light border-b-theme-text-primary flex items-center border-b py-4">
             <Avatar>
               <AvatarImage
                 src="https://github.com/shadcn.png"
