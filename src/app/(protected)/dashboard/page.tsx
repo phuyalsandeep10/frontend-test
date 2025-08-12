@@ -10,35 +10,35 @@ const DashboardPage = () => {
   const [open2FaAuthenticatorModal, setOpen2FaAuthenticatorModal] =
     useState(false);
   const [openEmailVerifyForm, setOpenVerifyEmail] = useState(false);
-  const [openCreateBusinessModal, setOpenCreateBusinessModal] = useState(true);
+  const [openCreateBusinessModal, setOpenCreateBusinessModal] = useState(false);
 
   const authData = useAuthStore((state) => state.authData);
 
-  // useEffect(() => {
-  //   if (!authData?.data?.user?.email_verified_at) {
-  //     setOpenVerifyEmail(true);
-  //   } else {
-  //     setOpenVerifyEmail(false);
-  //   }
+  useEffect(() => {
+    if (!authData?.data?.user?.email_verified_at) {
+      setOpenVerifyEmail(true);
+    } else {
+      setOpenVerifyEmail(false);
+    }
 
-  //   if (
-  //     Object.keys(authData?.data?.user?.attributes || {}).length === 0 &&
-  //     authData?.data?.user?.email_verified_at
-  //   ) {
-  //     setOpenCreateBusinessModal(true);
-  //   } else {
-  //     setOpenCreateBusinessModal(false);
-  //   }
+    if (
+      Object.keys(authData?.data?.user?.attributes || {}).length === 0 &&
+      authData?.data?.user?.email_verified_at
+    ) {
+      setOpenCreateBusinessModal(true);
+    } else {
+      setOpenCreateBusinessModal(false);
+    }
 
-  //   if (
-  //     authData?.data?.user?.two_fa_enabled &&
-  //     !authData?.data?.is_2fa_verified
-  //   ) {
-  //     setOpen2FaAuthenticatorModal(true);
-  //   } else {
-  //     setOpen2FaAuthenticatorModal(false);
-  //   }
-  // }, [authData]);
+    if (
+      authData?.data?.user?.two_fa_enabled &&
+      !authData?.data?.is_2fa_verified
+    ) {
+      setOpen2FaAuthenticatorModal(true);
+    } else {
+      setOpen2FaAuthenticatorModal(false);
+    }
+  }, [authData]);
 
   return (
     <div className="font-outfit p-10">
