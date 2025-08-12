@@ -31,6 +31,23 @@ const Inbox = () => {
   const { showChatInfo } = useUiStore();
 
   useEffect(() => {
+    setMessages([
+      {
+        id: 1,
+        sender: 'customer',
+        message: 'Hello, I need help with my order.',
+        time: '10:00',
+      },
+      {
+        id: 2,
+        sender: 'agent',
+        message: 'Sure! Could you provide your order ID?',
+        time: '10:01',
+      },
+    ]);
+  }, []);
+
+  useEffect(() => {
     if (!chatId) return;
 
     socket.emit('joinChat', chatId);
@@ -49,6 +66,7 @@ const Inbox = () => {
   const onSend = () => {
     const text = inputRef.current?.value;
     if (text) {
+      console.log('Text:', text);
       const messageId = crypto.randomUUID();
       const msg = {
         messageId,
@@ -60,7 +78,7 @@ const Inbox = () => {
           minute: '2-digit',
         }),
         status: 'sent',
-        sender: 'agent',
+        sender: 'customer',
         replyTo: replyingTo,
       };
 
@@ -114,6 +132,13 @@ const Inbox = () => {
                   placeholder="Enter your message here"
                   className={`h-24 resize-none ${replyingTo ? 'pt-14' : 'pt-3'}`}
                   ref={inputRef}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      const text = inputRef.current?.value || '';
+                      onSend();
+                    }
+                  }}
                 />
               </div>
 
