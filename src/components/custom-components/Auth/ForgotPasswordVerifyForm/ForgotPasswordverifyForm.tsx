@@ -59,69 +59,67 @@ const ForgotPasswordVerifyForm = () => {
 
   return (
     <>
-      <div className="pt-[180px]">
-        {!verifySuccess ? (
-          <>
-            <Link
-              href={'/login'}
-              className="text-theme-text-primary flex items-center gap-1 pb-[32px] text-[15px] font-semibold"
-            >
-              <Icons.chevron_left className="h-4 w-4" />
-              Go back
-            </Link>
+      {!verifySuccess ? (
+        <>
+          <Link
+            href={'/login'}
+            className="text-theme-text-primary flex items-center gap-1 pb-[32px] text-[15px] font-semibold"
+          >
+            <Icons.chevron_left className="h-4 w-4" />
+            Go back
+          </Link>
 
-            <HeadingSubHeadingTypography
-              heading={
-                <>
-                  Set New <span className="text-brand-primary">Password</span>
-                </>
-              }
-            />
-
-            <div className="flex pt-[40px]">
-              <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className="w-full space-y-4"
-                >
-                  <StrongPasswordField
-                    control={form.control}
-                    name="new_password"
-                    label="Enter new password"
-                    required
-                    placeholder="**********"
-                  />
-
-                  <StrongPasswordField
-                    control={form.control}
-                    name="confirm_password"
-                    label="Confirm your password"
-                    compareWith={form.watch('new_password')}
-                    required
-                    placeholder="**********"
-                    hideChecklist
-                  />
-                  <Button
-                    variant="default"
-                    type="submit"
-                    size="lg"
-                    className="mt-4 w-full"
-                    disabled={isPending}
-                  >
-                    {isPending ? 'Confirming...' : 'Confirm'}
-                  </Button>
-                </form>
-              </Form>
-            </div>
-          </>
-        ) : (
-          <SuccessScreen
-            text="SUCCESSFUL"
-            subText="You have changed your password"
-            redirectLink={ROUTES.LOGIN}
+          <HeadingSubHeadingTypography
+            heading={
+              <>
+                Set New <span className="text-brand-primary">Password</span>
+              </>
+            }
           />
-        )}
-      </div>
+
+          <div className="flex pt-[40px]">
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="w-full space-y-4"
+              >
+                <StrongPasswordField
+                  control={form.control}
+                  name="new_password"
+                  label="Enter new password"
+                  required
+                  placeholder="**********"
+                />
+
+                <StrongPasswordField
+                  control={form.control}
+                  name="confirm_password"
+                  label="Confirm your password"
+                  compareWith={form.watch('new_password')}
+                  required
+                  placeholder="**********"
+                  hideChecklist
+                />
+                <Button
+                  variant="default"
+                  type="submit"
+                  size="lg"
+                  className="mt-4 w-full"
+                  disabled={isPending}
+                >
+                  {isPending ? 'Confirming...' : 'Confirm'}
+                </Button>
+              </form>
+            </Form>
+          </div>
+        </>
+      ) : (
+        <SuccessScreen
+          text="SUCCESSFUL"
+          subText="You have changed your password"
+          redirectLink={ROUTES.LOGIN}
+        />
+      )}
     </>
   );
 };

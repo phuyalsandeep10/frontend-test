@@ -28,59 +28,57 @@ const ForgotPasswordForm = () => {
 
   return (
     <>
-      <div className="pt-[180px]">
-        <Link
-          href={'/login'}
-          className="text-theme-text-primary flex items-center pb-[32px] text-[15px] font-semibold"
-        >
-          <Icons.chevron_left className="h-4 w-4" />
-          Go back
-        </Link>
+      <Link
+        href={'/login'}
+        className="text-theme-text-primary flex items-center pb-[32px] text-[15px] font-semibold"
+      >
+        <Icons.chevron_left className="h-4 w-4" />
+        Go back
+      </Link>
 
-        <HeadingSubHeadingTypography
-          heading={
-            <>
-              Enter your register email address to{' '}
-              <span className="text-brand-primary">
-                get a password reset code
-              </span>
-            </>
-          }
-        />
+      <HeadingSubHeadingTypography
+        heading={
+          <>
+            Enter your register email address to{' '}
+            <span className="text-brand-primary">
+              get a password reset code
+            </span>
+          </>
+        }
+      />
 
-        <div className="flex pt-[40px]">
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="w-full space-y-4"
+      <div className="flex pt-[40px]">
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="w-full space-y-4"
+          >
+            <InputField
+              control={form.control}
+              name="email"
+              label="Email Address"
+              type="email"
+              placeholder="Enter your email address"
+              required
+            />
+
+            <Button
+              variant="default"
+              type="submit"
+              size="lg"
+              className="mt-4 w-full"
+              disabled={isPending}
             >
-              <InputField
-                control={form.control}
-                name="email"
-                label="Email Address"
-                type="email"
-                placeholder="Enter your email address"
-                required
-              />
+              {isPending ? 'Sending...' : 'Send Reset Code'}
+            </Button>
 
-              <Button
-                variant="default"
-                type="submit"
-                size="lg"
-                className="mt-4 w-full"
-                disabled={isPending}
-              >
-                {isPending ? 'Sending...' : 'Send Reset Code'}
-              </Button>
-
-              <div className="text-brand-primary mt-[16px] flex w-full justify-between text-[18px] leading-[29px] underline">
-                <Link href="/login">Return to Sign In</Link>
-                <Link href="/register">Don’t Have an Account</Link>
-                <p>Need Help?</p>
-              </div>
-            </form>
-          </Form>
-        </div>
+            <div className="text-brand-primary mt-[16px] flex w-full justify-between text-[18px] leading-[29px] underline">
+              <Link href="/login">Return to Sign In</Link>
+              <Link href="/register">Don’t Have an Account</Link>
+              <p>Need Help?</p>
+            </div>
+          </form>
+        </Form>
       </div>
     </>
   );
