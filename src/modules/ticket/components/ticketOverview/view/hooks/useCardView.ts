@@ -58,13 +58,23 @@ export function useCardView() {
 
   // Format date to "time ago"
   function formatTimeAgo(dateStr: string) {
-    const date = new Date(dateStr);
-    const now = new Date();
-    const diffMs = now.getTime() - date.getTime();
-    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-    if (diffHours < 24) return `${diffHours}h ago`;
+    const dateUtc = new Date(dateStr);
+
+    // Current UTC time
+    const nowUtc = new Date(
+      Date.now() + new Date().getTimezoneOffset() * 60 * 1000,
+    );
+
+    const diffMs = nowUtc.getTime() - dateUtc.getTime();
+    const diffSeconds = Math.floor(diffMs / 1000);
+    const diffMinutes = Math.floor(diffSeconds / 60);
+    const diffHours = Math.floor(diffMinutes / 60);
     const diffDays = Math.floor(diffHours / 24);
-    return `${diffDays}d ago`;
+
+    if (diffDays > 0) return `${diffDays}d ago`;
+    if (diffHours > 0) return `${diffHours}h ago`;
+    if (diffMinutes > 0) return `${diffMinutes}m ago`;
+    return `${diffSeconds}s ago`;
   }
 
   // Get selected ticket IDs and ticket data

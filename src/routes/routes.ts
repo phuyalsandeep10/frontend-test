@@ -17,6 +17,7 @@ export const ROUTES = {
     TRANSPARENCY_LOGS: '/settings/workspace/transparency-logs',
     OPERATOR_TEAMS: '/settings/workspace/operator-teams',
     ADVANCE_CONFIGURATION: '/settings/workspace/advance-configuration',
+    Ticket_Setting: '/settings/ticket-setting',
   },
 
   YOUR_INBOXES: {

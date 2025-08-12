@@ -60,7 +60,7 @@ export default function TicketOverview() {
       {/* Switch condition to render components */}
       <div>
         {activeTab === 'card' && <CardView />}
-        {/* {activeTab === 'table' && <TableView />} */}
+        {activeTab === 'table' && <TableView />}
         {activeTab === 'karban' && <KarbanView />}
       </div>
     </div>

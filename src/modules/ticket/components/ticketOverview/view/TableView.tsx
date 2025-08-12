@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import TicketTabs from '@/modules/ticket/components/comman/ticketCard/TicketTabs';
-import { TicketCardProps } from '../../../types/type';
 import {
   Table,
   TableBody,
@@ -20,230 +19,160 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from '@/components/ui/tooltip';
-import { useTicketStatuses } from '@/modules/ticket/hooks/useTicketStatus';
+import DeleteModal from '@/components/modal/DeleteModal';
+import { useCardView } from './hooks/useCardView';
 
-const ITEMS_PER_PAGE = 10;
+export default function TableView() {
+  const {
+    statusLoading,
+    statusError,
+    ticketsLoading,
+    ticketsError,
+    selectedStatus,
+    setSelectedStatus,
+    tickets,
+    checkedTickets,
+    handleCheckChange,
+    formatTimeAgo,
+    selectedCountInCurrentTab,
+    tabs,
+    isDeleteModalOpen,
+    openDeleteModal,
+    closeDeleteModal,
+    deleteTicketName,
+    handleConfirmDelete,
+    isDeleting,
+  } = useCardView();
 
-// Table headers
-const tableHeaders = [
-  { key: 'checkbox', label: '' },
-  { key: 'ticket', label: 'Ticket' },
-  { key: 'status', label: 'Status' },
-  { key: 'createdTime', label: 'Created Time' },
-  { key: 'agent', label: 'Agent' },
-  { key: 'priority', label: 'Priority' },
-];
-
-const TableView = ({ tickets }: { tickets: TicketCardProps[] }) => {
-  const { data: statuses = [], isLoading, error } = useTicketStatuses();
-
-  // Generate tabs dynamically from API (add 'ALL' tab at start)
-  const tabs = [
-    { label: 'ALL', status: 'ALL' as TicketCardProps['status'] },
-    ...statuses.map((s) => ({
-      label: s.name,
-      status: s.name as TicketCardProps['status'],
-    })),
-  ];
-
-  const [selectedTab, setSelectedTab] =
-    useState<TicketCardProps['status']>('ALL');
-  const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 10;
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const currentTickets = tickets.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
-  // Reset page when tab changes
+  // Reset pagination when tickets or tab changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedTab]);
+  }, [tickets, selectedStatus]);
 
-  if (isLoading) return <div className="p-4">Loading statuses...</div>;
-  if (error)
-    return <div className="p-4 text-red-500">Failed to load statuses</div>;
-
-  // Filter tickets by selected tab status
-  const filteredTickets =
-    selectedTab === 'ALL'
-      ? tickets
-      : tickets.filter((ticket) => ticket.status === selectedTab);
-
-  const totalItems = filteredTickets.length;
-
-  // Paginate filtered tickets
-  const pagedTickets = filteredTickets.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE,
-  );
-
-  // Checkbox states
-  const allChecked =
-    pagedTickets.length > 0 &&
-    pagedTickets.every((ticket) => selectedIds.includes(ticket.id!));
-  const isIndeterminate = selectedIds.length > 0 && !allChecked;
-
-  const toggleSelectAll = () => {
-    if (allChecked) {
-      // Unselect all visible tickets
-      setSelectedIds((prev) =>
-        prev.filter((id) => !pagedTickets.some((ticket) => ticket.id === id)),
-      );
-    } else {
-      // Select all visible tickets
-      setSelectedIds((prev) => [
-        ...new Set([...prev, ...pagedTickets.map((t) => t.id!)]),
-      ]);
-    }
-  };
-
-  const toggleItem = (id: number) => {
-    setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
-    );
-  };
-
-  const selectedCountInCurrentTab = selectedIds.filter((id) =>
-    filteredTickets.some((ticket) => ticket.id === id),
-  ).length;
+  if (statusLoading) return <div>Loading statuses...</div>;
+  if (statusError)
+    return <div className="text-red-500">Error loading statuses</div>;
+  if (ticketsLoading) return <div>Loading tickets...</div>;
+  if (ticketsError)
+    return <div className="text-red-500">Error loading tickets</div>;
 
   return (
     <div className="pt-6">
       {/* Tabs */}
       <TicketTabs
         tabs={tabs}
-        selected={selectedTab}
-        onSelect={setSelectedTab}
+        selected={selectedStatus}
+        onSelect={setSelectedStatus}
       />
 
-      {/* Selected Count and action icons */}
+      {/* Selected Count and actions */}
       {selectedCountInCurrentTab > 0 && (
-        <div className="font-outfit mt-4 flex items-center justify-between text-base font-medium text-black">
+        <div className="mt-4 flex items-center justify-between">
           <span>
             {selectedCountInCurrentTab} ticket
             {selectedCountInCurrentTab > 1 ? 's' : ''} selected
           </span>
-
-          <div className="text-gray-primary flex items-center gap-4.5">
-            {selectedCountInCurrentTab > 1 && (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button>
-                    <Icons.git_merge className="h-6 w-6 cursor-pointer" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="top">Merge</TooltipContent>
-              </Tooltip>
-            )}
-
+          <div className="flex gap-4">
             <Tooltip>
               <TooltipTrigger asChild>
-                <button>
-                  <Icons.arrow_left_right className="h-6 w-6 cursor-pointer" />
+                <button onClick={openDeleteModal}>
+                  <Icons.delete_bin_fill className="h-6 w-6" />
                 </button>
               </TooltipTrigger>
-              <TooltipContent side="top">Swap</TooltipContent>
-            </Tooltip>
-
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button>
-                  <Icons.ri_user_fill className="h-6 w-6 cursor-pointer" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="top">Assign</TooltipContent>
-            </Tooltip>
-
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button>
-                  <Icons.error_warning2 className="h-6 w-6 cursor-pointer" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="top">More</TooltipContent>
-            </Tooltip>
-
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button>
-                  <Icons.delete_bin_fill className="h-6 w-6 cursor-pointer" />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent side="top">Delete</TooltipContent>
+              <TooltipContent>Delete</TooltipContent>
             </Tooltip>
           </div>
         </div>
       )}
 
       {/* Table */}
-      <div className="mt-4 rounded-lg border shadow-sm">
+      <div className="mt-6 border-b">
         <Table>
-          <TableHeader>
-            <TableRow className="bg-secondary-hover hover:bg-secondary-hover font-outfit h-15 cursor-pointer text-xl leading-[30px] font-semibold">
-              {tableHeaders.map(({ key, label }) => (
-                <TableHead key={key}>
-                  {key === 'checkbox' ? (
-                    <Checkbox
-                      checked={allChecked}
-                      onCheckedChange={toggleSelectAll}
-                      className={`bg-gray-primary h-4 w-4 cursor-pointer ${
-                        allChecked ? 'accent-brand-primary' : ''
-                      }`}
-                      ref={(el) => {
-                        if (el && 'indeterminate' in el) {
-                          (el as HTMLInputElement).indeterminate =
-                            isIndeterminate;
-                        }
-                      }}
-                    />
-                  ) : (
-                    label
-                  )}
-                </TableHead>
-              ))}
+          <TableHeader className="bg-secondary-hover font-outfit h-[74px] text-xl font-semibold">
+            <TableRow>
+              <TableHead>
+                <Checkbox
+                  className="bg-gray-primary ml-4"
+                  checked={
+                    currentTickets.length > 0 &&
+                    currentTickets.every((ticket) => checkedTickets[ticket.id])
+                  }
+                  onCheckedChange={(checked) =>
+                    currentTickets.forEach((ticket) =>
+                      handleCheckChange(ticket.id, Boolean(checked)),
+                    )
+                  }
+                />
+              </TableHead>
+              <TableHead>Ticket</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Created Time</TableHead>
+              <TableHead>Agent</TableHead>
+              <TableHead>Priority</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {pagedTickets.map((ticket) => (
+            {currentTickets.map((ticket) => (
               <TableRow key={ticket.id}>
                 <TableCell>
                   <Checkbox
-                    checked={selectedIds.includes(ticket.id!)}
-                    onCheckedChange={() => toggleItem(ticket.id!)}
-                    className={`bg-gray-primary h-4 w-4 cursor-pointer ${
-                      selectedIds.includes(ticket.id!)
-                        ? 'accent-brand-primary'
-                        : ''
-                    }`}
+                    className="bg-gray-primary ml-4"
+                    checked={checkedTickets[ticket.id] || false}
+                    onCheckedChange={(checked) =>
+                      handleCheckChange(ticket.id, Boolean(checked))
+                    }
                   />
                 </TableCell>
                 <TableCell>
-                  <div className="flex flex-col">
-                    <span className="font-outfit text-base font-normal text-black">
-                      {ticket.created_by}
-                    </span>
-                    <span className="text-muted-foreground text-sm">
+                  <div>
+                    <div className="font-outfit text-base font-normal text-black">
                       {ticket.title}
-                    </span>
+                    </div>
+                    <div className="font-outfit text-xs font-normal">
+                      Created From {ticket.created_by.name}
+                    </div>
                   </div>
                 </TableCell>
-                <TableCell className="font-outfit text-sm font-normal">
-                  {ticket.status}
+                <TableCell>
+                  <div
+                    className="border-theme-text-light inline-flex items-center gap-2 rounded-md border-1 px-2 py-2"
+                    style={{
+                      color: ticket.status.fg_color,
+                      backgroundColor: ticket.status.bg_color,
+                    }}
+                  >
+                    <span
+                      className="ml-4 inline-block h-2 w-2 rounded-full"
+                      style={{ backgroundColor: ticket.status.fg_color }}
+                    ></span>
+                    {ticket.status.name}
+                  </div>
                 </TableCell>
                 <TableCell className="font-outfit text-base font-normal">
-                  {ticket.timeAgo}
+                  {formatTimeAgo(ticket.created_at)}
                 </TableCell>
                 <TableCell>
-                  <Avatar className="h-10 w-10">
-                    <AvatarImage
-                      src={ticket.avatarUrl || ''}
-                      alt={ticket.created_by}
-                    />
+                  <Avatar className="h-10.5 w-10.5">
+                    <AvatarImage src={''} alt={ticket.created_by.name} />
                     <AvatarFallback>
-                      {ticket.created_by?.charAt(0)}
+                      {ticket.created_by.name.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
                 </TableCell>
-                <TableCell className="font-outfit text-xs font-bold">
-                  <span className="bg-black px-2 py-2 text-white">
-                    {ticket.priority}
+                <TableCell>
+                  <span
+                    className="font-outfit rounded-2xl px-5 py-2 text-xs font-semibold"
+                    style={{
+                      backgroundColor: ticket.priority.bg_color,
+                      color: ticket.priority.fg_color,
+                    }}
+                  >
+                    {ticket.priority.name}
                   </span>
                 </TableCell>
               </TableRow>
@@ -255,12 +184,23 @@ const TableView = ({ tickets }: { tickets: TicketCardProps[] }) => {
       {/* Pagination */}
       <Pagination
         currentPage={currentPage}
-        totalItems={totalItems}
+        totalItems={tickets.length}
         itemsPerPage={ITEMS_PER_PAGE}
         onPageChange={setCurrentPage}
       />
+
+      {/* Delete Modal */}
+      <DeleteModal
+        open={isDeleteModalOpen}
+        onOpenChange={closeDeleteModal}
+        title="Are you sure?"
+        TitleclassName="font-outfit font-medium text-base text-black"
+        description={`Deleting this ticket is a permanent action and cannot be undone. This may result in the loss of important information and context related to the issue.`}
+        descriptionColor="text-alert-prominent font-outfit text-xs font-normal"
+        onConfirm={handleConfirmDelete}
+        onCancel={closeDeleteModal}
+        icon={''}
+      />
     </div>
   );
-};
-
-export default TableView;
+}
