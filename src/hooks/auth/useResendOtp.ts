@@ -10,7 +10,7 @@ export const useResendOtp = () => {
       toast.success(data?.message || 'OTP send successfully');
     },
     onError: (error: any) => {
-      toast.error(error?.response?.data?.detail || 'Failed to send OTP');
+      toast.error(error?.response?.data?.message || 'Failed to send OTP');
       console.error('Failed to send OTP:', error);
     },
   });

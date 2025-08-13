@@ -41,8 +41,8 @@ const DashboardPage = () => {
   }, [authData]);
 
   return (
-    <div className="p-10">
-      <div className="mb-4 text-lg">User Dashboard</div>
+    <div className="font-outfit p-10">
+      <div className="font-outfit mb-4 text-lg">User Dashboard</div>
 
       <AuthenticatorModal
         open={open2FaAuthenticatorModal}

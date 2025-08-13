@@ -54,7 +54,9 @@ const BusinessRegisterForm = ({ from, setOpen }: BusinessRegisterFormProps) => {
     });
   }
   return (
-    <div className={`mt-6 ${from === 'dashboard' ? 'w-full' : 'w-[516px]'}`}>
+    <div
+      className={`mt-6 ${from === 'dashboard' ? 'w-full' : 'w-[516px]'} font-outfit`}
+    >
       <ScrollArea
         className={`${from === 'dashboard' && 'max-h-[70vh] overflow-y-auto'}`}
       >

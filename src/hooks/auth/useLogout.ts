@@ -15,7 +15,7 @@ export const useLogout = () => {
       router.replace(ROUTES.LOGIN);
     },
     onError: (error: any) => {
-      toast.error(error?.response?.data?.detail || 'Logout failed');
+      toast.error(error?.response?.data?.message || 'Logout failed');
       console.error('Logout failed:', error);
     },
   });

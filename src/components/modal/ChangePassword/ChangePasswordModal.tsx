@@ -63,7 +63,7 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({
     },
   });
 
-  const { mutate: resetPassword, isPending, isSuccess } = useResetPassword();
+  const { mutate: resetPassword, isPending } = useResetPassword();
 
   const handleSubmit = async (values: ChangePasswordFormValues) => {
     resetPassword(
@@ -74,7 +74,8 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({
       {
         onSuccess: (data) => {
           setOpen(false);
-          toast.success(data?.data?.message || 'Password reset successfully!');
+          form.reset();
+          toast.success(data?.message || 'Password reset successfully!');
         },
         onError: (error: any) => {
           console.log(error);
@@ -86,8 +87,13 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({
     );
   };
 
+  const closeChangePasswordModal = () => {
+    setOpen(false);
+    form.reset();
+  };
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={closeChangePasswordModal}>
       <DialogContent className="w-[344px] gap-0">
         <DialogHeader>
           <DialogTitle>

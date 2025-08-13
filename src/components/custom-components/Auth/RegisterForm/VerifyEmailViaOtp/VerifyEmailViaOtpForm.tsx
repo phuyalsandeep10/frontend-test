@@ -10,6 +10,11 @@ import { useVerifyEmail } from '@/hooks/auth/useVerifyEmail';
 import { toast } from 'sonner';
 import { AuthService } from '@/services/auth/auth';
 
+function maskEmail(email: string): string {
+  const [username, domain] = email.split('@');
+  return `*****@${domain}`;
+}
+
 interface VerifyEmailViaOtpProps {
   email: string;
   setCurrentStep: React.Dispatch<SetStateAction<number>>;
@@ -56,7 +61,7 @@ const VerifyEmailViaOtpForm = ({
     <div>
       <p className="text-theme-text-primary mb-8">
         We have sent mail with verification code to{' '}
-        <span className="font-semibold"> *****@gmail.com.</span>
+        <span className="font-semibold">{maskEmail(email)}</span>
       </p>
 
       <div className="w-[489px]">

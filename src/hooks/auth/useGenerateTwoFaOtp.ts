@@ -7,13 +7,14 @@ export const useGenerateTwoFaOtp = () => {
     mutationFn: AuthService.generate2FAOtp,
     onSuccess: (response) => {
       const data = response?.data;
+      console.log(data);
       toast.success(
         data?.message || '2 Factor authentication otp generated  successfully',
       );
     },
     onError: (error: any) => {
       toast.error(
-        error?.response?.data?.detail ||
+        error?.response?.data?.message ||
           'Failed to generate 2 factor authentication otp',
       );
       console.log(error);

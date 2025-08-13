@@ -11,11 +11,11 @@ export const useRegisterUser = () => {
   return useMutation({
     mutationFn: (payload: RegisterPayload) => AuthService.registerUser(payload),
     onSuccess: (data) => {
-      toast.success(data?.data?.message || 'Registration successful!');
+      toast.success(data?.message || 'Registration successful!');
       // router.push(ROUTES.LOGIN);
     },
     onError: (error: any) => {
-      toast.error(error?.response?.data?.detail || 'Registration failed');
+      toast.error(error?.response?.data?.message || 'Registration failed');
     },
   });
 };
