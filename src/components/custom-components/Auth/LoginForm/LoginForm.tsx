@@ -24,6 +24,8 @@ import { useRedirectIfAuthenticated } from '@/hooks/auth/useRedirectIfAuthentica
 const LoginForm = () => {
   const [isNotARobot, setIsNotARobot] = useState(false);
   const [captchaError, setCaptchaError] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const accessToken = searchParams.get('access_token');
@@ -47,7 +49,12 @@ const LoginForm = () => {
     setCaptchaError('');
     login(values, {
       onSuccess: (data) => {
-        console.log(data);
+        if (rememberMe) {
+          localStorage.setItem('rememberedEmail', values.email);
+        } else {
+          localStorage.removeItem('rememberedEmail');
+        }
+
         const authToken = {
           accessToken: data?.data?.access_token,
           refreshToken: data?.data?.refresh_token,
@@ -82,6 +89,14 @@ const LoginForm = () => {
       router.replace(ROUTES.DASHBOARD);
     }
   }, [accessToken, refreshToken, router]);
+
+  useEffect(() => {
+    const savedEmail = localStorage.getItem('rememberedEmail');
+    if (savedEmail) {
+      form.setValue('email', savedEmail);
+      setRememberMe(true);
+    }
+  }, [form]);
 
   // useRedirectIfAuthenticated()
 
@@ -122,6 +137,13 @@ const LoginForm = () => {
                 <input
                   type="checkbox"
                   className="accent-brand-primary border-grey-light h-4 w-4"
+                  checked={rememberMe}
+                  onChange={(e) => {
+                    setRememberMe(e.target.checked);
+                    if (!e.target.checked) {
+                      localStorage.removeItem('rememberedEmail');
+                    }
+                  }}
                 />
                 <span className="text-[14px] leading-[21px] font-normal">
                   Remember Me

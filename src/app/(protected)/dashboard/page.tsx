@@ -15,7 +15,6 @@ const DashboardPage = () => {
   const authData = useAuthStore((state) => state.authData);
 
   useEffect(() => {
-    console.log('authData:', authData);
     if (!authData?.data?.user?.email_verified_at) {
       setOpenVerifyEmail(true);
     } else {
@@ -42,8 +41,8 @@ const DashboardPage = () => {
   }, [authData]);
 
   return (
-    <div>
-      <div className="mb-4 text-xl">User Dashboard</div>
+    <div className="font-outfit p-10">
+      <div className="font-outfit mb-4 text-lg">User Dashboard</div>
 
       <AuthenticatorModal
         open={open2FaAuthenticatorModal}
