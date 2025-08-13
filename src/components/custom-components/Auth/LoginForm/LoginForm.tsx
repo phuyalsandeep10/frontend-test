@@ -51,8 +51,10 @@ const LoginForm = () => {
       onSuccess: (data) => {
         if (rememberMe) {
           localStorage.setItem('rememberedEmail', values.email);
+          localStorage.setItem('rememberedPassword', values.password);
         } else {
           localStorage.removeItem('rememberedEmail');
+          localStorage.removeItem('rememberedPassword');
         }
 
         const authToken = {
@@ -92,8 +94,10 @@ const LoginForm = () => {
 
   useEffect(() => {
     const savedEmail = localStorage.getItem('rememberedEmail');
-    if (savedEmail) {
+    const savedPassword = localStorage.getItem('rememberedPassword');
+    if (savedEmail && savedPassword) {
       form.setValue('email', savedEmail);
+      form.setValue('password', savedPassword);
       setRememberMe(true);
     }
   }, [form]);

@@ -51,14 +51,14 @@ const SidebarFooterMenu = () => {
           <div className={cn('flex w-full flex-col')}>
             <span
               className={cn(
-                'text-theme-text-dark font-outfit text-lg font-medium text-wrap',
+                'text-theme-text-dark font-outfit text-lg font-medium text-wrap break-all',
               )}
             >
               {authData?.data?.user?.name}
             </span>
             <span
               className={cn(
-                'text-theme-text-primary font-outfit text-xs font-normal text-wrap',
+                'text-theme-text-primary font-outfit text-xs font-normal text-wrap break-all',
               )}
             >
               {authData?.data?.user?.email}
