@@ -56,6 +56,10 @@ export function InputField<T extends FieldValues>({
         name={name}
         rules={{
           required: required ? 'This field is required' : false,
+          min:
+            type === 'number'
+              ? { value: 1, message: 'Value must be ≥ 1' }
+              : undefined,
         }}
         render={({ field, fieldState }) => (
           <>
@@ -71,8 +75,23 @@ export function InputField<T extends FieldValues>({
                   'border-grey-light h-[36px] border-[1px] px-3 placeholder:text-[14px] focus:outline-none',
                 )}
                 {...field}
+                min={type === 'number' ? 1 : undefined}
+                onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                  if (type === 'number') {
+                    if (['-', 'e', 'E', '+'].includes(e.key)) {
+                      e.preventDefault(); // prevent invalid characters
+                    }
+                  }
+                }}
+                onChange={(e) => {
+                  let value = e.target.value;
+                  if (type === 'number') {
+                    // prevent 0 or negatives
+                    if (Number(value) < 1) value = '1';
+                  }
+                  field.onChange(value); // pass the corrected value to RHF
+                }}
               />
-              {error && <p className="text-alert-prominent">{error}</p>}
 
               {isPasswordField && (
                 <span
@@ -88,8 +107,8 @@ export function InputField<T extends FieldValues>({
               )}
             </div>
 
-            {fieldState.error && (
-              <ErrorText error={`${fieldState.error.message}`} />
+            {(fieldState.error || error) && (
+              <ErrorText error={fieldState.error?.message || error || ''} />
             )}
           </>
         )}

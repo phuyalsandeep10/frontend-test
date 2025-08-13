@@ -90,7 +90,6 @@ export default function TicketCard({
             </Avatar>
           </div>
         </div>
-
         {/* Title */}
         <p
           className={cn(
@@ -99,19 +98,24 @@ export default function TicketCard({
         >
           {title}
         </p>
-
         {/* Priority Badge */}
-        <Badge
-          className={cn(
-            'font-outfit w-full justify-center rounded-full py-2 text-xs leading-[20px] font-bold',
-          )}
-          style={{
-            backgroundColor: priority_bg_color,
-            color: priority_fg_color,
-          }}
-        >
-          {priority}
-        </Badge>
+        {priority ? (
+          <Badge
+            className={cn(
+              'font-outfit w-full justify-center rounded-full py-2 text-xs leading-[20px] font-bold',
+            )}
+            style={{
+              backgroundColor: priority_bg_color,
+              color: priority_fg_color,
+            }}
+          >
+            {priority}
+          </Badge>
+        ) : (
+          <span className="font-outfit bg-alert-prominent flex w-full items-center justify-center rounded-full py-2 text-xs font-bold text-white">
+            Priority Not Set
+          </span>
+        )}
       </div>
     </div>
   );

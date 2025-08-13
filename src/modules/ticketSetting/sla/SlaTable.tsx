@@ -1,7 +1,6 @@
 'use client';
 
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import {
@@ -14,175 +13,98 @@ import {
 } from '@/components/ui/table';
 import { InputField } from '@/components/common/hook-form/InputField';
 import { SelectField } from '@/components/common/hook-form/SelectField';
+import { useSlaAutoSaveHook } from './hooks/useSlaAutoSave';
 
-interface SLAFormData {
-  low_responseTime: number;
-  low_responseUnit: string;
-  low_resolutionTime: number;
-  low_resolutionUnit: string;
-  low_calendar: string;
-  high_responseTime: number;
-  high_responseUnit: string;
-  high_resolutionTime: number;
-  high_resolutionUnit: string;
-  high_calendar: string;
-  medium_responseTime: number;
-  medium_responseUnit: string;
-  medium_resolutionTime: number;
-  medium_resolutionUnit: string;
-  medium_calendar: string;
-  critical_responseTime: number;
-  critical_responseUnit: string;
-  critical_resolutionTime: number;
-  critical_resolutionUnit: string;
-  critical_calendar: string;
+interface SlaTableProps {
+  slaList: any[];
 }
 
-export default function SlaTable() {
-  const { control, watch } = useForm<SLAFormData>({
-    defaultValues: {
-      low_responseTime: 4,
-      low_responseUnit: 'Hours',
-      low_resolutionTime: 24,
-      low_resolutionUnit: 'Hours',
-      low_calendar: 'Business Hours',
-      high_responseTime: 4,
-      high_responseUnit: 'Minutes',
-      high_resolutionTime: 24,
-      high_resolutionUnit: 'Minutes',
-      high_calendar: '24/7',
-      medium_responseTime: 4,
-      medium_responseUnit: 'Days',
-      medium_resolutionTime: 24,
-      medium_resolutionUnit: 'Days',
-      medium_calendar: 'Business Hours',
-      critical_responseTime: 4,
-      critical_responseUnit: 'Hours',
-      critical_resolutionTime: 24,
-      critical_resolutionUnit: 'Hours',
-      critical_calendar: 'Business Hours',
-    },
-  });
+export default function SlaTable({ slaList }: SlaTableProps) {
+  const { control, timeUnitOptions } = useSlaAutoSaveHook(slaList);
 
   const [alertBeforeBreach, setAlertBeforeBreach] = useState(true);
   const [alertAfterBreach, setAlertAfterBreach] = useState(true);
 
-  const timeUnitOptions = [
-    { value: 'Minutes', label: 'Minutes' },
-    { value: 'Hours', label: 'Hours' },
-    { value: 'Days', label: 'Days' },
-  ];
-
-  //   const calendarOptions = [
-  //     { value: 'Business Hours', label: 'Business Hours' },
-  //     { value: '24/7', label: '24/7' },
-  //   ];
-
-  const priorities = [
-    {
-      key: 'low',
-      label: 'Low',
-      badgeClass: 'bg-green-100 text-green-800 hover:bg-green-100',
-    },
-    {
-      key: 'high',
-      label: 'High',
-      badgeClass: 'bg-yellow-100 text-yellow-800 hover:bg-yellow-100',
-    },
-    {
-      key: 'medium',
-      label: 'Medium',
-      badgeClass: 'bg-blue-100 text-blue-800 hover:bg-blue-100',
-    },
-    {
-      key: 'critical',
-      label: 'Critical',
-      badgeClass: 'bg-red-100 text-red-800 hover:bg-red-100',
-    },
-  ];
-
   return (
-    <div className="">
+    <div>
       <div className="overflow-hidden rounded-lg border bg-white shadow-sm">
         <Table>
-          <TableHeader className="ml-2.5">
-            <TableRow className="bg-brand-light font-outfit font-semibolds text-brand-dark h-15 text-lg">
+          <TableHeader>
+            <TableRow className="bg-brand-light hover:bg-brand-light text-brand-dark h-15 text-lg font-semibold">
               <TableHead>Priority</TableHead>
+              <TableHead>Priority Name</TableHead>
               <TableHead>Response Time</TableHead>
               <TableHead>Resolution Time</TableHead>
-              {/* <TableHead className="font-medium text-gray-800">
-                Calendar
-              </TableHead> */}
             </TableRow>
           </TableHeader>
           <TableBody>
-            {priorities.map((priority) => (
-              <TableRow key={priority.key} className="">
-                <TableCell>
-                  <Badge className={priority.badgeClass}>
-                    {priority.label}
-                  </Badge>
-                </TableCell>
-
-                <TableCell>
-                  <div className="flex items-end gap-2">
-                    <InputField
-                      control={control}
-                      name={`${priority.key}_responseTime` as keyof SLAFormData}
-                      type="number"
-                      className="w-28"
-                      inputClassName="h-9"
-                    />
-                    <SelectField
-                      control={control}
-                      name={`${priority.key}_responseUnit` as keyof SLAFormData}
-                      options={timeUnitOptions}
-                      className="w-28"
-                    />
-                  </div>
-                </TableCell>
-
-                <TableCell>
-                  <div className="mb-5 flex items-end gap-2">
-                    <InputField
-                      control={control}
-                      name={
-                        `${priority.key}_resolutionTime` as keyof SLAFormData
-                      }
-                      type="number"
-                      className="w-28"
-                      inputClassName="h-9"
-                    />
-                    <SelectField
-                      control={control}
-                      name={
-                        `${priority.key}_resolutionUnit` as keyof SLAFormData
-                      }
-                      options={timeUnitOptions}
-                      className="w-28"
-                    />
-                  </div>
-                </TableCell>
-
-                {/* <TableCell>
-                  <SelectField
-                    control={control}
-                    name={`${priority.key}_calendar` as keyof SLAFormData}
-                    options={calendarOptions}
-                    className="w-40"
-                  />
-                </TableCell> */}
-              </TableRow>
-            ))}
+            {slaList?.map((sla: any) => {
+              const key = sla.priority?.name || 'low';
+              return (
+                <TableRow key={sla.id}>
+                  <TableCell>
+                    {sla.priority?.name && (
+                      <Badge
+                        className="font-outfit px-2 py-1 text-xs leading-[16px] font-semibold"
+                        style={{
+                          backgroundColor: sla.priority.bg_color,
+                          color: sla.priority.fg_color,
+                          textTransform: 'capitalize',
+                        }}
+                      >
+                        {sla.priority.name}
+                      </Badge>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {sla.name && (
+                      <Badge className="font-outfit text-brand-dark bg-white text-xs leading-[16px] font-semibold">
+                        {sla.name}
+                      </Badge>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex gap-2">
+                      <InputField
+                        control={control}
+                        name={`${key}_responseTime`}
+                        type="number"
+                        className="border-grey-light h-9 w-28 text-sm"
+                      />
+                      <SelectField
+                        control={control}
+                        name={`${key}_responseUnit`}
+                        options={timeUnitOptions}
+                        className="border-grey-light h-9 w-28"
+                      />
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex gap-2">
+                      <InputField
+                        control={control}
+                        name={`${key}_resolutionTime`}
+                        type="number"
+                        className="border-grey-light h-9 w-28 text-sm"
+                      />
+                      <SelectField
+                        control={control}
+                        name={`${key}_resolutionUnit`}
+                        options={timeUnitOptions}
+                        className="border-grey-light h-9 w-28"
+                      />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </div>
-      {/* Alert Settings */}
+
       <div className="space-y-4 pt-4">
         <div className="flex items-center justify-between">
-          <span className="font-outfit text-brand-dark text-base font-normal">
-            Alert when SLA is about to breach
-          </span>
+          <span>Alert when SLA is about to breach</span>
           <Switch
             checked={alertBeforeBreach}
             onCheckedChange={setAlertBeforeBreach}
@@ -190,9 +112,7 @@ export default function SlaTable() {
           />
         </div>
         <div className="flex items-center justify-between">
-          <span className="font-outfit text-brand-dark text-base font-normal">
-            Alert when SLA has breached
-          </span>
+          <span>Alert when SLA has breached</span>
           <Switch
             checked={alertAfterBreach}
             onCheckedChange={setAlertAfterBreach}

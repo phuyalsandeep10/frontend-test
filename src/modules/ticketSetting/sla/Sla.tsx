@@ -1,7 +1,12 @@
+'use client';
 import React from 'react';
 import SlaTable from './SlaTable';
 
-const SLA = () => {
+interface SlaProps {
+  slaList: any[];
+}
+
+export default function SLA({ slaList }: SlaProps) {
   return (
     <>
       <div>
@@ -16,10 +21,8 @@ const SLA = () => {
         </p>
       </div>
       <div className="mt-5">
-        <SlaTable />
+        <SlaTable slaList={slaList} />
       </div>
     </>
   );
-};
-
-export default SLA;
+}

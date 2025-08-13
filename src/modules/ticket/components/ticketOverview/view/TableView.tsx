@@ -70,21 +70,61 @@ export default function TableView() {
         onSelect={setSelectedStatus}
       />
 
-      {/* Selected Count and actions */}
+      {/* Selected count & actions */}
       {selectedCountInCurrentTab > 0 && (
-        <div className="mt-4 flex items-center justify-between">
+        <div className="font-outfit mt-4 flex items-center justify-between text-base font-medium text-black">
           <span>
             {selectedCountInCurrentTab} ticket
             {selectedCountInCurrentTab > 1 ? 's' : ''} selected
           </span>
-          <div className="flex gap-4">
+
+          <div className="text-gray-primary flex items-center gap-4.5">
+            {selectedCountInCurrentTab > 1 && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button>
+                    <Icons.git_merge className="h-6 w-6 cursor-pointer" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="top">Merge</TooltipContent>
+              </Tooltip>
+            )}
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button>
+                  <Icons.arrow_left_right className="h-6 w-6 cursor-pointer" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="top">Swap</TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button>
+                  <Icons.ri_user_fill className="h-6 w-6 cursor-pointer" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="top">Assign</TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button>
+                  <Icons.error_warning2 className="h-6 w-6 cursor-pointer" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="top">More</TooltipContent>
+            </Tooltip>
+
+            {/* Delete */}
             <Tooltip>
               <TooltipTrigger asChild>
                 <button onClick={openDeleteModal}>
-                  <Icons.delete_bin_fill className="h-6 w-6" />
+                  <Icons.delete_bin_fill className="h-6 w-6 cursor-pointer" />
                 </button>
               </TooltipTrigger>
-              <TooltipContent>Delete</TooltipContent>
+              <TooltipContent side="top">Delete</TooltipContent>
             </Tooltip>
           </div>
         </div>
@@ -131,10 +171,10 @@ export default function TableView() {
                 <TableCell>
                   <div>
                     <div className="font-outfit text-base font-normal text-black">
-                      {ticket.title}
+                      {ticket?.title}
                     </div>
                     <div className="font-outfit text-xs font-normal">
-                      Created From {ticket.created_by.name}
+                      Created From {ticket?.created_by?.name}
                     </div>
                   </div>
                 </TableCell>
@@ -142,25 +182,25 @@ export default function TableView() {
                   <div
                     className="border-theme-text-light inline-flex items-center gap-2 rounded-md border-1 px-2 py-2"
                     style={{
-                      color: ticket.status.fg_color,
+                      color: ticket?.status?.fg_color,
                       backgroundColor: ticket.status.bg_color,
                     }}
                   >
                     <span
                       className="ml-4 inline-block h-2 w-2 rounded-full"
-                      style={{ backgroundColor: ticket.status.fg_color }}
+                      style={{ backgroundColor: ticket?.status?.fg_color }}
                     ></span>
-                    {ticket.status.name}
+                    {ticket?.status?.name}
                   </div>
                 </TableCell>
                 <TableCell className="font-outfit text-base font-normal">
-                  {formatTimeAgo(ticket.created_at)}
+                  {formatTimeAgo(ticket?.created_at)}
                 </TableCell>
                 <TableCell>
                   <Avatar className="h-10.5 w-10.5">
-                    <AvatarImage src={''} alt={ticket.created_by.name} />
+                    <AvatarImage src={''} alt={ticket?.created_by?.name} />
                     <AvatarFallback>
-                      {ticket.created_by.name.charAt(0)}
+                      {ticket?.created_by?.name.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
                 </TableCell>
@@ -168,11 +208,11 @@ export default function TableView() {
                   <span
                     className="font-outfit rounded-2xl px-5 py-2 text-xs font-semibold"
                     style={{
-                      backgroundColor: ticket.priority.bg_color,
-                      color: ticket.priority.fg_color,
+                      backgroundColor: ticket?.priority?.bg_color,
+                      color: ticket?.priority?.fg_color,
                     }}
                   >
-                    {ticket.priority.name}
+                    {ticket.priority?.name}
                   </span>
                 </TableCell>
               </TableRow>

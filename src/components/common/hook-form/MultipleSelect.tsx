@@ -90,27 +90,33 @@ export const MultiSelectField = ({
               >
                 <Command className="w-full">
                   <CommandGroup className="w-full">
-                    {options.map((option) => (
-                      <CommandItem
-                        key={option.value}
-                        onSelect={() => toggleValue(option.value)}
-                        className="w-full"
-                      >
-                        <div
-                          className={cn(
-                            'mr-2 flex w-4 items-center justify-center rounded-sm',
-                            selectedValues.includes(option.value)
-                              ? 'bg-primary'
-                              : 'opacity-50',
-                          )}
+                    {options.length > 0 ? (
+                      options.map((option) => (
+                        <CommandItem
+                          key={option.value}
+                          onSelect={() => toggleValue(option.value)}
+                          className="w-full"
                         >
-                          {selectedValues.includes(option.value) && (
-                            <Check className="h-4 w-4" />
-                          )}
-                        </div>
-                        <span className="">{option.label}</span>
-                      </CommandItem>
-                    ))}
+                          <div
+                            className={cn(
+                              'mr-2 flex w-4 items-center justify-center rounded-sm',
+                              selectedValues.includes(option.value)
+                                ? 'bg-primary'
+                                : 'opacity-50',
+                            )}
+                          >
+                            {selectedValues.includes(option.value) && (
+                              <Check className="h-4 w-4" />
+                            )}
+                          </div>
+                          <span className="">{option.label}</span>
+                        </CommandItem>
+                      ))
+                    ) : (
+                      <div className="px-3 py-2 text-sm text-gray-500">
+                        No Members Available
+                      </div>
+                    )}
                   </CommandGroup>
                 </Command>
               </PopoverContent>

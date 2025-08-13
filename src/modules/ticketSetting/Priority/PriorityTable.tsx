@@ -22,12 +22,14 @@ export default function TicketPriorityPage() {
     levelOptions,
     updatePriorityName,
     updatePriorityColor,
-    deletePriority,
     onAddPriority,
     isLoading,
     isError,
     error,
+    deletePriorities,
+    isDeleting,
   } = usePrioritiesTicket();
+
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedPriorityId, setSelectedPriorityId] = useState<number | null>(
     null,
@@ -40,11 +42,12 @@ export default function TicketPriorityPage() {
 
   const handleConfirmDelete = () => {
     if (selectedPriorityId !== null) {
-      //   deletePriority(selectedPriorityId);
+      deletePriorities([selectedPriorityId]);
     }
     setDeleteModalOpen(false);
     setSelectedPriorityId(null);
   };
+
   if (isLoading) {
     return <div className="p-4">Loading priorities...</div>;
   }
@@ -84,8 +87,8 @@ export default function TicketPriorityPage() {
                         updatePriorityColor(priority.id, 'dark', color)
                       }
                       tooltip={
-                        <div className="text-sm">
-                          <div className="font-medium">Background Color</div>
+                        <div className="text-sm font-medium">
+                          Background Color
                         </div>
                       }
                     />
@@ -95,9 +98,7 @@ export default function TicketPriorityPage() {
                         updatePriorityColor(priority.id, 'light', color)
                       }
                       tooltip={
-                        <div className="text-sm">
-                          <div className="font-medium">Text Color</div>
-                        </div>
+                        <div className="text-sm font-medium">Text Color</div>
                       }
                     />
                   </div>
@@ -114,8 +115,8 @@ export default function TicketPriorityPage() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    // onClick={() => openDeleteModal(priority.id)}
-                    className="text-alert-prominent cursor-pointer"
+                    onClick={() => openDeleteModal(Number(priority.id))}
+                    className="text-alert-prominent hover:text-alert-prominent cursor-pointer"
                   >
                     <Icons.ri_delete_bin_5_line className="h-4 w-4" />
                   </Button>
@@ -150,24 +151,20 @@ export default function TicketPriorityPage() {
                   color={newPriorityBgColor}
                   onChange={setNewPriorityBgColor}
                   tooltip={
-                    <div className="text-sm">
-                      <div className="font-medium">Background Color</div>
-                    </div>
+                    <div className="text-sm font-medium">Background Color</div>
                   }
                 />
                 <AdvancedColorPicker
                   color={newPriorityTextColor}
                   onChange={setNewPriorityTextColor}
                   tooltip={
-                    <div className="text-sm">
-                      <div className="font-medium">Text Color</div>
-                    </div>
+                    <div className="text-sm font-medium">Text Color</div>
                   }
                 />
               </div>
               <Button
                 type="submit"
-                className="hover:bg-brand-primary bg-brand-primary hover:bg- px-6 py-3 text-white"
+                className="bg-brand-primary hover:bg-brand-primary/90 px-6 py-3 text-white"
               >
                 <Icons.plus className="mr-2 h-4 w-4" />
                 Add Status
@@ -176,14 +173,19 @@ export default function TicketPriorityPage() {
           </div>
         </div>
       </TooltipProvider>
+
+      {/* Delete Modal */}
+
       <DeleteModal
         open={isDeleteModalOpen}
         onOpenChange={setDeleteModalOpen}
-        title="Delete Priority?"
-        description="Are you sure you want to delete this priority? This action cannot be undone."
-        confirmText="Delete Priority"
-        cancelText="Cancel"
+        title="Are you sure?"
+        TitleclassName="font-outfit font-medium text-base text-black"
+        description={`Deleting this ticket is a permanent action and cannot be undone. This may result in the loss of important information and context related to the issue.`}
+        descriptionColor="text-alert-prominent font-outfit text-xs font-normal"
         onConfirm={handleConfirmDelete}
+        // onCancel={setDeleteModalOpen}
+        icon={''}
       />
     </>
   );

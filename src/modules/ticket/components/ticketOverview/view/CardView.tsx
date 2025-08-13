@@ -132,22 +132,22 @@ export default function CardView() {
         ) : (
           tickets.map((ticket) => (
             <TicketCard
-              key={ticket.id}
-              id={ticket.id}
-              email={ticket.created_by.email || 'No Email'}
-              timeAgo={formatTimeAgo(ticket.created_at)}
-              title={ticket.title}
-              priority={ticket.priority.name}
-              priority_fg_color={ticket.priority.fg_color}
-              priority_bg_color={ticket.priority.bg_color}
-              status_fg_color={ticket.status.fg_color}
-              status_bg_color={ticket.status.bg_color}
-              status={ticket.status.name}
-              created_by={ticket.created_by.name}
+              key={ticket?.id}
+              id={ticket?.id}
+              email={ticket?.created_by?.email || 'No Email'}
+              timeAgo={formatTimeAgo(ticket?.created_at)}
+              title={ticket?.title}
+              priority={ticket.priority?.name}
+              priority_fg_color={ticket?.priority?.fg_color}
+              priority_bg_color={ticket?.priority?.bg_color}
+              status_fg_color={ticket?.status?.fg_color}
+              status_bg_color={ticket?.status?.bg_color}
+              status={ticket?.status?.name}
+              created_by={ticket?.created_by?.name}
               avatarUrl=""
-              checked={checkedTickets[ticket.id] || false}
+              checked={checkedTickets[ticket?.id] || false}
               onCheckChange={(isChecked) =>
-                handleCheckChange(ticket.id, isChecked)
+                handleCheckChange(ticket?.id, isChecked)
               }
             />
           ))

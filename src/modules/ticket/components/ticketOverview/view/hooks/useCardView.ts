@@ -100,22 +100,33 @@ export function useCardView() {
   // React Query mutation for deleting tickets
   const { mutate: deleteTickets, isPending: isDeleting } = useMutation({
     mutationFn: async (ids: number[]) => {
-      await Promise.all(ids.map((id) => deleteTicket(id)));
+      const responses = await Promise.all(ids.map((id) => deleteTicket(id)));
+      return responses; // Return API responses for use in onSuccess
     },
-    onSuccess: () => {
+    onSuccess: (responses: any) => {
+      // If API returns a message for each deleted ticket
+      const messages = responses.map((res: any) => res.message).join(', ');
+
       showToast({
         title: 'Deleted',
-        description: 'Ticket(s) deleted successfully',
+        description: messages || 'Ticket(s) deleted successfully',
         variant: 'success',
       });
+
       queryClient.invalidateQueries({ queryKey: ['tickets'] });
       setCheckedTickets({});
       closeDeleteModal();
     },
-    onError: (error: any) => {
+    onError: (err: any) => {
+      // If Axios error, extract message from response
+      const message =
+        err.response?.data?.message ||
+        err.message ||
+        'Failed to delete ticket(s)';
+
       showToast({
         title: 'Error',
-        description: error.message || 'Failed to delete ticket(s)',
+        description: message,
         variant: 'error',
       });
     },

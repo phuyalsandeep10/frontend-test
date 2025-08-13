@@ -152,18 +152,23 @@ export const useCreateTicket = () => {
       memberIds: number[];
       customerId: number;
     }) => createTicket(data, teamId, priorityId, memberIds, customerId),
-    onSuccess: () => {
+    onSuccess: (response: any) => {
+      // Assuming your API response has { success: boolean, message: string, data: any }
       showToast({
-        title: 'Success',
-        description: 'Ticket created successfully!',
-        variant: 'success',
+        title: response.success ? 'Success' : 'Notice',
+        description: response.message || 'Ticket created successfully!',
+        variant: response.success ? 'success' : 'warning',
       });
       queryClient.invalidateQueries({ queryKey: ['tickets'] });
     },
     onError: (error: any) => {
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        'Failed to create ticket';
       showToast({
         title: 'Error',
-        description: error.message || 'Failed to create ticket',
+        description: message,
         variant: 'error',
       });
     },

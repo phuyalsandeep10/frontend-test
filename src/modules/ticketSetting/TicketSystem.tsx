@@ -1,9 +1,14 @@
-import { Icons } from '@/components/ui/Icons';
+'use client';
+
 import React from 'react';
-import SLA from './sla/Sla';
+import { Icons } from '@/components/ui/Icons';
 import Priority from './Priority/Priority';
+import SLA from './sla/Sla';
+import { useSlaLogic } from './sla/hooks/useSlaLogic';
 
 const TicketSystem = () => {
+  const { slaList, isLoading } = useSlaLogic();
+
   return (
     <>
       <div>
@@ -15,9 +20,11 @@ const TicketSystem = () => {
           Configure and customize your ticket management system.
         </p>
       </div>
+
       <div className="mt-11">
-        <SLA />
+        <div className="mt-5">{!isLoading && <SLA slaList={slaList} />}</div>
       </div>
+
       <div className="mt-10">
         <Priority />
       </div>
