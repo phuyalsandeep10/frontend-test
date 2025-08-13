@@ -33,6 +33,7 @@ export default function ChatBox() {
 
   // typing: added
   const [isTyping, setIsTyping] = useState(false);
+
   const [otherTyping, setOtherTyping] = useState(false);
   const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(
     null,
@@ -119,7 +120,12 @@ export default function ChatBox() {
     e.preventDefault();
     if (!socket || !isConnected) return;
 
-    socket.emit('message', { message, mode: 'message' });
+    socket.emit('message', {
+      message,
+      mode: 'message',
+      organization_id: 1,
+      conversation_id: 1,
+    });
     emitStopTyping();
     setMessages((prev) => [...prev, { message, from: socketId }]);
     setMessage('');
