@@ -3,6 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Link from 'next/link';
 import { Icons } from '@/components/ui/Icons';
 import { Badge } from '@/components/ui/badge';
+import { getStatusColor } from './getColorsHelper';
 
 const ConversationsList = () => {
   const conversations = [
@@ -89,19 +90,6 @@ const ConversationsList = () => {
     },
   ];
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'Unresolved':
-        return 'bg-error text-white';
-      case 'Pending':
-        return 'bg-warning text-white';
-      case 'Resolved':
-        return 'bg-success text-white';
-      default:
-        return 'bg-warning text-white';
-    }
-  };
-
   return (
     // <div className="mt-5 max-h-[100vh-]">
     <div className="mt-5 max-h-[calc(100vh-155px)] min-h-[calc(100vh-155px)] overflow-y-auto">
@@ -111,7 +99,7 @@ const ConversationsList = () => {
           key={conversation.id}
           className=""
         >
-          <div className="border-gray-light flex items-center rounded-sm border-y-1 py-4">
+          <div className="border-gray-light flex items-center rounded-sm border-b-1 py-4">
             <Avatar>
               <AvatarImage
                 src="https://github.com/shadcn.png"
