@@ -44,7 +44,9 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const [authToken, setAuthToken] = useState('');
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
-  const [socketUrl, setSocketUrl] = useState('http://localhost:8000/chat');
+  const [socketUrl, setSocketUrl] = useState(
+    'http://localhost:8000/agent-chat',
+  );
   const [socketId, setSocketId] = useState<string | undefined>('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [otherTyping, setOtherTyping] = useState(false);
@@ -62,7 +64,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     const socketOptions: socketOptions = {
       transports: ['websocket', 'polling'],
       path: '/ws/sockets/socket.io',
-      namespace: '/chat',
+      namespace: '/agent-chat',
       auth: {
         customer_id: 1,
         conversation_id: 1,
@@ -93,7 +95,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
         console.log('Disconnected from:', socketUrl);
       });
 
-      newSocket.on('recieve-message', (data: Message) => {
+      newSocket.on('receive-message', (data: Message) => {
         console.log({ data });
         setMessages((prev) => [...prev, data]);
       });

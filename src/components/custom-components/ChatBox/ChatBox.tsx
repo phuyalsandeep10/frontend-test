@@ -75,7 +75,7 @@ export default function ChatBox() {
         console.log('Disconnected from:', socketUrl);
       });
 
-      newSocket.on('recieve-message', (data: Message) => {
+      newSocket.on('receive-message', (data: Message) => {
         console.log({ data });
         setMessages((prev) => [...prev, data]);
       });
@@ -144,7 +144,7 @@ export default function ChatBox() {
   };
   const emitStopTyping = () => {
     if (!socket || !isConnected) return;
-    socket.emit('stop_typing');
+    socket.emit('stop_typing', { conversation_id: 1 });
   };
 
   return (
