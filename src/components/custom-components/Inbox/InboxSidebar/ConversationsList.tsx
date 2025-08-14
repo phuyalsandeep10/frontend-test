@@ -3,6 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Link from 'next/link';
 import { Icons } from '@/components/ui/Icons';
 import { Badge } from '@/components/ui/badge';
+import { getStatusColor } from './getColorsHelper';
 
 const ConversationsList = () => {
   const conversations = [
@@ -88,19 +89,6 @@ const ConversationsList = () => {
       agent: 'Agent Sarah',
     },
   ];
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'Unresolved':
-        return 'bg-error text-white';
-      case 'Pending':
-        return 'bg-warning text-white';
-      case 'Resolved':
-        return 'bg-success text-white';
-      default:
-        return 'bg-warning text-white';
-    }
-  };
 
   return (
     // <div className="mt-5 max-h-[100vh-]">

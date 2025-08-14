@@ -64,7 +64,7 @@ const MessageItem = ({ message, onReply }: MessageItemProps) => {
                 <div className="w-full items-center rounded-[8px] border border-l-4 py-2.5 pr-7 pl-7">
                   <div className="flex items-center gap-3 text-sm font-semibold text-white">
                     <Icons.reply className="h-5 w-5" />
-                    <span>Replied</span>
+                    <span className="text-sm">Replied</span>
                   </div>
                   <p className="mt-1 text-xs font-normal text-white">
                     Great! Thanks for your help with the recent issue!

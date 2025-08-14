@@ -100,7 +100,7 @@ const Inbox = () => {
   return (
     <div className="flex">
       <SubSidebarContentWrapper className="w-[306px]">
-        <div className="flex">
+        <div className="flex-1">
           <InboxSubSidebar />
         </div>
       </SubSidebarContentWrapper>

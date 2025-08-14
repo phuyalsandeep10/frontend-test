@@ -99,6 +99,12 @@ import {
   RiArrowLeftRightLine,
   RiGitMergeFill,
   RiKey2Fill,
+  RiStarLine,
+  RiPlugLine,
+  RiPlug2Fill,
+  RiArrowRightLongLine,
+  RiLinksFill,
+  RiSettings5Fill,
 } from '@remixicon/react';
 
 // register your icons here as your requirements
@@ -175,6 +181,7 @@ export const Icons = {
   reply: Reply,
   ri_delete_bin_7_fill: RiDeleteBin7Fill,
   ri_star_fill: RiStarFill,
+  ri_star_line: RiStarLine,
   ri_contacts_book_line: RiContactsBookLine,
   ri_close_circle_fill: RiCloseCircleFill,
   arrow_up_circle: ArrowUpCircle,
@@ -202,4 +209,9 @@ export const Icons = {
   git_merge: RiGitMergeFill,
   key: RiKey2Fill,
   ri_alert_line: RiAlertLine,
+  ri_plug_line: RiPlugLine,
+  ri_plug_2_fill: RiPlug2Fill,
+  ri_arrow_right_long_line: RiArrowRightLongLine,
+  ri_links_fill: RiLinksFill,
+  ri_settings_5_fill: RiSettings5Fill,
 };
