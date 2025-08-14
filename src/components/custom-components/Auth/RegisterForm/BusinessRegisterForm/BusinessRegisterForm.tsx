@@ -76,8 +76,8 @@ const BusinessRegisterForm = ({ from, setOpen }: BusinessRegisterFormProps) => {
               control={businessRegisterForm.control}
               name="domain"
               label="Enter your Business's Domain"
-              type="url"
-              placeholder="www.businessname.com"
+              type="text"
+              placeholder="Enter your Business's Domain"
               required
             />
             <SelectableCardGroup
