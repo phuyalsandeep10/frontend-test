@@ -7,6 +7,7 @@ import CardView from './view/CardView';
 import KarbanView from './view/KarbanView';
 import TableView from './view/TableView';
 import { Icons } from '@/components/ui/Icons';
+import SectionHeader from '../comman/Heading';
 
 export default function TicketOverview() {
   const [activeTab, setActiveTab] = useState<'card' | 'table' | 'karban'>(
@@ -15,10 +16,7 @@ export default function TicketOverview() {
 
   return (
     <div className="max-w-full pt-11">
-      {/* Full width header */}
-      <h1 className="font-outfit text-brand-dark w-full text-xl leading-[30px] font-semibold">
-        Ticket Overview
-      </h1>
+      <SectionHeader title="Ticket" />
       <div className="flex">
         <p className="font-outfit text-theme-text-primary mt-1 w-full text-xs font-normal">
           Manage and monitor support tickets across different statuses. Use the

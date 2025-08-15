@@ -70,7 +70,8 @@ export function ValidEmailInput({
     if (validateMutation.isSuccess && validateMutation.data) {
       setLocalValidation({
         valid: true,
-        message: (validateMutation.data as any)?.message || 'Email is valid',
+        // message: (validateMutation.data as any)?.message || 'Email is valid',
+        message: '',
       });
       onValidityChange(true, debouncedEmail);
     }
@@ -97,8 +98,6 @@ export function ValidEmailInput({
     if (localValidation.valid === false) return 'text-error';
     return '';
   };
-
-  console.log(localValidation);
 
   return (
     <div className={cn('space-y-2', className)}>

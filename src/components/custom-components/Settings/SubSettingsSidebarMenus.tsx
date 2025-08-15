@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import { Icons } from '@/components/ui/Icons';
 import { usePathname } from 'next/navigation';
 import SidebarSection, { SidebarItem } from '../SharedSidebar/SettingSidebar';
+import Link from 'next/link';
 
 const sidebarSectionsData: {
   title: string;
@@ -146,6 +147,7 @@ const Sidebar = () => {
   const handleToggle = (title: string) => {
     setOpenSection((prev) => (prev === title ? '' : title));
   };
+  const isActive = pathname === ROUTES.SETTINGS.Ticket_Setting;
 
   return (
     <div className={cn('text-brand-dark w-full pt-2 pr-4 pl-4 text-sm')}>
@@ -158,6 +160,17 @@ const Sidebar = () => {
           onToggle={handleToggle}
         />
       ))}
+      {/* <Link to>Ticket Setting</Link> */}
+      <Link
+        href={ROUTES.SETTINGS.Ticket_Setting}
+        className={cn(
+          `hover:text-brand-primary font-outfit flex w-full cursor-pointer items-center justify-between gap-5 pb-4 text-sm font-normal ${
+            isActive ? 'text-brand-primary' : 'text-brand-dark'
+          } hover:text-brand-primary`,
+        )}
+      >
+        <span>Ticket Setting</span>
+      </Link>
     </div>
   );
 };
