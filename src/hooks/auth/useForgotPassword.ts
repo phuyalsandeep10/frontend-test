@@ -7,16 +7,5 @@ export const useForgotPassword = () => {
   return useMutation({
     mutationFn: (payload: ForgotPasswordPayload) =>
       AuthService.forgotPassword(payload),
-    onSuccess: (data) => {
-      toast.success(data?.message || 'Password reset email sent successfully');
-      console.log('Forgot Password success:', data);
-    },
-    onError: (error: any) => {
-      toast.error(
-        error?.response?.data?.message ||
-          'Failed to submit forgot password request',
-      );
-      console.error('Forgot Password error:', error);
-    },
   });
 };

@@ -55,11 +55,6 @@ const SettingsHeader = () => {
           <Icons.search className="text-gray-primary h-4 w-4" />
           <span className="text-gray-primary text-sm">Search</span>
         </div>
-
-        <div className="relative">
-          <Icons.notification className="text-gray-primary h-6 w-6" />
-          <span className="bg-alert-prominent absolute top-0 right-0 block h-2 w-2 rounded-full ring-2 ring-white"></span>
-        </div>
       </div>
     </div>
   );

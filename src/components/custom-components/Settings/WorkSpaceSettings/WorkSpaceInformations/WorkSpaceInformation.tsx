@@ -16,6 +16,8 @@ import { getCroppedImg } from '@/lib/cropImage';
 import TerminateWorkspace from './TerminateWorkspace';
 import Information from './Information';
 import WorkSpaceDetails from './WorkSpaceDetails';
+import WorkSpaceHeader from './WorkSpaceHeader';
+import { useGetorganizationDetails } from '@/hooks/organizations/useGetorganizations';
 type Country = {
   code: string;
   name: string;
@@ -28,6 +30,9 @@ export default function WorkspaceInformation() {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showChangePhotoModal, setShowChangePhotoModal] = useState(false);
+
+  const { data: organizationDetails, isPending } = useGetorganizationDetails();
+  console.log(organizationDetails);
 
   const handleRemovePhoto = () => {
     setImageUrl(null);
@@ -73,17 +78,7 @@ export default function WorkspaceInformation() {
     <>
       <div className={cn('mx-auto w-full')}>
         {/* Header */}
-        <div className="space-y-2">
-          <h1
-            className={cn('font-outfit text-brand-dark text-3xl font-semibold')}
-          >
-            Workspace Information
-          </h1>
-          <p className={cn('font-outfit text-xs font-normal text-black')}>
-            Configure your workspace information. This defines how your
-            workspace appears to your users.
-          </p>
-        </div>
+        <WorkSpaceHeader />
 
         {/* Profile Section */}
         <div className={cn('mt-11 mb-15 ml-16 flex items-start space-x-24')}>

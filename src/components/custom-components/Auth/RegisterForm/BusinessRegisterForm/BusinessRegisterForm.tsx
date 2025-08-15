@@ -54,7 +54,9 @@ const BusinessRegisterForm = ({ from, setOpen }: BusinessRegisterFormProps) => {
     });
   }
   return (
-    <div className={`mt-6 ${from === 'dashboard' ? 'w-full' : 'w-[516px]'}`}>
+    <div
+      className={`mt-6 ${from === 'dashboard' ? 'w-full' : 'w-[516px]'} font-outfit`}
+    >
       <ScrollArea
         className={`${from === 'dashboard' && 'max-h-[70vh] overflow-y-auto'}`}
       >
@@ -74,8 +76,8 @@ const BusinessRegisterForm = ({ from, setOpen }: BusinessRegisterFormProps) => {
               control={businessRegisterForm.control}
               name="domain"
               label="Enter your Business's Domain"
-              type="url"
-              placeholder="www.businessname.com"
+              type="text"
+              placeholder="Enter your Business's Domain"
               required
             />
             <SelectableCardGroup

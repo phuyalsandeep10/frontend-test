@@ -131,7 +131,6 @@ export class AuthService {
       accessToken: access_token,
       refreshToken: currentTokens.refreshToken,
     };
-    console.log('New Tokesn:', newTokens);
     this.setAuthTokens(newTokens);
 
     return access_token;

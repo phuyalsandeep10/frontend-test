@@ -62,12 +62,14 @@ const AuthenticatorModal: React.FC<AuthenticatorModalProps> = ({
       },
       {
         onSuccess: (data) => {
+          console.log(data);
           toast.success(data?.message || 'Otp verification successful');
           queryClient.invalidateQueries({ queryKey: ['authUser'] });
           form.reset();
           setOpen(false);
         },
         onError: (error: any) => {
+          console.log(error);
           toast.error(error?.response?.data?.message || 'Failed to verify otp');
           console.error('2fa otp verify error:', error);
         },

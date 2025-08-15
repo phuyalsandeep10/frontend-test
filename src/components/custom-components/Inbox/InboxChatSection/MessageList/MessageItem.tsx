@@ -55,7 +55,7 @@ const MessageItem = ({ message, onReply }: MessageItemProps) => {
           <div
             className={`max-w-xs rounded-lg px-4 py-2 lg:max-w-sm ${
               message.sender === 'agent'
-                ? 'bg-brand-primary px-5 pt-2.5 pb-5 text-white'
+                ? 'bg-brand-primary px-5 py-2.5 text-white'
                 : 'bg-brand-disable text-gray-dark'
             }`}
           >

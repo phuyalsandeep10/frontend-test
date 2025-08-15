@@ -1,6 +1,8 @@
 import React from 'react';
 import Logo from '@/assets/svg/Logo';
 import { cn } from '@/lib/utils';
+import Link from 'next/link';
+import { ROUTES } from '@/routes/routes';
 // import { useSidebar } from '@/components/ui/sidebar';
 const SidebarHeader: React.FC = () => {
   // const { toggleSidebar } = useSidebar();
@@ -10,7 +12,7 @@ const SidebarHeader: React.FC = () => {
         'flex w-full items-center justify-between transition-all duration-300',
       )}
     >
-      <div className="flex items-center">
+      <Link href={ROUTES.DASHBOARD} className="flex items-center">
         {/* Fix logo container width to avoid shifting */}
         <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center">
           {/* <button onClick={toggleSidebar}>hello</button> */}
@@ -30,7 +32,7 @@ const SidebarHeader: React.FC = () => {
             brahmabytelab.com
           </p>
         </div>
-      </div>
+      </Link>
     </div>
   );
 };
