@@ -31,7 +31,7 @@ import { AuthService } from '@/services/auth/auth';
 import { ROUTES } from '@/routes/routes';
 
 const RegisterForm = () => {
-  const [currentStep, setCurrentStep] = useState<number>(2);
+  const [currentStep, setCurrentStep] = useState<number>(0);
   const [isAgreed, setIsAreed] = useState(false);
   const [isAgreeError, setisAgreeError] = useState('');
   const [isEmailValid, setIsEmailValid] = useState(false);
