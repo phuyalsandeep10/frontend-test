@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import axiosInstance from '@/services/priority/lib/axios';
+// import axiosInstance from '@/services/priority/lib/axios';
+import axiosInstance from '@/apiConfigs/axiosInstance';
 import { useTeamStore } from '@/services/teams/useTeamStore';
 import { TeamResponse } from '@/services/teams/team';
 

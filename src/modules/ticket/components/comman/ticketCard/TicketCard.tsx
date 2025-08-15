@@ -4,16 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 
-import { TicketCardProps } from '@/modules/ticket/components/type';
-
-const priorityColors: Record<string, string> = {
-  Urgent: 'bg-red-600',
-  High: 'bg-orange-500',
-  Medium: 'bg-yellow-400',
-  Low: 'bg-green-500',
-  // fallback if not defined
-  Default: 'bg-gray-400',
-};
+import { TicketCardProps } from '@/modules/ticket/types/type';
 
 export default function TicketCard({
   email,
@@ -25,6 +16,10 @@ export default function TicketCard({
   avatarUrl,
   checked = false,
   onCheckChange,
+  priority_bg_color,
+  priority_fg_color,
+  status_fg_color,
+  status_bg_color,
 }: TicketCardProps) {
   return (
     <div
@@ -35,14 +30,22 @@ export default function TicketCard({
       {/* Left Vertical Badge */}
       <div
         className={cn(
-          'bg-alert-prominent relative flex h-[60px] w-12 items-center justify-center sm:h-auto',
+          'relative flex h-[60px] w-12 items-center justify-center sm:h-auto',
         )}
+        style={{
+          backgroundColor: status_bg_color,
+        }}
       >
         {/* White Circle - half inside, half outside */}
         <div className="absolute top-1/2 left-0 h-6 w-6 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white" />
 
         {/* Rotated Status Text */}
-        <span className="text-xl font-bold whitespace-nowrap text-white sm:-rotate-90">
+        <span
+          className="text-xl font-bold whitespace-nowrap text-white sm:-rotate-90"
+          style={{
+            color: status_fg_color,
+          }}
+        >
           {status}
         </span>
       </div>
@@ -87,7 +90,6 @@ export default function TicketCard({
             </Avatar>
           </div>
         </div>
-
         {/* Title */}
         <p
           className={cn(
@@ -96,16 +98,24 @@ export default function TicketCard({
         >
           {title}
         </p>
-
         {/* Priority Badge */}
-        <Badge
-          className={cn(
-            'font-outfit w-full justify-center rounded-full py-2 text-xs leading-[20px] font-bold text-white',
-            priorityColors[priority] || priorityColors.Default,
-          )}
-        >
-          {priority}
-        </Badge>
+        {priority ? (
+          <Badge
+            className={cn(
+              'font-outfit w-full justify-center rounded-full py-2 text-xs leading-[20px] font-bold',
+            )}
+            style={{
+              backgroundColor: priority_bg_color,
+              color: priority_fg_color,
+            }}
+          >
+            {priority}
+          </Badge>
+        ) : (
+          <span className="font-outfit bg-alert-prominent flex w-full items-center justify-center rounded-full py-2 text-xs font-bold text-white">
+            Priority Not Set
+          </span>
+        )}
       </div>
     </div>
   );

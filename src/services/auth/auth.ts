@@ -119,7 +119,7 @@ export class AuthService {
 
   //refresh tokens
   static async refreshAccessToken(refreshToken: string): Promise<string> {
-    const res = await axios.post(`${baseURL}/auth/refresh-token`, {
+    const res = await axiosInstance.post(`${baseURL}/auth/refresh-token`, {
       token: refreshToken,
     });
     const { access_token } = res.data?.data;

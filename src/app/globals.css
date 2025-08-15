@@ -88,6 +88,7 @@
   --color-warning-prominent: #f5ce31;
   --color-brand-bg-gradient: '#C9C9F780';
   --color-gray-g: '#232027';
+  --color-warning-prominent-bg: #fff0d2;
 
   /* Brand fonts  */
   --font-outfit: var(--font-outfit);

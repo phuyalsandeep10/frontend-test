@@ -1,88 +1,60 @@
 'use client';
 
-import React, { useState } from 'react';
-import { TicketCardProps } from '../../type';
-import TicketCard from '@/components/common/ticketCard/TicketCard';
-import TicketTabs from '@/components/common/ticketCard/TicketTabs';
+import React, { useEffect, useState } from 'react';
+import TicketCard from '@/modules/ticket/components/comman/ticketCard/TicketCard';
+import TicketTabs from '@/modules/ticket/components/comman/ticketCard/TicketTabs';
 import { Icons } from '@/components/ui/Icons';
 import {
   Tooltip,
   TooltipTrigger,
   TooltipContent,
 } from '@/components/ui/tooltip';
-
-const allTickets: TicketCardProps[] = [
-  {
-    id: 1,
-    email: 'john@example.com',
-    timeAgo: '1h',
-    title: 'Issue with login',
-    priority: 'High',
-    status: 'Unassigned',
-    avatarUrl: '',
-  },
-  {
-    id: 2,
-    email: 'jane@example.com',
-    timeAgo: '2h',
-    title: 'Page not loading',
-    priority: 'Medium',
-    status: 'Assigned',
-    avatarUrl: '',
-  },
-  {
-    id: 3,
-    email: 'admin@example.com',
-    timeAgo: '3h',
-    title: 'Bug in dashboard',
-    priority: 'Low',
-    status: 'Solved',
-    avatarUrl: '',
-  },
-  {
-    id: 4,
-    email: 'spam@example.com',
-    timeAgo: '4h',
-    title: 'Get rich quick!',
-    priority: 'Low',
-    status: 'Spam',
-    avatarUrl: '',
-  },
-];
-
-const tabs: { label: string; status: TicketCardProps['status'] | 'ALL' }[] = [
-  { label: 'Unassigned Tickets', status: 'Unassigned' },
-  { label: 'Assigned to me', status: 'Assigned' },
-  { label: 'Solved Tickets', status: 'Solved' },
-  { label: 'All Tickets', status: 'ALL' },
-  { label: 'Spams', status: 'Spam' },
-];
+import { useCardView } from './hooks/useCardView';
+import DeleteModal from '@/components/modal/DeleteModal';
+import Pagination from '@/components/common/pagination/Pagination';
 
 export default function CardView() {
-  const [selectedStatus, setSelectedStatus] = useState<
-    TicketCardProps['status'] | 'Unassigned'
-  >('Unassigned');
+  const {
+    statusLoading,
+    statusError,
+    ticketsLoading,
+    ticketsError,
+    selectedStatus,
+    setSelectedStatus,
+    tickets,
+    checkedTickets,
+    handleCheckChange,
+    formatTimeAgo,
+    selectedCountInCurrentTab,
+    tabs,
+    isDeleteModalOpen,
+    openDeleteModal,
+    closeDeleteModal,
+    deleteTicketName,
+    handleConfirmDelete,
+    isDeleting,
+  } = useCardView();
 
-  const [checkedTickets, setCheckedTickets] = useState<Record<number, boolean>>(
-    {},
-  );
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 10;
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const currentTickets = tickets.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
-  const filteredTickets =
-    selectedStatus === 'ALL'
-      ? allTickets
-      : allTickets.filter((ticket) => ticket.status === selectedStatus);
+  // Reset to page 1 if tickets or selectedStatus change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [tickets, selectedStatus]);
 
-  const handleCheckChange = (id: number, isChecked: boolean) => {
-    setCheckedTickets((prev) => ({
-      ...prev,
-      [id]: isChecked,
-    }));
-  };
+  if (statusLoading)
+    return <div className="p-4">Loading ticket statuses...</div>;
+  if (statusError)
+    return <div className="text-alert-prominent p-4">Error loading tabs</div>;
 
-  // Count how many are selected
-  const selectedCountInCurrentTab = filteredTickets.filter(
-    (ticket) => ticket.id && checkedTickets[ticket.id],
-  ).length;
+  if (ticketsLoading) return <div className="p-4">Loading tickets...</div>;
+  if (ticketsError)
+    return (
+      <div className="text-alert-prominent p-4">Error loading tickets</div>
+    );
 
   return (
     <div className="pt-6 pb-10">
@@ -93,7 +65,7 @@ export default function CardView() {
         onSelect={(status) => setSelectedStatus(status)}
       />
 
-      {/* Selected Count */}
+      {/* Selected count & actions */}
       {selectedCountInCurrentTab > 0 && (
         <div className="font-outfit mt-4 flex items-center justify-between text-base font-medium text-black">
           <span>
@@ -140,9 +112,10 @@ export default function CardView() {
               <TooltipContent side="top">More</TooltipContent>
             </Tooltip>
 
+            {/* Delete */}
             <Tooltip>
               <TooltipTrigger asChild>
-                <button>
+                <button onClick={openDeleteModal}>
                   <Icons.delete_bin_fill className="h-6 w-6 cursor-pointer" />
                 </button>
               </TooltipTrigger>
@@ -152,19 +125,54 @@ export default function CardView() {
         </div>
       )}
 
-      {/* Tickets */}
+      {/* Ticket Cards */}
       <div className="mt-6 grid gap-4 md:grid-cols-2">
-        {filteredTickets.map((ticket) => (
-          <TicketCard
-            key={ticket.id}
-            {...ticket}
-            checked={checkedTickets[ticket.id!] || false}
-            onCheckChange={(isChecked) =>
-              handleCheckChange(ticket.id!, isChecked)
-            }
-          />
-        ))}
+        {tickets.length === 0 ? (
+          <p>No Ticket Found.</p>
+        ) : (
+          tickets.map((ticket) => (
+            <TicketCard
+              key={ticket?.id}
+              id={ticket?.id}
+              email={ticket?.created_by?.email || 'No Email'}
+              timeAgo={formatTimeAgo(ticket?.created_at)}
+              title={ticket?.title}
+              priority={ticket.priority?.name}
+              priority_fg_color={ticket?.priority?.fg_color}
+              priority_bg_color={ticket?.priority?.bg_color}
+              status_fg_color={ticket?.status?.fg_color}
+              status_bg_color={ticket?.status?.bg_color}
+              status={ticket?.status?.name}
+              created_by={ticket?.created_by?.name}
+              avatarUrl=""
+              checked={checkedTickets[ticket?.id] || false}
+              onCheckChange={(isChecked) =>
+                handleCheckChange(ticket?.id, isChecked)
+              }
+            />
+          ))
+        )}
       </div>
+      {/* Pagination */}
+      <Pagination
+        currentPage={currentPage}
+        totalItems={tickets.length}
+        itemsPerPage={ITEMS_PER_PAGE}
+        onPageChange={setCurrentPage}
+      />
+
+      {/* Delete Confirmation Modal */}
+      <DeleteModal
+        open={isDeleteModalOpen}
+        onOpenChange={closeDeleteModal}
+        title="Are you sure?"
+        TitleclassName="font-outfit font-medium text-base text-black"
+        description={`Deleting this ticket is a permanent action and cannot be undone. This may result in the loss of important information and context related to the issue.`}
+        descriptionColor="text-alert-prominent font-outfit text-xs font-normal"
+        onConfirm={handleConfirmDelete}
+        onCancel={closeDeleteModal}
+        icon={''}
+      />
     </div>
   );
 }

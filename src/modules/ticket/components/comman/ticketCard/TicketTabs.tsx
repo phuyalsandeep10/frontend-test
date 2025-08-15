@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { TicketCardProps } from '@/modules/ticket/components/type';
+import { TicketCardProps } from '@/modules/ticket/types/type';
 
 type TabOption = {
   label: string;
