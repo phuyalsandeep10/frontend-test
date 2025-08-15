@@ -21,6 +21,7 @@ import {
 } from '@/components/ui/tooltip';
 import DeleteModal from '@/components/modal/DeleteModal';
 import { useCardView } from './hooks/useCardView';
+import { cn } from '@/lib/utils';
 
 export default function TableView() {
   const {
@@ -137,7 +138,12 @@ export default function TableView() {
             <TableRow>
               <TableHead>
                 <Checkbox
-                  className="bg-gray-primary ml-4"
+                  // className="bg-gray-primary ml-4"
+                  className={cn(
+                    'bg-gray-primary mt-2 h-5 w-5 rounded border',
+                    'data-[state=checked]:bg-brand-primary',
+                    'data-[state=checked]:border-brand-primary',
+                  )}
                   checked={
                     currentTickets.length > 0 &&
                     currentTickets.every((ticket) => checkedTickets[ticket.id])
@@ -161,7 +167,11 @@ export default function TableView() {
               <TableRow key={ticket.id}>
                 <TableCell>
                   <Checkbox
-                    className="bg-gray-primary ml-4"
+                    className={cn(
+                      'bg-gray-primary mt-2 h-5 w-5 rounded border',
+                      'data-[state=checked]:bg-brand-primary',
+                      'data-[state=checked]:border-brand-primary',
+                    )}
                     checked={checkedTickets[ticket.id] || false}
                     onCheckedChange={(checked) =>
                       handleCheckChange(ticket.id, Boolean(checked))

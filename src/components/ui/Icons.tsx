@@ -99,6 +99,7 @@ import {
   RiArrowLeftRightLine,
   RiGitMergeFill,
   RiKey2Fill,
+  RiDragMoveFill,
 } from '@remixicon/react';
 
 // register your icons here as your requirements
@@ -202,4 +203,5 @@ export const Icons = {
   git_merge: RiGitMergeFill,
   key: RiKey2Fill,
   ri_alert_line: RiAlertLine,
+  drag_move_fill: RiDragMoveFill,
 };
