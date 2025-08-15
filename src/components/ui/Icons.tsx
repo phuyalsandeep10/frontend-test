@@ -105,6 +105,10 @@ import {
   RiArrowRightLongLine,
   RiLinksFill,
   RiSettings5Fill,
+  RiMagicLine,
+  RiBaseStationLine,
+  RiStackFill,
+  RiPieChart2Fill,
 } from '@remixicon/react';
 
 // register your icons here as your requirements
@@ -214,4 +218,8 @@ export const Icons = {
   ri_arrow_right_long_line: RiArrowRightLongLine,
   ri_links_fill: RiLinksFill,
   ri_settings_5_fill: RiSettings5Fill,
+  ri_magic_line: RiMagicLine,
+  ri_base_station_line: RiBaseStationLine,
+  ri_stack_fill: RiStackFill,
+  ri_pie_chart_2_fill: RiPieChart2Fill,
 };
