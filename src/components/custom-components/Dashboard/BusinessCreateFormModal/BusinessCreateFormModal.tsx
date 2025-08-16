@@ -25,7 +25,7 @@ const BusinessCreateFormModal = ({
         onEscapeKeyDown={(e) => e.preventDefault()}
       >
         <AlertDialogHeader>
-          <AlertDialogTitle className="text-center">
+          <AlertDialogTitle className="font-outfit text-center">
             Create Your Business
           </AlertDialogTitle>
         </AlertDialogHeader>

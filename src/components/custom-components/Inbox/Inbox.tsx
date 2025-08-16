@@ -11,6 +11,8 @@ import InboxChatInfo from './InboxChatInfo/InboxChatInfo';
 import InboxChatSection from './InboxChatSection/InboxChatSection';
 import InboxSubSidebar from './InboxSidebar/InboxSubSidebar';
 
+// const socket = io('http://localhost:4000');
+
 interface Message {
   id: number;
   sender: 'agent' | 'customer';
@@ -37,16 +39,29 @@ const Inbox = () => {
 
   useEffect(() => {
     if (!chatId || !socket) return;
-    console.log({ chatId, socket });
+
+    socket.emit('join_conversation', { conversation_id: 1 });
+    setMessages([
+      {
+        id: 1,
+        sender: 'customer',
+        message: 'Hello, I need help with my order.',
+        time: '10:00',
+      },
+      {
+        id: 2,
+        sender: 'agent',
+        message: 'Sure! Could you provide your order ID?',
+        time: '10:01',
+      },
+    ]);
 
     // socket.emit('joinChat', chatId);
-    socket.emit('join_conversation', { conversation_id: 1 });
 
     const handleNewMessage = (msg: any) => {
       setMessages((prev) => [...prev, msg]);
     };
 
-    socket.on('newMessage', handleNewMessage);
     socket.on('receive-message', (data) => {
       console.log({ data });
     });
@@ -64,10 +79,20 @@ const Inbox = () => {
 
   const onSend = () => {
     const text = inputRef.current?.value;
+    if (!socket) return;
     if (text) {
+      console.log('Text:', text);
+
+      // typing: stop on send
+      // socket.emit('stop-typing');
+      setIsTyping(false);
+      if (typingTimeout) {
+        clearTimeout(typingTimeout);
+        setTypingTimeout(null);
+      }
       const messageId = crypto.randomUUID();
       const msg = {
-        messageId,
+        uuid: messageId,
         chatId,
         user: 'Me',
         message: text,
@@ -76,11 +101,19 @@ const Inbox = () => {
           minute: '2-digit',
         }),
         status: 'sent',
-        sender: 'agent',
+        sender: 'customer',
         replyTo: replyingTo,
       };
 
-      setMessages((prev) => [...prev, msg]);
+      socket.emit('message', {
+        message: msg,
+        mode: 'message',
+        organization_id: 1,
+        conversation_id: 1,
+      });
+      emitStopTyping();
+      setMessages((prev) => [...prev, { msg: message, from: socket.id }]);
+      setMessage('');
       // socket.emit('sendMessage', msg);
       if (inputRef.current) inputRef.current.value = '';
       setReplyingTo(null);

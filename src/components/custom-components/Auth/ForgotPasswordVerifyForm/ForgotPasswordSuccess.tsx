@@ -7,11 +7,11 @@ import { Button } from '@/components/ui/button';
 interface SuccessScreenProps {
   text: string;
   subText: string;
-  redirectLink: string;
+  redirectLink?: string;
 }
 const SuccessScreen = ({ text, subText, redirectLink }: SuccessScreenProps) => {
   return (
-    <div className="mx-auto flex flex-col items-center pb-20 lg:mx-0 lg:w-[489px]">
+    <div className="font-outfit mx-auto flex flex-col items-center pb-20 lg:mx-0 lg:w-[489px]">
       <Image
         src={passwordChanged}
         height={300}
@@ -28,11 +28,13 @@ const SuccessScreen = ({ text, subText, redirectLink }: SuccessScreenProps) => {
         {subText}
       </p>
 
-      <Link href={`${redirectLink}`} className="w-full">
-        <Button variant="default" size="lg" className="w-full">
-          Go to login
-        </Button>
-      </Link>
+      {redirectLink && (
+        <Link href={`${redirectLink}`} className="w-full">
+          <Button variant="default" size="lg" className="w-full">
+            Go to login
+          </Button>
+        </Link>
+      )}
     </div>
   );
 };

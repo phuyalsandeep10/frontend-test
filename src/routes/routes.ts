@@ -20,12 +20,12 @@ export const ROUTES = {
   },
 
   YOUR_INBOXES: {
-    MAIN_INBOX: 'user/inbox/',
-    SALES: '/inbox/sales',
-    SUPPORT: '/inbox/support',
+    MAIN_INBOX: '/inbox/',
+    SALES: '/sales',
+    SUPPORT: '/support',
   },
   OTHER_BOXES: {
-    SPAM: '/inbox/spam',
+    SPAM: '/spam',
   },
   TOOLS_FEATURES: {
     DASHBOARD: '/tools_features/dashboard',
