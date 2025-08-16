@@ -90,26 +90,16 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
         console.log('Customer land:', data);
       });
 
+      newSocket.on('message-notification', (data: Message) => {
+        console.log('Message notification:', data);
+      });
+
       newSocket.on('disconnect', () => {
         setIsConnected(false);
         console.log('Disconnected from:', socketUrl);
       });
 
-      newSocket.on('receive-message', (data: Message) => {
-        console.log({ data });
-        setMessages((prev) => [...prev, data]);
-      });
-
       // typing: listen
-      newSocket.on('typing', () => {
-        setOtherTyping(true);
-        console.log('typing ...');
-      });
-
-      newSocket.on('stop-typing', () => {
-        setOtherTyping(false);
-        console.log('stop typing...');
-      });
 
       setSocket(newSocket);
     } catch (error) {

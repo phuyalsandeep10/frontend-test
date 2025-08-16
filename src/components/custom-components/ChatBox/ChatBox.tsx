@@ -144,7 +144,7 @@ export default function ChatBox() {
   };
   const emitStopTyping = () => {
     if (!socket || !isConnected) return;
-    socket.emit('stop_typing', { conversation_id: 1 });
+    socket.emit('stop_typing');
   };
 
   return (

@@ -1,17 +1,15 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
-import SubSidebarContentWrapper from '../CustomSidebar/SubSidebarContentWrapper';
-import InboxChatSection from './InboxChatSection/InboxChatSection';
-import InboxChatInfo from './InboxChatInfo/InboxChatInfo';
-import InboxSubSidebar from './InboxSidebar/InboxSubSidebar';
-import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import io from 'socket.io-client';
-import { useParams } from 'next/navigation';
+import { Textarea } from '@/components/ui/textarea';
+import { useSocket } from '@/context/socket.context';
 import { useUiStore } from '@/store/UiStore/useUiStore';
+import { useParams } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
+import SubSidebarContentWrapper from '../CustomSidebar/SubSidebarContentWrapper';
 import ChatEmptyScreen from './ChatEmptyScreen/ChatEmptyScreen';
-
-const socket = io('http://localhost:4000');
+import InboxChatInfo from './InboxChatInfo/InboxChatInfo';
+import InboxChatSection from './InboxChatSection/InboxChatSection';
+import InboxSubSidebar from './InboxSidebar/InboxSubSidebar';
 
 interface Message {
   id: number;
@@ -26,25 +24,43 @@ const Inbox = () => {
   const chatId = params?.userId;
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [messages, setMessages] = useState<any[]>([]);
+
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
+  const [isTyping, setIsTyping] = useState(false);
+  const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(
+    null,
+  );
+  const [message, setMessage] = useState('');
 
   const { showChatInfo } = useUiStore();
+  const { socket } = useSocket();
 
   useEffect(() => {
-    if (!chatId) return;
+    if (!chatId || !socket) return;
+    console.log({ chatId, socket });
 
-    socket.emit('joinChat', chatId);
+    // socket.emit('joinChat', chatId);
+    socket.emit('join_conversation', { conversation_id: 1 });
 
     const handleNewMessage = (msg: any) => {
       setMessages((prev) => [...prev, msg]);
     };
 
     socket.on('newMessage', handleNewMessage);
+    socket.on('receive-message', (data) => {
+      console.log({ data });
+    });
+    socket.on('typing', () => {
+      console.log('typing ...');
+    });
+    socket.on('stop-typing', () => {
+      console.log('stop typing...');
+    });
 
     return () => {
       socket.off('newMessage', handleNewMessage);
     };
-  }, [chatId]);
+  }, [chatId, socket]);
 
   const onSend = () => {
     const text = inputRef.current?.value;
@@ -65,7 +81,7 @@ const Inbox = () => {
       };
 
       setMessages((prev) => [...prev, msg]);
-      socket.emit('sendMessage', msg);
+      // socket.emit('sendMessage', msg);
       if (inputRef.current) inputRef.current.value = '';
       setReplyingTo(null);
     }
@@ -77,6 +93,15 @@ const Inbox = () => {
 
   const clearReply = () => {
     setReplyingTo(null);
+  };
+
+  const emitTyping = (message: string) => {
+    if (!socket) return;
+    socket.emit('typing', { message, mode: 'typing' });
+  };
+  const emitStopTyping = () => {
+    if (!socket) return;
+    socket.emit('stop_typing');
   };
 
   return (
@@ -114,6 +139,28 @@ const Inbox = () => {
                   placeholder="Enter your message here"
                   className={`h-24 resize-none ${replyingTo ? 'pt-14' : 'pt-3'}`}
                   ref={inputRef}
+                  value={message}
+                  onChange={(e) => {
+                    setMessage(e.target.value);
+                    if (!socket) return;
+
+                    if (!isTyping) {
+                      setIsTyping(true);
+
+                      // socket.emit('message', { message, mode: 'typing' });
+                      emitTyping(e.target.value);
+                    }
+
+                    if (typingTimeout) clearTimeout(typingTimeout);
+
+                    const timeout = setTimeout(() => {
+                      setIsTyping(false);
+                      // socket.emit('message', { message, mode: 'stop-typing' });
+                      emitStopTyping();
+                    }, 2000);
+
+                    setTypingTimeout(timeout);
+                  }}
                 />
               </div>
 
