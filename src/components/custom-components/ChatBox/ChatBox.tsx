@@ -125,6 +125,7 @@ export default function ChatBox() {
       mode: 'message',
       organization_id: 1,
       conversation_id: 1,
+      customer_id: 1,
     });
     emitStopTyping();
     setMessages((prev) => [...prev, { message, from: socketId }]);

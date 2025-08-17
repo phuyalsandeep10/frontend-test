@@ -35,7 +35,7 @@ const Inbox = () => {
   const [message, setMessage] = useState('');
 
   const { showChatInfo } = useUiStore();
-  const { socket } = useSocket();
+  const { socket, playSound } = useSocket();
 
   useEffect(() => {
     if (!chatId || !socket) return;
@@ -64,6 +64,7 @@ const Inbox = () => {
 
     socket.on('receive-message', (data) => {
       console.log({ data });
+      playSound();
     });
     socket.on('typing', () => {
       console.log('typing ...');
@@ -73,9 +74,9 @@ const Inbox = () => {
     });
 
     return () => {
-      socket.off('newMessage', handleNewMessage);
+      socket.emit('leave_conversation', { conversation_id: 1 });
     };
-  }, [chatId, socket]);
+  }, [chatId, socket, playSound]);
 
   const onSend = () => {
     const text = inputRef.current?.value;

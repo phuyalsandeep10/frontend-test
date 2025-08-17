@@ -21,11 +21,13 @@ interface Message {
 type SocketContextType = {
   socket: Socket | null;
   isConnected: boolean;
+  playSound: () => void;
 };
 
 const SocketContext = createContext<SocketContextType>({
   socket: null,
   isConnected: false,
+  playSound: () => {},
 });
 
 interface socketOptions {
@@ -41,6 +43,7 @@ interface socketOptions {
 }
 
 export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
+  const [isSoundEnabled, setIsSoundEnabled] = useState(false);
   const [authToken, setAuthToken] = useState('');
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
@@ -51,8 +54,29 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [otherTyping, setOtherTyping] = useState(false);
   const { authData } = useAuthStore();
+  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    // Initialize audio when component mounts
+    const audioElement = new Audio('/message.mp3');
+    setAudio(audioElement);
+
+    // Cleanup on unmount
+    return () => {
+      if (audioElement) {
+        audioElement.pause();
+        audioElement.remove();
+      }
+    };
+  }, []);
+
+  const playSound = useCallback(() => {
+    if (typeof window === 'undefined') return;
+    audio?.play();
+  }, [audio]);
 
   const connectSocket = useCallback(() => {
+    if (typeof window === 'undefined') return;
     const authTokens = AuthService.getAuthTokens();
     if (!authTokens) return;
     const { accessToken } = authTokens;
@@ -88,10 +112,12 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
 
       newSocket.on('customer_land', (data: Message) => {
         console.log('Customer land:', data);
+        playSound();
       });
 
       newSocket.on('message-notification', (data: Message) => {
         console.log('Message notification:', data);
+        playSound();
       });
 
       newSocket.on('disconnect', () => {
@@ -105,9 +131,9 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (error) {
       console.log({ error });
     }
-  }, [authToken, socket, socketUrl]);
+  }, [playSound, socket, socketUrl]);
 
-  const disconnectSocket = () => {
+  const disconnectSocket = useCallback(() => {
     if (socket) {
       socket.disconnect();
       setSocket(null);
@@ -116,9 +142,10 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
       setMessages([]);
       setOtherTyping(false); // typing: clear typing state
     }
-  };
+  }, [socket]);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
     // if (!authTokens) return;
     connectSocket();
     return () => {
@@ -127,7 +154,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   }, [authData]);
 
   return (
-    <SocketContext.Provider value={{ socket, isConnected }}>
+    <SocketContext.Provider value={{ socket, isConnected, playSound }}>
       {children}
     </SocketContext.Provider>
   );
