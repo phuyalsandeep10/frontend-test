@@ -1,5 +1,6 @@
 'use client';
 
+import { useMessageAudio } from '@/hooks/useMessageAudio.hook';
 import { AuthService } from '@/services/auth/auth';
 import { useAuthStore } from '@/store/AuthStore/useAuthStore';
 import {
@@ -9,7 +10,6 @@ import {
   useEffect,
   useState,
 } from 'react';
-
 import { Socket, io } from 'socket.io-client';
 
 interface Message {
@@ -21,13 +21,11 @@ interface Message {
 type SocketContextType = {
   socket: Socket | null;
   isConnected: boolean;
-  playSound: () => void;
 };
 
 const SocketContext = createContext<SocketContextType>({
   socket: null,
   isConnected: false,
-  playSound: () => {},
 });
 
 interface socketOptions {
@@ -43,7 +41,6 @@ interface socketOptions {
 }
 
 export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
-  const [isSoundEnabled, setIsSoundEnabled] = useState(false);
   const [authToken, setAuthToken] = useState('');
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
@@ -54,26 +51,9 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [otherTyping, setOtherTyping] = useState(false);
   const { authData } = useAuthStore();
-  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    // Initialize audio when component mounts
-    const audioElement = new Audio('/message.mp3');
-    setAudio(audioElement);
 
-    // Cleanup on unmount
-    return () => {
-      if (audioElement) {
-        audioElement.pause();
-        audioElement.remove();
-      }
-    };
-  }, []);
-
-  const playSound = useCallback(() => {
-    if (typeof window === 'undefined') return;
-    audio?.play();
-  }, [audio]);
+  // Use the new useAudio hook
+  const { playSound } = useMessageAudio();
 
   const connectSocket = useCallback(() => {
     if (typeof window === 'undefined') return;
@@ -151,10 +131,15 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     return () => {
       disconnectSocket();
     };
-  }, [authData]);
+  }, []);
 
   return (
-    <SocketContext.Provider value={{ socket, isConnected, playSound }}>
+    <SocketContext.Provider
+      value={{
+        socket,
+        isConnected,
+      }}
+    >
       {children}
     </SocketContext.Provider>
   );

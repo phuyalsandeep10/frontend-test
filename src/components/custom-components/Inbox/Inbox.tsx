@@ -2,6 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { useSocket } from '@/context/socket.context';
+import { useMessageAudio } from '@/hooks/useMessageAudio.hook';
 import { useUiStore } from '@/store/UiStore/useUiStore';
 import { useParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
@@ -35,7 +36,8 @@ const Inbox = () => {
   const [message, setMessage] = useState('');
 
   const { showChatInfo } = useUiStore();
-  const { socket, playSound } = useSocket();
+  const { socket } = useSocket();
+  const { playSound } = useMessageAudio();
 
   useEffect(() => {
     if (!chatId || !socket) return;
@@ -57,11 +59,6 @@ const Inbox = () => {
     ]);
 
     // socket.emit('joinChat', chatId);
-
-    const handleNewMessage = (msg: any) => {
-      setMessages((prev) => [...prev, msg]);
-    };
-
     socket.on('receive-message', (data) => {
       console.log({ data });
       playSound();

@@ -109,12 +109,11 @@ export default function ChatBox() {
   };
 
   useEffect(() => {
+    connectSocket();
     return () => {
-      if (socket) {
-        socket.disconnect();
-      }
+      disconnectSocket();
     };
-  }, [socket]);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
