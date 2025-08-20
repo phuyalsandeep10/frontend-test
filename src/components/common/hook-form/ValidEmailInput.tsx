@@ -67,21 +67,27 @@ export function ValidEmailInput({
   }, [debouncedEmail]);
 
   useEffect(() => {
-    if (validateMutation.isSuccess) {
+    if (validateMutation.isSuccess && validateMutation.data) {
       setLocalValidation({
         valid: true,
-        message: 'Email is valid',
+        // message: (validateMutation.data as any)?.message || 'Email is valid',
+        message: '',
       });
       onValidityChange(true, debouncedEmail);
     }
 
-    if (validateMutation.isError) {
+    if (validateMutation.isError && validateMutation.error) {
+      let backendMessage = 'Email validation failed';
+
+      if ((validateMutation.error as any)?.response?.data?.message) {
+        backendMessage = (validateMutation.error as any).response.data.message;
+      } else if (validateMutation.error instanceof Error) {
+        backendMessage = validateMutation.error.message;
+      }
+
       setLocalValidation({
         valid: false,
-        message:
-          validateMutation.error instanceof Error
-            ? validateMutation.error.message
-            : 'Email validation failed',
+        message: backendMessage,
       });
       onValidityChange(false, debouncedEmail);
     }

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import {
   Table,
@@ -12,43 +12,31 @@ import {
 } from '@/components/ui/table';
 import { InputField } from '@/components/common/hook-form/InputField';
 import { SelectField } from '@/components/common/hook-form/SelectField';
-import { useSlaAutoSaveHook } from './hooks/useSlaAutoSave';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/ui/Icons';
 import { cn } from '@/lib/utils';
+import DeleteModal from '@/components/modal/DeleteModal';
+import { useSlaLogic } from './hooks/useSlaLogic';
 
-interface SlaTableProps {
-  slaList: any[];
-}
-
-export default function SlaTable({ slaList }: SlaTableProps) {
-  const { control, timeUnitOptions } = useSlaAutoSaveHook(slaList);
-
-  const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set());
-  const [showNewRow, setShowNewRow] = useState(false); // Controls new SLA row visibility
-
-  const toggleRowSelection = (id: number) => {
-    const newSelection = new Set(selectedRows);
-    if (newSelection.has(id)) newSelection.delete(id);
-    else newSelection.add(id);
-    setSelectedRows(newSelection);
-  };
-
-  const handleDelete = () => {
-    console.log('Deleting selected rows:', Array.from(selectedRows));
-    setSelectedRows(new Set());
-  };
-
-  const handleCancel = () => {
-    setSelectedRows(new Set());
-  };
-
-  const handleAddNewRow = () => {
-    setShowNewRow(true);
-  };
-
-  const isAnySelected = selectedRows.size > 0;
+export default function SlaTable() {
+  const {
+    slaList,
+    control,
+    newSlaControl,
+    selectedRows,
+    showNewRow,
+    setIsDeleteOpen,
+    isDeleteOpen,
+    toggleRowSelection,
+    handleCancel,
+    handleAddNewRow,
+    handleConfirmDelete,
+    isAnySelected,
+    priorityOptions,
+    timeUnitOptions,
+    capitalizeFirstLetter,
+  } = useSlaLogic();
 
   return (
     <div>
@@ -75,33 +63,32 @@ export default function SlaTable({ slaList }: SlaTableProps) {
 
       {isAnySelected && (
         <div className="mt-5 mb-3 flex items-center justify-between">
-          {/* Left: Selected count */}
-          <div>
-            <span className="font-outfit text-brand-primary text-base">
-              {selectedRows.size} Selected
-            </span>
-          </div>
-
-          {/* Right: Buttons */}
+          <span className="font-outfit text-brand-primary text-base">
+            {selectedRows.size} Selected
+          </span>
           <div className="flex gap-2">
-            <Button
-              variant="outline"
-              onClick={handleCancel}
-              className="border-gray-primary text-brand-dark text-baset- w-17 font-semibold"
-            >
+            <Button variant="outline" onClick={handleCancel}>
               Cancel
             </Button>
-            <Button
-              variant="destructive"
-              onClick={handleDelete}
-              className="w-25 text-base font-semibold"
-            >
-              <Icons.delete_bin_fill />
-              Delete
+            <Button variant="destructive" onClick={() => setIsDeleteOpen(true)}>
+              <Icons.delete_bin_fill /> Delete
             </Button>
           </div>
         </div>
       )}
+
+      {/* Delete Modal */}
+      <DeleteModal
+        open={isDeleteOpen}
+        onOpenChange={setIsDeleteOpen}
+        title="Are you sure?"
+        TitleclassName="font-outfit font-medium text-base text-black"
+        description={`Deleting this ticket is a permanent action and cannot be undone. This may result in the loss of important information and context related to the issue.`}
+        descriptionColor="text-alert-prominent font-outfit text-xs font-normal"
+        onConfirm={handleConfirmDelete}
+        onCancel={() => setIsDeleteOpen(false)}
+        icon={''}
+      />
 
       <div className="mt-5 overflow-hidden rounded-lg border bg-white shadow-sm">
         <Table>
@@ -128,7 +115,6 @@ export default function SlaTable({ slaList }: SlaTableProps) {
                       : ''
                   }
                 >
-                  {/* Checkbox cell */}
                   <TableCell className="flex justify-center">
                     <Checkbox
                       checked={isSelected}
@@ -141,20 +127,18 @@ export default function SlaTable({ slaList }: SlaTableProps) {
                     />
                   </TableCell>
 
-                  {/* SLA Name */}
                   <TableCell>
                     {sla.name && (
-                      <Badge className="font-outfit text-brand-dark bg-white text-xs leading-[16px] font-semibold">
-                        {sla.name}
+                      <Badge className="font-outfit text-brand-dark bg-white text-sm font-normal">
+                        {capitalizeFirstLetter(sla.name)}
                       </Badge>
                     )}
                   </TableCell>
 
-                  {/* Priority */}
                   <TableCell>
                     {sla.priority?.name && (
                       <Badge
-                        className="font-outfit px-2 py-1 text-xs leading-[16px] font-semibold"
+                        className="font-outfit px-2 py-1 text-xs font-semibold"
                         style={{
                           backgroundColor: sla.priority.bg_color,
                           color: sla.priority.fg_color,
@@ -166,38 +150,36 @@ export default function SlaTable({ slaList }: SlaTableProps) {
                     )}
                   </TableCell>
 
-                  {/* Response Time */}
                   <TableCell>
-                    <div className="font-outfit text-disabled-foreground flex gap-2 text-sm font-medium">
+                    <div className="flex gap-2">
                       <InputField
                         control={control}
                         name={`${key}_responseTime`}
                         type="number"
-                        className="border-grey-light h-9 w-28 text-sm"
+                        className="h-9 w-28 text-sm"
                       />
                       <SelectField
                         control={control}
                         name={`${key}_responseUnit`}
-                        options={timeUnitOptions ?? []}
-                        className="border-grey-light h-9 w-28"
+                        options={timeUnitOptions}
+                        className="h-9 w-28"
                       />
                     </div>
                   </TableCell>
 
-                  {/* Resolution Time */}
                   <TableCell>
-                    <div className="font-outfit text-disabled-foreground flex gap-2 text-sm font-medium">
+                    <div className="flex gap-2">
                       <InputField
                         control={control}
                         name={`${key}_resolutionTime`}
                         type="number"
-                        className="border-grey-light h-9 w-28 text-sm"
+                        className="h-9 w-28 text-sm"
                       />
                       <SelectField
                         control={control}
                         name={`${key}_resolutionUnit`}
-                        options={timeUnitOptions ?? []}
-                        className="border-grey-light h-9 w-28"
+                        options={timeUnitOptions}
+                        className="h-9 w-28"
                       />
                     </div>
                   </TableCell>
@@ -207,54 +189,42 @@ export default function SlaTable({ slaList }: SlaTableProps) {
 
             {/* New SLA Row */}
             {showNewRow && (
-              <TableRow className="hover:bg-brand-light bg-white">
+              <TableRow className="bg-white">
                 <TableCell className="flex justify-center">
-                  <Checkbox
-                    checked={false}
-                    onCheckedChange={() => {}}
-                    className={cn(
-                      'mt-2 h-5 w-5 rounded border',
-                      'data-[state=checked]:bg-brand-primary',
-                      'data-[state=checked]:border-brand-primary',
-                    )}
-                  />
+                  <Checkbox disabled className="mt-2 h-5 w-5 rounded border" />
                 </TableCell>
 
                 <TableCell>
                   <InputField
-                    control={control}
-                    name={`new_sla_name`}
+                    control={newSlaControl}
+                    name="new_sla_name"
                     placeholder="Enter SLA Name"
-                    className="border-grey-light h-9 w-full text-sm"
+                    className="h-9 w-full text-sm"
                   />
                 </TableCell>
 
                 <TableCell>
                   <SelectField
-                    control={control}
-                    name={`new_sla_priority`}
-                    options={[
-                      { value: 'Low', label: 'Low' },
-                      { value: 'Medium', label: 'Medium' },
-                      { value: 'High', label: 'High' },
-                    ]}
-                    className="border-grey-light h-9 w-full text-sm"
+                    control={newSlaControl}
+                    name="new_sla_priority"
+                    options={priorityOptions}
+                    className="h-9 w-28 text-sm"
                   />
                 </TableCell>
 
                 <TableCell>
                   <div className="flex gap-2">
                     <InputField
-                      control={control}
-                      name={`new_sla_responseTime`}
+                      control={newSlaControl}
+                      name="new_sla_responseTime"
                       type="number"
-                      className="border-grey-light h-9 w-28 text-sm"
+                      className="h-9 w-28 text-sm"
                     />
                     <SelectField
-                      control={control}
-                      name={`new_sla_responseUnit`}
-                      options={timeUnitOptions ?? []}
-                      className="border-grey-light h-9 w-28 text-sm"
+                      control={newSlaControl}
+                      name="new_sla_responseUnit"
+                      options={timeUnitOptions}
+                      className="h-9 w-28 text-sm"
                     />
                   </div>
                 </TableCell>
@@ -262,16 +232,16 @@ export default function SlaTable({ slaList }: SlaTableProps) {
                 <TableCell>
                   <div className="flex gap-2">
                     <InputField
-                      control={control}
-                      name={`new_sla_resolutionTime`}
+                      control={newSlaControl}
+                      name="new_sla_resolutionTime"
                       type="number"
-                      className="border-grey-light h-9 w-28 text-sm"
+                      className="h-9 w-28 text-sm"
                     />
                     <SelectField
-                      control={control}
-                      name={`new_sla_resolutionUnit`}
-                      options={timeUnitOptions ?? []}
-                      className="border-grey-light h-9 w-28 text-sm"
+                      control={newSlaControl}
+                      name="new_sla_resolutionUnit"
+                      options={timeUnitOptions}
+                      className="h-9 w-28 text-sm"
                     />
                   </div>
                 </TableCell>

@@ -55,7 +55,7 @@ const MessageItem = ({ message, onReply }: MessageItemProps) => {
           <div
             className={`max-w-xs rounded-lg px-4 py-2 lg:max-w-sm ${
               message.sender === 'agent'
-                ? 'bg-brand-primary px-5 pt-2.5 pb-5 text-white'
+                ? 'bg-brand-primary px-5 py-2.5 text-white'
                 : 'bg-brand-disable text-gray-dark'
             }`}
           >
@@ -64,7 +64,7 @@ const MessageItem = ({ message, onReply }: MessageItemProps) => {
                 <div className="w-full items-center rounded-[8px] border border-l-4 py-2.5 pr-7 pl-7">
                   <div className="flex items-center gap-3 text-sm font-semibold text-white">
                     <Icons.reply className="h-5 w-5" />
-                    <span>Replied</span>
+                    <span className="text-sm">Replied</span>
                   </div>
                   <p className="mt-1 text-xs font-normal text-white">
                     Great! Thanks for your help with the recent issue!
@@ -76,7 +76,7 @@ const MessageItem = ({ message, onReply }: MessageItemProps) => {
             <p
               className={`${
                 message.sender === 'agent'
-                  ? 'mt-3 text-lg font-normal break-all'
+                  ? 'mt-3 text-sm font-normal break-all'
                   : 'text-sm'
               }`}
             >

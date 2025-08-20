@@ -1,7 +1,8 @@
 import axiosInstance from '@/apiConfigs/axiosInstance';
 import { create } from 'zustand';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
+import { showToast } from '@/shared/toast'; // ✅ use your custom toast
 
 // Types
 export type TicketStatus = {
@@ -44,26 +45,38 @@ export const useTicketStatuses = () => {
   return query;
 };
 
-// Add new status
+// ---- Add new status ----
 export const addTicketStatus = async (status: Omit<TicketStatus, 'id'>) => {
   try {
-    // Send payload as an array
     const res = await axiosInstance.post('/tickets/status', [status]);
-
-    // Backend might return array, extract first element
     const addedStatus = Array.isArray(res.data.data)
       ? res.data.data[0]
       : res.data.data;
-
     return addedStatus;
   } catch (error: any) {
-    // Throw error to handle in frontend
     throw error?.response?.data || error;
   }
 };
 
-// Delete status
+// ---- Delete status ----
 export const deleteTicketStatus = async (id: string | number) => {
-  const res = await axiosInstance.delete(`/tickets/status/${id}`);
-  return res.data;
+  try {
+    const res = await axiosInstance.delete(`/tickets/status/${id}`);
+    return res.data;
+  } catch (error: any) {
+    throw error?.response?.data || error;
+  }
+};
+
+// ---- Update status ----
+export const updateTicketStatus = async (
+  id: string | number,
+  updates: Partial<TicketStatus>,
+) => {
+  try {
+    const res = await axiosInstance.patch(`/tickets/status/${id}`, updates);
+    return res.data.data;
+  } catch (error: any) {
+    throw error?.response?.data || error;
+  }
 };

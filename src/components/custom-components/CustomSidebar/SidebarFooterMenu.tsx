@@ -33,7 +33,7 @@ const SidebarFooterMenu = () => {
             )}
           >
             <div className={cn('min-h-8 min-w-8 rounded-full bg-white')}>
-              <Image
+              {/* <Image
                 src={
                   authData?.data?.user?.image
                     ? authData?.data?.user?.image
@@ -43,7 +43,7 @@ const SidebarFooterMenu = () => {
                 width={32}
                 height={32}
                 className={cn('h-8 w-8 rounded-full object-cover')}
-              />
+              /> */}
             </div>
           </div>
 
@@ -51,14 +51,14 @@ const SidebarFooterMenu = () => {
           <div className={cn('flex w-full flex-col')}>
             <span
               className={cn(
-                'text-theme-text-dark font-outfit text-lg font-medium text-wrap',
+                'text-theme-text-dark font-outfit text-lg font-medium text-wrap break-all',
               )}
             >
               {authData?.data?.user?.name}
             </span>
             <span
               className={cn(
-                'text-theme-text-primary font-outfit text-xs font-normal text-wrap',
+                'text-theme-text-primary font-outfit text-xs font-normal text-wrap break-all',
               )}
             >
               {authData?.data?.user?.email}

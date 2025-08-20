@@ -13,7 +13,7 @@ export const useGenerateTwoFaOtp = () => {
     },
     onError: (error: any) => {
       toast.error(
-        error?.response?.data?.detail ||
+        error?.response?.data?.message ||
           'Failed to generate 2 factor authentication otp',
       );
       console.log(error);

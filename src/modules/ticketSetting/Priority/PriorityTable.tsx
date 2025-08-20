@@ -27,7 +27,7 @@ export default function TicketPriorityPage() {
     isError,
     error,
     deletePriorities,
-    isDeleting,
+    capitalizeFirstLetter,
   } = usePrioritiesTicket();
 
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -109,7 +109,7 @@ export default function TicketPriorityPage() {
                   <div className="flex-1">
                     <input
                       type="text"
-                      value={priority.name}
+                      value={capitalizeFirstLetter(priority.name)}
                       onChange={(e) =>
                         updatePriorityName(priority.id, e.target.value)
                       }

@@ -26,7 +26,7 @@ const SelectableCardGroup: React.FC<SelectableCardGroupProps> = ({
       control={control}
       defaultValue=""
       render={({ field, fieldState }) => (
-        <div className="w-full space-y-4">
+        <div className="font-outfit w-full space-y-4">
           {label && (
             <Label
               htmlFor={name}

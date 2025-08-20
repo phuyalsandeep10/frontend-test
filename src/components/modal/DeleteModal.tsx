@@ -62,7 +62,9 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-      <DialogContent className={cn(`${TitleclassName} flex-colflex w-[568px]`)}>
+      <DialogContent
+        className={cn(`${TitleclassName} flex w-[568px] flex-col`)}
+      >
         <DialogTitle className="sr-only">{title}</DialogTitle>
 
         {icon ?? (

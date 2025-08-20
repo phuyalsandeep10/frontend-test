@@ -31,7 +31,7 @@ export default function TicketStatus() {
 
       <div className="space-y-5">
         {logic.statuses.map((status) =>
-          status ? ( // <-- check if status is not null
+          status ? (
             <div
               key={status.id}
               className="border-theme-text-light flex items-center gap-4 rounded-lg border p-4"
@@ -70,31 +70,22 @@ export default function TicketStatus() {
               </div>
 
               <div className="flex w-full justify-between gap-4 pr-12">
+                {/* --- NAME --- */}
                 <input
                   type="text"
                   value={status.name || ''}
                   onChange={(e) =>
-                    logic.setStatuses(
-                      logic.statuses.map((s) =>
-                        s?.id === status.id
-                          ? { ...s, name: e.target.value }
-                          : s,
-                      ),
-                    )
+                    logic.handleNameChange(status.id, e.target.value)
                   }
                   className="font-outfit text-disabled-foreground w-full rounded-md border px-3 py-2 text-sm font-medium"
                 />
+
+                {/* --- CATEGORY --- */}
                 <div className="relative w-52">
                   <select
                     value={status.status_category || 'pending'}
                     onChange={(e) =>
-                      logic.setStatuses(
-                        logic.statuses.map((s) =>
-                          s?.id === status.id
-                            ? { ...s, status_category: e.target.value }
-                            : s,
-                        ),
-                      )
+                      logic.handleCategoryChange(status.id, e.target.value)
                     }
                     className="font-outfit text-disabled-foreground w-full appearance-none rounded-md border px-3 py-3 text-sm font-medium focus:outline-none"
                   >
@@ -111,6 +102,7 @@ export default function TicketStatus() {
                   />
                 </div>
 
+                {/* --- DELETE --- */}
                 <button
                   onClick={() => logic.handleOpenDeleteModal(status)}
                   className="text-alert-prominent cursor-pointer rounded-md p-2"
@@ -122,6 +114,7 @@ export default function TicketStatus() {
           ) : null,
         )}
 
+        {/* --- ADD NEW STATUS --- */}
         <form
           onSubmit={logic.handleSubmit(logic.handleAddStatus)}
           className="mt-6 mb-5"

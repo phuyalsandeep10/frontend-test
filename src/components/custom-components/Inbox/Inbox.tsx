@@ -11,7 +11,7 @@ import { useParams } from 'next/navigation';
 import { useUiStore } from '@/store/UiStore/useUiStore';
 import ChatEmptyScreen from './ChatEmptyScreen/ChatEmptyScreen';
 
-const socket = io('http://localhost:4000');
+// const socket = io('http://localhost:4000');
 
 interface Message {
   id: number;
@@ -31,24 +31,42 @@ const Inbox = () => {
   const { showChatInfo } = useUiStore();
 
   useEffect(() => {
+    setMessages([
+      {
+        id: 1,
+        sender: 'customer',
+        message: 'Hello, I need help with my order.',
+        time: '10:00',
+      },
+      {
+        id: 2,
+        sender: 'agent',
+        message: 'Sure! Could you provide your order ID?',
+        time: '10:01',
+      },
+    ]);
+  }, []);
+
+  useEffect(() => {
     if (!chatId) return;
 
-    socket.emit('joinChat', chatId);
+    // socket.emit('joinChat', chatId);
 
     const handleNewMessage = (msg: any) => {
       setMessages((prev) => [...prev, msg]);
     };
 
-    socket.on('newMessage', handleNewMessage);
+    // socket.on('newMessage', handleNewMessage);
 
-    return () => {
-      socket.off('newMessage', handleNewMessage);
-    };
+    // return () => {
+    //   socket.off('newMessage', handleNewMessage);
+    // };
   }, [chatId]);
 
   const onSend = () => {
     const text = inputRef.current?.value;
     if (text) {
+      console.log('Text:', text);
       const messageId = crypto.randomUUID();
       const msg = {
         messageId,
@@ -60,12 +78,12 @@ const Inbox = () => {
           minute: '2-digit',
         }),
         status: 'sent',
-        sender: 'agent',
+        sender: 'customer',
         replyTo: replyingTo,
       };
 
       setMessages((prev) => [...prev, msg]);
-      socket.emit('sendMessage', msg);
+      // socket.emit('sendMessage', msg);
       if (inputRef.current) inputRef.current.value = '';
       setReplyingTo(null);
     }
@@ -82,7 +100,7 @@ const Inbox = () => {
   return (
     <div className="flex">
       <SubSidebarContentWrapper className="w-[306px]">
-        <div className="flex">
+        <div className="flex-1">
           <InboxSubSidebar />
         </div>
       </SubSidebarContentWrapper>
@@ -114,6 +132,13 @@ const Inbox = () => {
                   placeholder="Enter your message here"
                   className={`h-24 resize-none ${replyingTo ? 'pt-14' : 'pt-3'}`}
                   ref={inputRef}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      const text = inputRef.current?.value || '';
+                      onSend();
+                    }
+                  }}
                 />
               </div>
 

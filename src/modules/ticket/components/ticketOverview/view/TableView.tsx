@@ -207,12 +207,25 @@ export default function TableView() {
                   {formatTimeAgo(ticket?.created_at)}
                 </TableCell>
                 <TableCell>
-                  <Avatar className="h-10.5 w-10.5">
-                    <AvatarImage src={''} alt={ticket?.created_by?.name} />
-                    <AvatarFallback>
-                      {ticket?.created_by?.name.charAt(0)}
-                    </AvatarFallback>
-                  </Avatar>
+                  <div className="flex flex-wrap gap-1">
+                    {ticket?.assignees?.map((assignee: any) => (
+                      <Avatar
+                        key={assignee.id}
+                        className="h-10 w-10 border-2 border-white"
+                      >
+                        {assignee.image ? (
+                          <AvatarImage
+                            src={assignee.image}
+                            alt={assignee.name}
+                          />
+                        ) : (
+                          <AvatarFallback>
+                            {assignee.name.charAt(0).toUpperCase()}
+                          </AvatarFallback>
+                        )}
+                      </Avatar>
+                    ))}
+                  </div>
                 </TableCell>
                 <TableCell>
                   <span

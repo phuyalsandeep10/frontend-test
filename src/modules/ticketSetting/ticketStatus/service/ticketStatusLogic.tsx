@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { showToast } from '@/shared/toast';
-import { useQueryClient } from '@tanstack/react-query'; // Add this import
-
+import { useQueryClient } from '@tanstack/react-query';
 import {
   TicketStatus as TicketStatusType,
   useTicketStatuses,
   addTicketStatus,
   deleteTicketStatus,
+  updateTicketStatus,
 } from './useTicketStatuses';
+import { useDebounce } from './debounce';
 
 export interface FormData {
   newStatusName: string;
@@ -16,7 +17,7 @@ export interface FormData {
 }
 
 export const useTicketStatusLogic = () => {
-  const queryClient = useQueryClient(); // Initialize queryClient
+  const queryClient = useQueryClient();
   const { data: fetchedStatuses } = useTicketStatuses();
   const [statuses, setStatuses] = useState<TicketStatusType[]>([]);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -43,6 +44,60 @@ export const useTicketStatusLogic = () => {
     if (fetchedStatuses) setStatuses(fetchedStatuses);
   }, [fetchedStatuses]);
 
+  // ---- API UPDATE (Debounced) ----
+  const debouncedUpdate = useDebounce(
+    async (id: string | number, updates: Partial<TicketStatusType>) => {
+      try {
+        const res = await updateTicketStatus(id, updates);
+        queryClient.invalidateQueries({ queryKey: ['ticket-statuses'] });
+        showToast({
+          title: 'Updated',
+          description: res?.message || 'Status updated successfully',
+          variant: 'success',
+        });
+      } catch (error: any) {
+        showToast({
+          title: 'Error',
+          description:
+            error?.response?.data?.message ||
+            error?.message ||
+            'Failed to update',
+          variant: 'error',
+        });
+      }
+    },
+    600, // debounce delay
+  );
+
+  // Handlers for inline edits
+  const handleNameChange = (id: string | number, value: string) => {
+    setStatuses((prev) =>
+      prev.map((s) => (s.id === id ? { ...s, name: value } : s)),
+    );
+    debouncedUpdate(id, { name: value });
+  };
+
+  const handleCategoryChange = (id: string | number, value: string) => {
+    setStatuses((prev) =>
+      prev.map((s) => (s.id === id ? { ...s, status_category: value } : s)),
+    );
+    debouncedUpdate(id, { status_category: value });
+  };
+
+  const handleBackgroundColorChange = (id: string | number, color: string) => {
+    setStatuses((prev) =>
+      prev.map((s) => (s.id === id ? { ...s, bg_color: color } : s)),
+    );
+    debouncedUpdate(id, { bg_color: color });
+  };
+
+  const handleForegroundColorChange = (id: string | number, color: string) => {
+    setStatuses((prev) =>
+      prev.map((s) => (s.id === id ? { ...s, fg_color: color } : s)),
+    );
+    debouncedUpdate(id, { fg_color: color });
+  };
+
   // Delete modal
   const handleOpenDeleteModal = (status: TicketStatusType) => {
     setStatusToDelete(status);
@@ -56,15 +111,17 @@ export const useTicketStatusLogic = () => {
       setStatuses((prev) => prev.filter((s) => s.id !== statusToDelete.id));
       showToast({
         title: 'Deleted',
-        description: res.message,
+        description: res?.message || 'Status deleted successfully',
         variant: 'success',
       });
-      // Invalidate the ticket-statuses query to trigger a refetch
       queryClient.invalidateQueries({ queryKey: ['ticket-statuses'] });
     } catch (error: any) {
       showToast({
         title: 'Error',
-        description: error?.response?.data?.message || 'Failed to delete',
+        description:
+          error?.response?.data?.message ||
+          error?.message ||
+          'Failed to delete',
         variant: 'error',
       });
     } finally {
@@ -91,32 +148,19 @@ export const useTicketStatusLogic = () => {
         setNewStatusFgColor('#ffffff');
         showToast({
           title: 'Added',
-          description: 'Status added successfully',
+          description: addedStatus?.message || 'Status added successfully',
           variant: 'success',
         });
-        // Invalidate the ticket-statuses query to trigger a refetch
         queryClient.invalidateQueries({ queryKey: ['ticket-statuses'] });
       } catch (error: any) {
         showToast({
           title: 'Error',
-          description: error?.message || 'Failed to add',
+          description:
+            error?.response?.data?.message || error?.message || 'Failed to add',
           variant: 'error',
         });
       }
     }
-  };
-
-  // Color updates
-  const handleBackgroundColorChange = (id: string | number, color: string) => {
-    setStatuses((prev) =>
-      prev.map((s) => (s.id === id ? { ...s, bg_color: color } : s)),
-    );
-  };
-
-  const handleForegroundColorChange = (id: string | number, color: string) => {
-    setStatuses((prev) =>
-      prev.map((s) => (s.id === id ? { ...s, fg_color: color } : s)),
-    );
   };
 
   return {
@@ -139,5 +183,7 @@ export const useTicketStatusLogic = () => {
     handleAddStatus,
     handleBackgroundColorChange,
     handleForegroundColorChange,
+    handleNameChange,
+    handleCategoryChange,
   };
 };

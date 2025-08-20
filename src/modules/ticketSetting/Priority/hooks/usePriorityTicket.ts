@@ -61,6 +61,11 @@ function useDebounce<T extends (...args: any[]) => void>(fn: T, delay: number) {
   return debounced as T;
 }
 
+export function capitalizeFirstLetter(text: string) {
+  if (!text) return '';
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
 // ---- MAIN HOOK ----
 export function usePrioritiesTicket() {
   const queryClient = useQueryClient();
@@ -291,5 +296,6 @@ export function usePrioritiesTicket() {
     deletePriorities,
     isDeleting,
     isUpdating,
+    capitalizeFirstLetter,
   };
 }
