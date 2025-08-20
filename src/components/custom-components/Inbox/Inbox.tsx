@@ -1,15 +1,16 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
-import SubSidebarContentWrapper from '../CustomSidebar/SubSidebarContentWrapper';
-import InboxChatSection from './InboxChatSection/InboxChatSection';
-import InboxChatInfo from './InboxChatInfo/InboxChatInfo';
-import InboxSubSidebar from './InboxSidebar/InboxSubSidebar';
-import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import io from 'socket.io-client';
-import { useParams } from 'next/navigation';
+import { Textarea } from '@/components/ui/textarea';
+import { useSocket } from '@/context/socket.context';
+import { useMessageAudio } from '@/hooks/useMessageAudio.hook';
 import { useUiStore } from '@/store/UiStore/useUiStore';
+import { useParams } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
+import SubSidebarContentWrapper from '../CustomSidebar/SubSidebarContentWrapper';
 import ChatEmptyScreen from './ChatEmptyScreen/ChatEmptyScreen';
+import InboxChatInfo from './InboxChatInfo/InboxChatInfo';
+import InboxChatSection from './InboxChatSection/InboxChatSection';
+import InboxSubSidebar from './InboxSidebar/InboxSubSidebar';
 
 // const socket = io('http://localhost:4000');
 
@@ -26,11 +27,22 @@ const Inbox = () => {
   const chatId = params?.userId;
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [messages, setMessages] = useState<any[]>([]);
+
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
+  const [isTyping, setIsTyping] = useState(false);
+  const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(
+    null,
+  );
+  const [message, setMessage] = useState('');
 
   const { showChatInfo } = useUiStore();
+  const { socket } = useSocket();
+  const { playSound } = useMessageAudio();
 
   useEffect(() => {
+    if (!chatId || !socket) return;
+
+    socket.emit('join_conversation', { conversation_id: 1 });
     setMessages([
       {
         id: 1,
@@ -45,31 +57,40 @@ const Inbox = () => {
         time: '10:01',
       },
     ]);
-  }, []);
-
-  useEffect(() => {
-    if (!chatId) return;
 
     // socket.emit('joinChat', chatId);
+    socket.on('receive-message', (data) => {
+      console.log({ data });
+      playSound();
+    });
+    socket.on('typing', () => {
+      console.log('typing ...');
+    });
+    socket.on('stop-typing', () => {
+      console.log('stop typing...');
+    });
 
-    const handleNewMessage = (msg: any) => {
-      setMessages((prev) => [...prev, msg]);
+    return () => {
+      socket.emit('leave_conversation', { conversation_id: 1 });
     };
-
-    // socket.on('newMessage', handleNewMessage);
-
-    // return () => {
-    //   socket.off('newMessage', handleNewMessage);
-    // };
-  }, [chatId]);
+  }, [chatId, socket, playSound]);
 
   const onSend = () => {
     const text = inputRef.current?.value;
+    if (!socket) return;
     if (text) {
       console.log('Text:', text);
+
+      // typing: stop on send
+      // socket.emit('stop-typing');
+      setIsTyping(false);
+      if (typingTimeout) {
+        clearTimeout(typingTimeout);
+        setTypingTimeout(null);
+      }
       const messageId = crypto.randomUUID();
       const msg = {
-        messageId,
+        uuid: messageId,
         chatId,
         user: 'Me',
         message: text,
@@ -82,7 +103,15 @@ const Inbox = () => {
         replyTo: replyingTo,
       };
 
-      setMessages((prev) => [...prev, msg]);
+      socket.emit('message', {
+        message: msg,
+        mode: 'message',
+        organization_id: 1,
+        conversation_id: 1,
+      });
+      emitStopTyping();
+      setMessages((prev) => [...prev, { msg: message, from: socket.id }]);
+      setMessage('');
       // socket.emit('sendMessage', msg);
       if (inputRef.current) inputRef.current.value = '';
       setReplyingTo(null);
@@ -95,6 +124,15 @@ const Inbox = () => {
 
   const clearReply = () => {
     setReplyingTo(null);
+  };
+
+  const emitTyping = (message: string) => {
+    if (!socket) return;
+    socket.emit('typing', { message, mode: 'typing' });
+  };
+  const emitStopTyping = () => {
+    if (!socket) return;
+    socket.emit('stop_typing');
   };
 
   return (
@@ -132,12 +170,27 @@ const Inbox = () => {
                   placeholder="Enter your message here"
                   className={`h-24 resize-none ${replyingTo ? 'pt-14' : 'pt-3'}`}
                   ref={inputRef}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                      e.preventDefault();
-                      const text = inputRef.current?.value || '';
-                      onSend();
+                  value={message}
+                  onChange={(e) => {
+                    setMessage(e.target.value);
+                    if (!socket) return;
+
+                    if (!isTyping) {
+                      setIsTyping(true);
+
+                      // socket.emit('message', { message, mode: 'typing' });
+                      emitTyping(e.target.value);
                     }
+
+                    if (typingTimeout) clearTimeout(typingTimeout);
+
+                    const timeout = setTimeout(() => {
+                      setIsTyping(false);
+                      // socket.emit('message', { message, mode: 'stop-typing' });
+                      emitStopTyping();
+                    }, 2000);
+
+                    setTypingTimeout(timeout);
                   }}
                 />
               </div>
