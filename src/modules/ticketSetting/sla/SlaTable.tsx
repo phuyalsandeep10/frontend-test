@@ -19,9 +19,12 @@ import { cn } from '@/lib/utils';
 import DeleteModal from '@/components/modal/DeleteModal';
 import { useSlaLogic } from './hooks/useSlaLogic';
 
-export default function SlaTable() {
+interface SlaTableProps {
+  slaList: any[];
+}
+
+export default function SlaTable({ slaList }: SlaTableProps) {
   const {
-    slaList,
     control,
     newSlaControl,
     selectedRows,
