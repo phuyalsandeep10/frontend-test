@@ -9,22 +9,15 @@ import { Icons } from '@/components/ui/Icons';
 import { useState } from 'react';
 import Image from 'next/image';
 import profile from '@/assets/images/profile.jpg';
-
-interface Message {
-  id: number;
-  sender: 'agent' | 'customer';
-  message: string;
-  time: string;
-  date?: string;
-}
+import ShowTime from '@/lib/timeFormatUtils';
 
 interface MessageItemProps {
-  message: Message;
+  message: any;
   onReply: (messageText: string) => void;
 }
 
 const MessageItem = ({ message, onReply }: MessageItemProps) => {
-  const [replyTo, setReplyTo] = useState(true);
+  // const [replyTo, setReplyTo] = useState(true);
 
   const handleReplyClick = () => {
     onReply(message.message);
@@ -32,20 +25,20 @@ const MessageItem = ({ message, onReply }: MessageItemProps) => {
 
   return (
     <div>
-      {message.date && (
+      {/* {message?.updated_at && (
         <div className="mb-4 flex items-center">
           <div className="bg-gray-light h-[0.5px] w-full"></div>
           <div className="text-gray-light text-center text-xs">
-            {message.date}
+            {ShowTime(message?.updated_at)}
           </div>
           <div className="bg-gray-light h-[0.5px] w-full"></div>
         </div>
-      )}
+      )} */}
 
       <div
-        className={`flex ${message.sender === 'agent' ? 'justify-end' : 'justify-start'} mb-4`}
+        className={`flex ${message?.user_id ? 'justify-end' : 'justify-start'} mb-4`}
       >
-        {message.sender === 'customer' && (
+        {!message?.user_id && (
           <div className="bg-gray-light mr-2 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full">
             <span className="text-theme-text-dark text-xs font-medium">AJ</span>
           </div>
@@ -54,12 +47,12 @@ const MessageItem = ({ message, onReply }: MessageItemProps) => {
         <div className="flex items-center">
           <div
             className={`max-w-xs rounded-lg px-4 py-2 lg:max-w-sm ${
-              message.sender === 'agent'
+              message?.user_id
                 ? 'bg-brand-primary px-5 py-2.5 text-white'
                 : 'bg-brand-disable text-gray-dark'
             }`}
           >
-            {message.sender === 'agent' && replyTo && (
+            {/* {message?.user_id&& (
               <div className="bg-brand-bg-gradient flex items-center justify-center overflow-hidden">
                 <div className="w-full items-center rounded-[8px] border border-l-4 py-2.5 pr-7 pl-7">
                   <div className="flex items-center gap-3 text-sm font-semibold text-white">
@@ -71,32 +64,30 @@ const MessageItem = ({ message, onReply }: MessageItemProps) => {
                   </p>
                 </div>
               </div>
-            )}
+            )} */}
 
             <p
               className={`${
-                message.sender === 'agent'
+                message?.user_id
                   ? 'mt-3 text-sm font-normal break-all'
                   : 'text-sm'
               }`}
             >
-              {message.message}
+              {message?.content}
             </p>
 
             <div
-              className={`mt-1 flex items-center ${message.sender === 'agent' ? 'justify-end' : ''}`}
+              className={`mt-1 flex items-center ${message?.user_id ? 'justify-end' : ''}`}
             >
               <span
                 className={`text-xs ${
-                  message.sender === 'agent' ? 'text-white' : 'text-gray-dark'
+                  message?.user_id ? 'text-white' : 'text-gray-dark'
                 }`}
-              >
-                {message.time}
-              </span>
+              ></span>
             </div>
           </div>
 
-          {message.sender === 'agent' && (
+          {message?.user_id && (
             <div className="ml-2 flex h-12 w-12 flex-shrink-0 items-center justify-center overflow-hidden rounded-full">
               <Image
                 src={profile}
@@ -132,7 +123,7 @@ const MessageItem = ({ message, onReply }: MessageItemProps) => {
         )}
       </div>
 
-      {message.sender === 'agent' && (
+      {message?.user_id && (
         <div className="-mt-2 mr-10 flex justify-end">
           <Icons.double_check className="text-brand-primary" />
         </div>

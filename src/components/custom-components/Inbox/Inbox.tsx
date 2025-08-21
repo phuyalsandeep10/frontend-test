@@ -11,16 +11,9 @@ import ChatEmptyScreen from './ChatEmptyScreen/ChatEmptyScreen';
 import InboxChatInfo from './InboxChatInfo/InboxChatInfo';
 import InboxChatSection from './InboxChatSection/InboxChatSection';
 import InboxSubSidebar from './InboxSidebar/InboxSubSidebar';
-
-// const socket = io('http://localhost:4000');
-
-interface Message {
-  id: number;
-  sender: 'agent' | 'customer';
-  message: string;
-  time: string;
-  date?: string;
-}
+import { useGetAgentAllChatConversations } from '@/hooks/inbox/useGetAgentAllChatConversations';
+import { InboxService } from '@/services/inbox/inbox';
+import { Input } from '@/components/ui/input';
 
 const Inbox = () => {
   const params = useParams();
@@ -42,21 +35,17 @@ const Inbox = () => {
   useEffect(() => {
     if (!chatId || !socket) return;
 
+    const getAgentChatConversationsMessagesById = async () => {
+      const data: any =
+        await InboxService.getAgentChatConversationsMessagesById(
+          Number(chatId),
+        );
+      console.log(data);
+      setMessages(data?.data);
+    };
+    getAgentChatConversationsMessagesById();
+
     socket.emit('join_conversation', { conversation_id: 1 });
-    setMessages([
-      {
-        id: 1,
-        sender: 'customer',
-        message: 'Hello, I need help with my order.',
-        time: '10:00',
-      },
-      {
-        id: 2,
-        sender: 'agent',
-        message: 'Sure! Could you provide your order ID?',
-        time: '10:01',
-      },
-    ]);
 
     // socket.emit('joinChat', chatId);
     socket.on('receive-message', (data) => {
@@ -75,7 +64,8 @@ const Inbox = () => {
     };
   }, [chatId, socket, playSound]);
 
-  const onSend = () => {
+  const onSend = async (e: any) => {
+    e.preventDefault();
     const text = inputRef.current?.value;
     if (!socket) return;
     if (text) {
@@ -89,28 +79,22 @@ const Inbox = () => {
         setTypingTimeout(null);
       }
       const messageId = crypto.randomUUID();
-      const msg = {
-        uuid: messageId,
-        chatId,
-        user: 'Me',
-        message: text,
-        time: new Date().toLocaleTimeString([], {
-          hour: '2-digit',
-          minute: '2-digit',
-        }),
-        status: 'sent',
-        sender: 'customer',
-        replyTo: replyingTo,
-      };
 
-      socket.emit('message', {
-        message: msg,
-        mode: 'message',
-        organization_id: 1,
-        conversation_id: 1,
-      });
       emitStopTyping();
-      setMessages((prev) => [...prev, { msg: message, from: socket.id }]);
+      // setMessages((prev) => [...prev, { msg: message, from: socket.id }]);
+      console.log('clicked...');
+      const response = await InboxService.createAgentChatConversastions(
+        Number(chatId),
+        {
+          content: text,
+          reply_to_id: 25,
+        },
+      );
+      console.log({ response });
+      setMessages((prev: any) => {
+        console.log({ prev });
+        return [...prev, response?.data];
+      });
       setMessage('');
       // socket.emit('sendMessage', msg);
       if (inputRef.current) inputRef.current.value = '';
@@ -135,6 +119,14 @@ const Inbox = () => {
     socket.emit('stop_typing');
   };
 
+  console.log(messages);
+  const getAgentChatConversastionDetails = async () => {
+    const data: any = await InboxService.getAgentChatConversationsDetailsById(
+      Number(chatId),
+    );
+    return data?.data;
+  };
+
   return (
     <div className="flex">
       <SubSidebarContentWrapper className="w-[306px]">
@@ -145,7 +137,7 @@ const Inbox = () => {
 
       {chatId ? (
         <>
-          <div className="flex-1">
+          <form onSubmit={onSend} className="flex-1">
             <InboxChatSection messages={messages} onReply={handleReply} />
             <div className="relative m-4">
               <div className="relative">
@@ -166,10 +158,10 @@ const Inbox = () => {
                   </div>
                 )}
 
-                <Textarea
+                <Input
                   placeholder="Enter your message here"
-                  className={`h-24 resize-none ${replyingTo ? 'pt-14' : 'pt-3'}`}
-                  ref={inputRef}
+                  className={` ${replyingTo ? 'pt-14' : 'pt-3'}`}
+                  ref={inputRef as any}
                   value={message}
                   onChange={(e) => {
                     setMessage(e.target.value);
@@ -196,10 +188,10 @@ const Inbox = () => {
               </div>
 
               <div className="mt-3 flex justify-end">
-                <Button onClick={onSend}>{'Send'}</Button>
+                <Button type="submit">{'Send'}</Button>
               </div>
             </div>
-          </div>
+          </form>
           {showChatInfo && (
             <div className="w-[400px]">
               <InboxChatInfo />

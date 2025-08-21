@@ -25,13 +25,15 @@ const InboxChatSection = ({ messages, onReply }: InboxChatSectionProps) => {
     endOfMessagesRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  console.log(messages);
+
   return (
     <div className="flex-1 p-4">
       <InboxChatSectionHeader onOpen={openChatInfo} />
       <LanguageSelector />
       <div className="max-h-[calc(100vh-380px)] min-h-[calc(100vh-380px)] space-y-4 overflow-y-auto py-10">
-        {messages.map((message) => (
-          <MessageItem key={message.id} message={message} onReply={onReply} />
+        {messages?.map((message, index) => (
+          <MessageItem key={index} message={message} onReply={onReply} />
         ))}
         <div ref={endOfMessagesRef} />
       </div>
