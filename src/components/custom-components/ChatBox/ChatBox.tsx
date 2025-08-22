@@ -1,4 +1,5 @@
 'use client';
+import { CustomerConversastionService } from '@/services/inbox/customerConversation.service';
 import { useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 
@@ -147,6 +148,12 @@ export default function ChatBox() {
     socket.emit('stop_typing');
   };
 
+  const getConversastions = async () => {
+    await CustomerConversastionService.getCustomerAllChatConversationMessages(
+      1,
+    );
+  };
+
   return (
     <div className="mx-auto flex h-screen max-w-2xl flex-col p-4">
       <h1 className="mb-4 text-center text-2xl font-bold">
@@ -266,9 +273,8 @@ export default function ChatBox() {
 
             if (!isTyping) {
               setIsTyping(true);
-
-              // socket.emit('message', { message, mode: 'typing' });
               emitTyping(e.target.value);
+              socket.emit('message', { message, mode: 'typing' });
             }
 
             if (typingTimeout) clearTimeout(typingTimeout);
@@ -297,6 +303,7 @@ export default function ChatBox() {
           Send
         </button>
       </form>
+      <button onClick={() => getConversastions()}>get Conversastions</button>
     </div>
   );
 }

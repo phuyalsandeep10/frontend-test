@@ -11,9 +11,9 @@ import ChatEmptyScreen from './ChatEmptyScreen/ChatEmptyScreen';
 import InboxChatInfo from './InboxChatInfo/InboxChatInfo';
 import InboxChatSection from './InboxChatSection/InboxChatSection';
 import InboxSubSidebar from './InboxSidebar/InboxSubSidebar';
-import { useGetAgentAllChatConversations } from '@/hooks/inbox/useGetAgentAllChatConversations';
-import { InboxService } from '@/services/inbox/inbox';
 import { Input } from '@/components/ui/input';
+import { useConversationStore } from '@/store/inbox/agentConversationStore';
+import { ConversationService } from '@/services/inbox/coversation.service';
 
 const Inbox = () => {
   const params = useParams();
@@ -21,8 +21,10 @@ const Inbox = () => {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [messages, setMessages] = useState<any[]>([]);
 
-  const [replyingTo, setReplyingTo] = useState<string | null>(null);
+  const [replyingTo, setReplyingTo] = useState<any>(null);
   const [isTyping, setIsTyping] = useState(false);
+  const [showTyping, setShowTyping] = useState(false);
+  const [typingmessage, setTypingMessage] = useState<string>('');
   const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(
     null,
   );
@@ -32,18 +34,29 @@ const Inbox = () => {
   const { socket } = useSocket();
   const { playSound } = useMessageAudio();
 
+  const { setConversationData } = useConversationStore();
+
   useEffect(() => {
     if (!chatId || !socket) return;
 
     const getAgentChatConversationsMessagesById = async () => {
       const data: any =
-        await InboxService.getAgentChatConversationsMessagesById(
+        await ConversationService.getAgentChatConversationsMessagesById(
           Number(chatId),
         );
-      console.log(data);
       setMessages(data?.data);
     };
     getAgentChatConversationsMessagesById();
+
+    const getAgentChatConversastionDetails = async () => {
+      const data: any =
+        await ConversationService.getAgentChatConversationsDetailsById(
+          Number(chatId),
+        );
+      setConversationData(data);
+    };
+
+    getAgentChatConversastionDetails();
 
     socket.emit('join_conversation', { conversation_id: 1 });
 
@@ -52,11 +65,16 @@ const Inbox = () => {
       console.log({ data });
       playSound();
     });
-    socket.on('typing', () => {
-      console.log('typing ...');
+    socket.on('typing', (data) => {
+      console.log('typing ...', data);
+      setShowTyping(true);
+      setTypingMessage(data?.message);
     });
     socket.on('stop-typing', () => {
-      console.log('stop typing...');
+      console.log('Stopping...');
+      setTimeout(() => {
+        setShowTyping(false);
+      }, 2000);
     });
 
     return () => {
@@ -78,16 +96,14 @@ const Inbox = () => {
         clearTimeout(typingTimeout);
         setTypingTimeout(null);
       }
-      const messageId = crypto.randomUUID();
 
       emitStopTyping();
-      // setMessages((prev) => [...prev, { msg: message, from: socket.id }]);
-      console.log('clicked...');
-      const response = await InboxService.createAgentChatConversastions(
+
+      const response = await ConversationService.createAgentChatConversastions(
         Number(chatId),
         {
           content: text,
-          reply_to_id: 25,
+          reply_to_id: replyingTo ? replyingTo?.id : null,
         },
       );
       console.log({ response });
@@ -96,14 +112,13 @@ const Inbox = () => {
         return [...prev, response?.data];
       });
       setMessage('');
-      // socket.emit('sendMessage', msg);
       if (inputRef.current) inputRef.current.value = '';
       setReplyingTo(null);
     }
   };
 
-  const handleReply = (messageText: string) => {
-    setReplyingTo(messageText);
+  const handleReply = (replyToMessage: string) => {
+    setReplyingTo(replyToMessage);
   };
 
   const clearReply = () => {
@@ -113,18 +128,11 @@ const Inbox = () => {
   const emitTyping = (message: string) => {
     if (!socket) return;
     socket.emit('typing', { message, mode: 'typing' });
+    console.log('Hello typing....', isTyping);
   };
   const emitStopTyping = () => {
     if (!socket) return;
     socket.emit('stop_typing');
-  };
-
-  console.log(messages);
-  const getAgentChatConversastionDetails = async () => {
-    const data: any = await InboxService.getAgentChatConversationsDetailsById(
-      Number(chatId),
-    );
-    return data?.data;
   };
 
   return (
@@ -137,16 +145,21 @@ const Inbox = () => {
 
       {chatId ? (
         <>
-          <form onSubmit={onSend} className="flex-1">
+          <div className="flex-1">
             <InboxChatSection messages={messages} onReply={handleReply} />
             <div className="relative m-4">
+              <div>
+                {showTyping && (
+                  <p className="text-red-300">Typing...{typingmessage}</p>
+                )}
+              </div>
               <div className="relative">
                 {replyingTo && (
                   <div className="bg bg-brand-disable absolute top-2 right-2 left-2 z-10 flex w-fit items-center justify-between rounded-md border px-4 py-2 text-black">
                     <div className="flex items-center gap-2">
                       <span className="text-xs text-black">Replying to:</span>
                       <span className="text-theme-text-primary max-w-[200px] truncate text-xs font-medium">
-                        {replyingTo}
+                        {replyingTo?.content}
                       </span>
                     </div>
                     <button
@@ -158,12 +171,12 @@ const Inbox = () => {
                   </div>
                 )}
 
-                <Input
+                <Textarea
                   placeholder="Enter your message here"
                   className={` ${replyingTo ? 'pt-14' : 'pt-3'}`}
                   ref={inputRef as any}
                   value={message}
-                  onChange={(e) => {
+                  onChange={(e: any) => {
                     setMessage(e.target.value);
                     if (!socket) return;
 
@@ -184,14 +197,22 @@ const Inbox = () => {
 
                     setTypingTimeout(timeout);
                   }}
+                  onKeyDown={(e: any) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      onSend(e);
+                    }
+                  }}
                 />
               </div>
 
               <div className="mt-3 flex justify-end">
-                <Button type="submit">{'Send'}</Button>
+                <Button type="button" onClick={onSend}>
+                  {'Send'}
+                </Button>
               </div>
             </div>
-          </form>
+          </div>
           {showChatInfo && (
             <div className="w-[400px]">
               <InboxChatInfo />

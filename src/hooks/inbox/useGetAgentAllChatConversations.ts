@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import { InboxService } from '@/services/inbox/inbox';
+import { ConversationService } from '@/services/inbox/coversation.service';
 
 export const useGetAgentAllChatConversations = () => {
   return useQuery({
     queryKey: ['agetAllChatConversastions'],
-    queryFn: InboxService.getAgentAllChatConversations,
+    queryFn: ConversationService.getAgentAllChatConversations,
     refetchOnWindowFocus: false,
     refetchOnMount: true,
   });

@@ -10,6 +10,8 @@ import { useState } from 'react';
 import Image from 'next/image';
 import profile from '@/assets/images/profile.jpg';
 import ShowTime from '@/lib/timeFormatUtils';
+import { useConversationStore } from '@/store/inbox/agentConversationStore';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface MessageItemProps {
   message: any;
@@ -17,11 +19,10 @@ interface MessageItemProps {
 }
 
 const MessageItem = ({ message, onReply }: MessageItemProps) => {
-  // const [replyTo, setReplyTo] = useState(true);
-
   const handleReplyClick = () => {
-    onReply(message.message);
+    onReply(message);
   };
+  const { customer } = useConversationStore();
 
   return (
     <div>
@@ -40,7 +41,9 @@ const MessageItem = ({ message, onReply }: MessageItemProps) => {
       >
         {!message?.user_id && (
           <div className="bg-gray-light mr-2 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full">
-            <span className="text-theme-text-dark text-xs font-medium">AJ</span>
+            <span className="text-theme-text-dark text-xs font-medium">
+              {customer?.name?.substring(0, 2)?.toLocaleUpperCase()}
+            </span>
           </div>
         )}
 
@@ -52,29 +55,28 @@ const MessageItem = ({ message, onReply }: MessageItemProps) => {
                 : 'bg-brand-disable text-gray-dark'
             }`}
           >
-            {/* {message?.user_id&& (
+            {message?.reply_to && message?.reply_to_id && (
               <div className="bg-brand-bg-gradient flex items-center justify-center overflow-hidden">
                 <div className="w-full items-center rounded-[8px] border border-l-4 py-2.5 pr-7 pl-7">
                   <div className="flex items-center gap-3 text-sm font-semibold text-white">
                     <Icons.reply className="h-5 w-5" />
                     <span className="text-sm">Replied</span>
                   </div>
-                  <p className="mt-1 text-xs font-normal text-white">
-                    Great! Thanks for your help with the recent issue!
+                  <p className="mt-1 text-sm font-normal text-white">
+                    {message?.reply_to?.content}
                   </p>
                 </div>
               </div>
-            )} */}
+            )}
 
             <p
               className={`${
-                message?.user_id
-                  ? 'mt-3 text-sm font-normal break-all'
-                  : 'text-sm'
+                message?.user_id ? 'text-sm font-normal break-all' : 'text-sm'
               }`}
             >
               {message?.content}
             </p>
+            {/* <p>{ShowTime(message?.updated_at)}</p> */}
 
             <div
               className={`mt-1 flex items-center ${message?.user_id ? 'justify-end' : ''}`}
@@ -87,18 +89,24 @@ const MessageItem = ({ message, onReply }: MessageItemProps) => {
             </div>
           </div>
 
-          {message?.user_id && (
-            <div className="ml-2 flex h-12 w-12 flex-shrink-0 items-center justify-center overflow-hidden rounded-full">
-              <Image
-                src={profile}
-                alt="Profile"
-                className="h-full w-full object-cover"
-              />
-            </div>
-          )}
+          <div className="">
+            <Avatar>
+              {message?.user && message?.user?.image ? (
+                <AvatarImage
+                  src={message?.user?.image}
+                  alt="@shadcn"
+                  className="ml-2 flex h-12 w-12 flex-shrink-0 items-center justify-center overflow-hidden rounded-full"
+                />
+              ) : (
+                <AvatarFallback>
+                  {message?.name?.substring(0, 2)?.toLocaleUpperCase()}
+                </AvatarFallback>
+              )}
+            </Avatar>
+          </div>
         </div>
 
-        {message.sender === 'customer' && (
+        {!message?.user_id && (
           <div className="transition-opacity duration-200">
             <DropdownMenu>
               <DropdownMenuTrigger className="text-theme-text-primary flex h-6 w-6 cursor-pointer items-center justify-center transition-colors">
@@ -123,11 +131,11 @@ const MessageItem = ({ message, onReply }: MessageItemProps) => {
         )}
       </div>
 
-      {message?.user_id && (
+      {/* {message?.user_id && (
         <div className="-mt-2 mr-10 flex justify-end">
           <Icons.double_check className="text-brand-primary" />
         </div>
-      )}
+      )} */}
     </div>
   );
 };

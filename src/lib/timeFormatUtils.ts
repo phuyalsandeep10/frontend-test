@@ -1,13 +1,11 @@
 export default function ShowTime(timestamp: string) {
-  // Trim microseconds to milliseconds and create Date object
   const date = new Date(timestamp);
-
-  // Format to readable time (HH:MM in 24-hour format)
-  const formattedTime = date.toLocaleTimeString('en-US', {
+  const formattedTime = new Intl.DateTimeFormat('en-US', {
     hour: '2-digit',
     minute: '2-digit',
-    hour12: false, // Use 24-hour format
-  });
+    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    hour12: true,
+  }).format(date);
 
   return formattedTime;
 }
