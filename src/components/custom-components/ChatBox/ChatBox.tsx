@@ -1,5 +1,6 @@
 'use client';
 import { CustomerConversationService } from '@/services/inbox/customerConversation.service';
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
 
@@ -41,6 +42,13 @@ export default function ChatBox() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const searchParams = useSearchParams();
+  const orgId = searchParams.get('orgId');
+
+  localStorage.setItem('X-Org-Id', orgId!);
+
+  console.log('orgId from query:', orgId);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

@@ -101,19 +101,21 @@ const MessageItem = ({ message, onReply }: MessageItemProps) => {
           </div>
 
           <div className="">
-            <Avatar>
-              {message?.user && message?.user?.image ? (
-                <AvatarImage
-                  src={message?.user?.image}
-                  alt="@shadcn"
-                  className="ml-2 flex h-12 w-12 flex-shrink-0 items-center justify-center overflow-hidden rounded-full"
-                />
-              ) : (
-                <AvatarFallback>
-                  {message?.name?.substring(0, 2)?.toLocaleUpperCase()}
-                </AvatarFallback>
-              )}
-            </Avatar>
+            {message?.user_id && (
+              <Avatar>
+                {message?.user && message?.user?.image ? (
+                  <AvatarImage
+                    src={message?.user?.image}
+                    alt="@shadcn"
+                    className="ml-2 flex h-12 w-12 flex-shrink-0 items-center justify-center overflow-hidden rounded-full"
+                  />
+                ) : (
+                  <AvatarFallback>
+                    {message?.name?.substring(0, 2)?.toLocaleUpperCase()}
+                  </AvatarFallback>
+                )}
+              </Avatar>
+            )}
           </div>
         </div>
 
