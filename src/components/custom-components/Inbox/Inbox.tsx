@@ -62,7 +62,10 @@ const Inbox = () => {
 
     // socket.emit('joinChat', chatId);
     socket.on('receive-message', (data) => {
-      console.log({ data });
+      console.log(data);
+      setMessages((prev: any) => {
+        return [...prev, data];
+      });
       playSound();
     });
     socket.on('typing', (data) => {

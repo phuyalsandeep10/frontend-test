@@ -30,7 +30,7 @@ export default function ChatBox() {
 
   const [message, setMessage] = useState('');
   const [socketId, setSocketId] = useState<string | undefined>('');
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<any>([]);
 
   // typing: added
   const [isTyping, setIsTyping] = useState(false);
@@ -78,7 +78,7 @@ export default function ChatBox() {
 
       newSocket.on('receive-message', (data: Message) => {
         console.log({ data });
-        setMessages((prev) => [...prev, data]);
+        setMessages((prev: any) => [...prev, data]);
       });
       newSocket.on('message_seen', (data: Message) => {
         console.log('message_seen', data);
@@ -133,7 +133,17 @@ export default function ChatBox() {
     });
 
     emitStopTyping();
-    setMessages((prev) => [...prev, { message, from: socketId }]);
+    const messageData = {
+      content: message,
+    };
+    console.log('clicked...');
+    const res =
+      await CustomerConversastionService.createCustomerConversastionWithAgent(
+        1,
+        messageData,
+      );
+    setMessages((prev: any) => [...prev, res?.data]);
+
     setMessage('');
 
     // typing: stop on send
@@ -257,11 +267,11 @@ export default function ChatBox() {
           </div>
         )}
 
-        {messages.map((msg, index) => (
+        {messages.map((msg: any, index: number) => (
           <div
             key={index}
             className={`rounded p-2 ${
-              msg.from === socketId
+              !msg?.user_id
                 ? 'ml-auto self-end bg-blue-500 text-white'
                 : 'mr-auto self-start bg-gray-200 text-black'
             } max-w-xs`}

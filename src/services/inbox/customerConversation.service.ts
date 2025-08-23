@@ -26,4 +26,20 @@ export class CustomerConversastionService {
       throw error;
     }
   }
+  static async createCustomer() {
+    try {
+      const res = await axiosInstance.post(`/customers`);
+      return res.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+  static async customerVisit(customerId: any) {
+    try {
+      const res = await axiosInstance.post(`/customers/${customerId}/visit`);
+      return res.data;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
