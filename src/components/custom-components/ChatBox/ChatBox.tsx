@@ -1,12 +1,15 @@
 'use client';
-import { CustomerConversastionService } from '@/services/inbox/customerConversation.service';
-import { useEffect, useState } from 'react';
+import { CustomerConversationService } from '@/services/inbox/customerConversation.service';
+import { useEffect, useState, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
 
 interface Message {
-  message: string;
-  from?: string;
+  content: string;
+  user_id?: number;
   mode?: 'message' | 'typing';
+  organization_id?: number;
+  conversation_id?: number;
+  customer_id?: number;
 }
 
 interface socketOptions {
@@ -27,18 +30,21 @@ export default function ChatBox() {
   const [authToken, setAuthToken] = useState('');
   const [isConnected, setIsConnected] = useState(false);
   const [socket, setSocket] = useState<Socket | null>(null);
-
   const [message, setMessage] = useState('');
   const [socketId, setSocketId] = useState<string | undefined>('');
-  const [messages, setMessages] = useState<any>([]);
-
-  // typing: added
+  const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState(false);
-
   const [otherTyping, setOtherTyping] = useState(false);
   const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(
     null,
   );
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   const connectSocket = () => {
     if (socket) {
@@ -57,9 +63,7 @@ export default function ChatBox() {
     };
 
     if (authToken.trim()) {
-      socketOptions.auth = {
-        token: authToken.trim(),
-      };
+      socketOptions.auth.token = authToken.trim();
     }
 
     try {
@@ -77,27 +81,26 @@ export default function ChatBox() {
       });
 
       newSocket.on('receive-message', (data: Message) => {
-        console.log({ data });
-        setMessages((prev: any) => [...prev, data]);
+        if (!data?.user_id) return;
+        setMessages((prev) => [...prev, data]);
+        console.log('Received message:', data);
       });
-      newSocket.on('message_seen', (data: Message) => {
+
+      newSocket.on('message_seen', (data) => {
         console.log('message_seen', data);
       });
 
-      // typing: listen
       newSocket.on('typing', () => {
         setOtherTyping(true);
-        console.log('typing ...');
       });
 
       newSocket.on('stop-typing', () => {
         setOtherTyping(false);
-        console.log('stop typing...');
       });
 
       setSocket(newSocket);
     } catch (error) {
-      console.log({ error });
+      console.error('Failed to connect socket:', error);
     }
   };
 
@@ -108,77 +111,84 @@ export default function ChatBox() {
       setIsConnected(false);
       setSocketId('');
       setMessages([]);
-      setOtherTyping(false); // typing: clear typing state
+      setOtherTyping(false);
+    }
+  };
+
+  const getConversations = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res =
+        await CustomerConversationService.getCustomerAllChatConversationMessages(
+          1,
+        );
+      console.log('Fetched conversations:', res);
+      setMessages(res?.data || []);
+    } catch (error) {
+      console.error('Failed to fetch conversations:', error);
+      setError(
+        'Failed to fetch conversations. Please check your connection or authentication.',
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     connectSocket();
+    getConversations();
     return () => {
       disconnectSocket();
     };
   }, []);
 
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, otherTyping]);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!socket || !isConnected || !message.trim()) return;
 
-    if (!socket || !isConnected) return;
-
-    socket.emit('message', {
-      message,
+    const messageData: Message = {
+      content: message,
       mode: 'message',
       organization_id: 1,
       conversation_id: 1,
       customer_id: 1,
-    });
-
-    emitStopTyping();
-    const messageData = {
-      content: message,
     };
-    console.log('clicked...');
-    const res =
-      await CustomerConversastionService.createCustomerConversastionWithAgent(
-        1,
-        messageData,
-      );
-    setMessages((prev: any) => [...prev, res?.data]);
 
-    setMessage('');
+    try {
+      socket.emit('message', messageData);
+      const res =
+        await CustomerConversationService.createCustomerConversationWithAgent(
+          1,
+          { content: message },
+        );
+      console.log('Sent message response:', res);
+      setMessages((prev) => [...prev, res?.data]);
+      setMessage('');
+      setIsTyping(false);
 
-    // typing: stop on send
-    // socket.emit('stop-typing');
-    setIsTyping(false);
-    if (typingTimeout) {
-      clearTimeout(typingTimeout);
-      setTypingTimeout(null);
+      if (typingTimeout) {
+        clearTimeout(typingTimeout);
+        setTypingTimeout(null);
+      }
+      emitStopTyping();
+    } catch (error) {
+      console.error('Failed to send message:', error);
     }
   };
 
-  const sendMessage = async () => {
-    const messageData = {
-      content: message,
-    };
-    console.log('clicked...');
-    const res =
-      await CustomerConversastionService.createCustomerConversastionWithAgent(
-        1,
-        messageData,
-      );
-  };
-  const emitTyping = (message: string) => {
+  const emitTyping = () => {
     if (!socket || !isConnected) return;
-    socket.emit('typing', { message, mode: 'typing' });
-  };
-  const emitStopTyping = () => {
-    if (!socket || !isConnected) return;
-    socket.emit('stop_typing');
+    socket.emit('typing');
   };
 
-  const getConversastions = async () => {
-    await CustomerConversastionService.getCustomerAllChatConversationMessages(
-      1,
-    );
+  const emitStopTyping = () => {
+    if (!socket || !isConnected) return;
+    socket.emit('stop-typing');
   };
 
   return (
@@ -187,10 +197,8 @@ export default function ChatBox() {
         Socket.IO Chat Client
       </h1>
 
-      {/* Connection Configuration */}
       <div className="mb-4 rounded border border-gray-300 bg-gray-50 p-4">
         <h2 className="mb-3 text-lg font-semibold">Connection Settings</h2>
-
         <div className="mb-3">
           <label className="mb-1 block text-sm font-medium">
             Socket Server URL
@@ -204,7 +212,6 @@ export default function ChatBox() {
             disabled={isConnected}
           />
         </div>
-
         <div className="mb-3">
           <label className="mb-1 block text-sm font-medium">
             Authentication Token (Optional)
@@ -221,7 +228,6 @@ export default function ChatBox() {
             Leave empty if no authentication is required
           </p>
         </div>
-
         <div className="flex gap-2">
           <button
             onClick={connectSocket}
@@ -234,7 +240,6 @@ export default function ChatBox() {
           >
             {isConnected ? 'Connected' : 'Connect'}
           </button>
-
           {isConnected && (
             <button
               onClick={disconnectSocket}
@@ -244,7 +249,6 @@ export default function ChatBox() {
             </button>
           )}
         </div>
-
         <div className="mt-3 flex items-center gap-2">
           <div
             className={`h-3 w-3 rounded-full ${
@@ -259,56 +263,49 @@ export default function ChatBox() {
         </div>
       </div>
 
-      {/* Messages Box */}
       <div className="mb-4 flex-1 space-y-2 overflow-y-auto rounded border border-gray-300 bg-gray-50 p-4">
         {!isConnected && (
           <div className="mt-8 text-center text-gray-500">
             Please connect to a socket server to start chatting
           </div>
         )}
-
-        {messages.map((msg: any, index: number) => (
-          <div
-            key={index}
-            className={`rounded p-2 ${
-              !msg?.user_id
-                ? 'ml-auto self-end bg-blue-500 text-white'
-                : 'mr-auto self-start bg-gray-200 text-black'
-            } max-w-xs`}
-          >
-            {msg?.message}
+        {loading && (
+          <div className="text-center text-gray-500">
+            Loading conversations...
           </div>
+        )}
+        {error && <div className="text-center text-red-500">{error}</div>}
+        {!loading && !error && messages.length === 0 && (
+          <div className="mt-8 text-center text-gray-500">No messages yet.</div>
+        )}
+        {messages.map((msg: any, index: number) => (
+          <MessageItem message={msg} key={msg?.id} socket={socket} />
         ))}
-
-        {/* typing: show indicator */}
         {otherTyping && (
           <div className="text-sm text-gray-500 italic">
             Someone is typing...
           </div>
         )}
+        <div ref={messagesEndRef} />
       </div>
 
-      {/* Input Area */}
       <form onSubmit={handleSubmit} className="flex gap-2">
         <input
           type="text"
           value={message}
           onChange={(e) => {
             setMessage(e.target.value);
+            if (!socket || !isConnected) return;
 
-            if (!socket) return;
-
-            if (!isTyping) {
+            if (!isTyping && e.target.value.trim()) {
               setIsTyping(true);
-              emitTyping(e.target.value);
-              socket.emit('message', { message, mode: 'typing' });
+              emitTyping();
             }
 
             if (typingTimeout) clearTimeout(typingTimeout);
 
             const timeout = setTimeout(() => {
               setIsTyping(false);
-              // socket.emit('message', { message, mode: 'stop-typing' });
               emitStopTyping();
             }, 2000);
 
@@ -331,15 +328,34 @@ export default function ChatBox() {
         </button>
       </form>
       <button
-        className="rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
-        onClick={() => getConversastions()}
+        className="mt-2 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+        onClick={getConversations}
       >
-        get Conversastions
-      </button>
-
-      <button type="button" onClick={sendMessage}>
-        Create Message{' '}
+        Get Conversations
       </button>
     </div>
   );
 }
+
+const MessageItem = ({ socket, message }: any) => {
+  useEffect(() => {
+    if (!socket) return;
+    if (!!message?.user_id && !message?.seen) {
+      socket.emit('message_seen', {
+        message_id: message?.id,
+      });
+    }
+  }, [message]);
+
+  return (
+    <div
+      className={`rounded p-3 break-words ${
+        !!message?.user_id
+          ? 'mr-auto self-start bg-gray-200 text-black'
+          : 'ml-auto self-end bg-blue-500 text-white'
+      } max-w-xs`}
+    >
+      {message?.content}
+    </div>
+  );
+};

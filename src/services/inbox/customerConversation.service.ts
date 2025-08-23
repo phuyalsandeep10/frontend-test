@@ -1,6 +1,6 @@
 import axiosInstance from '@/apiConfigs/axiosInstance';
 
-export class CustomerConversastionService {
+export class CustomerConversationService {
   static async getCustomerAllChatConversationMessages(conversationId: number) {
     // identifier
     try {
@@ -12,7 +12,7 @@ export class CustomerConversastionService {
       throw error;
     }
   }
-  static async createCustomerConversastionWithAgent(
+  static async createCustomerConversationWithAgent(
     conversationId: number,
     data: any,
   ) {

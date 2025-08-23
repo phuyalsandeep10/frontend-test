@@ -33,6 +33,8 @@ const MessageItem = ({ message, onReply }: MessageItemProps) => {
     }
   }, [message]);
 
+  // console.log(message?.user_id && message?.seen ,message)
+
   return (
     <div>
       {/* {message?.updated_at && (
@@ -140,11 +142,11 @@ const MessageItem = ({ message, onReply }: MessageItemProps) => {
         )}
       </div>
 
-      {/* {message?.user_id && (
+      {message?.user_id && message?.seen && (
         <div className="-mt-2 mr-10 flex justify-end">
           <Icons.double_check className="text-brand-primary" />
         </div>
-      )} */}
+      )}
     </div>
   );
 };

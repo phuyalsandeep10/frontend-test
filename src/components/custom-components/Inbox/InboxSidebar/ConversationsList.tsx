@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { getStatusColor } from './getColorsHelper';
 import { useGetAgentAllChatConversations } from '@/hooks/inbox/useGetAgentAllChatConversations';
 import ShowTime from '@/lib/timeFormatUtils';
+import { useConversationStore } from '@/store/inbox/agentConversationStore';
 
 const ConversationsList = () => {
   const [activeTab, setActiveTab] = useState<'Unresolved' | 'Resolved'>(
@@ -14,6 +15,7 @@ const ConversationsList = () => {
   );
 
   const { data, isPending } = useGetAgentAllChatConversations();
+  const { conversation } = useConversationStore();
 
   return (
     <>
@@ -66,13 +68,15 @@ const ConversationsList = () => {
                       {conversation?.customer.name}
                     </h3>
                     <span className="text-theme-text-primary ml-1 text-sm leading-17">
-                      {ShowTime(conversation?.customer?.updated_at)}
+                      {ShowTime(
+                        conversation?.attributes?.last_message?.updated_at,
+                      )}
                     </span>
                   </div>
 
-                  {/* <p className="text-theme-text-primary my-1 truncate text-sm">
-                    {conversation.message}
-                  </p> */}
+                  <p className="text-theme-text-primary my-1 truncate text-sm">
+                    {conversation.attributes?.last_message?.content}
+                  </p>
 
                   <div className="flex items-center gap-3">
                     {/* <div className="flex h-5 w-5 items-center justify-center rounded-full">

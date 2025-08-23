@@ -11,7 +11,7 @@ import ChatEmptyScreen from './ChatEmptyScreen/ChatEmptyScreen';
 import InboxChatInfo from './InboxChatInfo/InboxChatInfo';
 import InboxChatSection from './InboxChatSection/InboxChatSection';
 import InboxSubSidebar from './InboxSidebar/InboxSubSidebar';
-import { Input } from '@/components/ui/input';
+
 import { useConversationStore } from '@/store/inbox/agentConversationStore';
 import { ConversationService } from '@/services/inbox/coversation.service';
 
@@ -72,6 +72,19 @@ const Inbox = () => {
       console.log('typing ...', data);
       setShowTyping(true);
       setTypingMessage(data?.message);
+    });
+    socket.on('message_seen', (data) => {
+      console.log('message_seen', data);
+      setMessages((prev: any) => {
+        return prev.map((item: any) => {
+          if (item?.id === data?.message_id)
+            return {
+              ...item,
+              seen: true,
+            };
+          return item;
+        });
+      });
     });
     socket.on('stop-typing', () => {
       console.log('Stopping...');
