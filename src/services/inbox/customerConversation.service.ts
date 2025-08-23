@@ -1,29 +1,25 @@
 import axiosInstance from '@/apiConfigs/axiosInstance';
 
 export class CustomerConversastionService {
-  static async getCustomerAllChatConversationMessages(
-    conversationId: number,
-    orgId: string = 'test1',
-  ) {
+  static async getCustomerAllChatConversationMessages(conversationId: number) {
     // identifier
     try {
       const res = await axiosInstance.get(
         `/customers/${conversationId}/messages`,
-        {
-          headers: {
-            'X-Org-ID': orgId,
-          },
-        },
       );
       return res.data;
     } catch (error) {
       throw error;
     }
   }
-  static async createCustomerConversastionWithAgent(conversationId: number) {
+  static async createCustomerConversastionWithAgent(
+    conversationId: number,
+    data: any,
+  ) {
     try {
-      const res = await axiosInstance.get(
+      const res = await axiosInstance.post(
         `/customers/conversations/${conversationId}/messages`,
+        data,
       );
       return res.data;
     } catch (error) {

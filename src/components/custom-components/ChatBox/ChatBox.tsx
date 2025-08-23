@@ -23,7 +23,7 @@ interface socketOptions {
 }
 
 export default function ChatBox() {
-  const [socketUrl, setSocketUrl] = useState('http://localhost:8000/chat');
+  const [socketUrl, setSocketUrl] = useState('http://127.0.0.1:8000/chat');
   const [authToken, setAuthToken] = useState('');
   const [isConnected, setIsConnected] = useState(false);
   const [socket, setSocket] = useState<Socket | null>(null);
@@ -116,8 +116,9 @@ export default function ChatBox() {
     };
   }, []);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (!socket || !isConnected) return;
 
     socket.emit('message', {
@@ -127,6 +128,7 @@ export default function ChatBox() {
       conversation_id: 1,
       customer_id: 1,
     });
+
     emitStopTyping();
     setMessages((prev) => [...prev, { message, from: socketId }]);
     setMessage('');
@@ -138,6 +140,18 @@ export default function ChatBox() {
       clearTimeout(typingTimeout);
       setTypingTimeout(null);
     }
+  };
+
+  const sendMessage = async () => {
+    const messageData = {
+      content: message,
+    };
+    console.log('clicked...');
+    const res =
+      await CustomerConversastionService.createCustomerConversastionWithAgent(
+        1,
+        messageData,
+      );
   };
   const emitTyping = (message: string) => {
     if (!socket || !isConnected) return;
@@ -303,7 +317,16 @@ export default function ChatBox() {
           Send
         </button>
       </form>
-      <button onClick={() => getConversastions()}>get Conversastions</button>
+      <button
+        className="rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
+        onClick={() => getConversastions()}
+      >
+        get Conversastions
+      </button>
+
+      <button type="button" onClick={sendMessage}>
+        Create Message{' '}
+      </button>
     </div>
   );
 }

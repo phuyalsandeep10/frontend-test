@@ -1,7 +1,7 @@
 import { AuthService } from '@/services/auth/auth';
 import axios from 'axios';
 
-export const baseURL = 'http://localhost:8000';
+export const baseURL = 'http://127.0.0.1:8000';
 // export const baseURL = 'https://api.chatboq.com';
 // export const baseURL = 'http://192.168.1.78:8000';
 // export const baseURL = 'https://df3bkw8f-8000.inc1.devtunnels.ms';
@@ -29,9 +29,14 @@ const axiosInstance = axios.create({ baseURL });
 
 axiosInstance.interceptors.request.use(
   (config) => {
+    const XOrgId = localStorage.getItem('X-Org-Id');
     const tokens = AuthService.getAuthTokens();
     if (tokens?.accessToken) {
       config.headers.Authorization = `Bearer ${tokens.accessToken}`;
+    }
+    console.log(XOrgId);
+    if (XOrgId) {
+      config.headers['X-Org-Id'] = XOrgId;
     }
     return config;
   },
