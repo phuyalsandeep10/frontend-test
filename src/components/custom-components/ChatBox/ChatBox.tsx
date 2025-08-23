@@ -1,7 +1,6 @@
 'use client';
 import { CustomerConversationService } from '@/services/inbox/customerConversation.service';
-import { useSearchParams } from 'next/navigation';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 
 interface Message {
@@ -26,7 +25,8 @@ interface socketOptions {
   namespace?: string;
 }
 
-export default function ChatBox() {
+export default function ChatBox({ visitor }: { visitor: any }) {
+  console.log({ visitor });
   const [socketUrl, setSocketUrl] = useState('http://127.0.0.1:8000/chat');
   const [authToken, setAuthToken] = useState('');
   const [isConnected, setIsConnected] = useState(false);
@@ -43,13 +43,6 @@ export default function ChatBox() {
   const [error, setError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const searchParams = useSearchParams();
-  const orgId = searchParams.get('orgId');
-
-  localStorage.setItem('X-Org-Id', orgId!);
-
-  console.log('orgId from query:', orgId);
-
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -64,9 +57,9 @@ export default function ChatBox() {
       path: '/ws/sockets/socket.io',
       namespace: '/chat',
       auth: {
-        customer_id: 1,
-        conversation_id: 1,
-        organization_id: 1,
+        customer_id: visitor?.customer?.id,
+        conversation_id: visitor?.conversation?.id,
+        organization_id: visitor?.customer?.organization_id,
       },
     };
 
@@ -131,7 +124,6 @@ export default function ChatBox() {
         await CustomerConversationService.getCustomerAllChatConversationMessages(
           1,
         );
-      console.log('Fetched conversations:', res);
       setMessages(res?.data || []);
     } catch (error) {
       console.error('Failed to fetch conversations:', error);
@@ -171,10 +163,10 @@ export default function ChatBox() {
       socket.emit('message', messageData);
       const res =
         await CustomerConversationService.createCustomerConversationWithAgent(
-          1,
+          visitor?.conversation?.id,
           { content: message },
         );
-      console.log('Sent message response:', res);
+
       setMessages((prev) => [...prev, res?.data]);
       setMessage('');
       setIsTyping(false);
@@ -205,7 +197,7 @@ export default function ChatBox() {
         Socket.IO Chat Client
       </h1>
 
-      <div className="mb-4 rounded border border-gray-300 bg-gray-50 p-4">
+      {/* <div className="mb-4 rounded border border-gray-300 bg-gray-50 p-4">
         <h2 className="mb-3 text-lg font-semibold">Connection Settings</h2>
         <div className="mb-3">
           <label className="mb-1 block text-sm font-medium">
@@ -269,7 +261,7 @@ export default function ChatBox() {
               : 'Disconnected'}
           </span>
         </div>
-      </div>
+      </div> */}
 
       <div className="mb-4 flex-1 space-y-2 overflow-y-auto rounded border border-gray-300 bg-gray-50 p-4">
         {!isConnected && (
@@ -335,12 +327,12 @@ export default function ChatBox() {
           Send
         </button>
       </form>
-      <button
+      {/* <button
         className="mt-2 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
         onClick={getConversations}
       >
         Get Conversations
-      </button>
+      </button> */}
     </div>
   );
 }

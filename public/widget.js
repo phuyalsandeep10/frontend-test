@@ -2,8 +2,6 @@
   const script = document.currentScript;
   const orgId = script.getAttribute('data-orgId');
 
-  localStorage.setItem('X-Org-Id', orgId);
-
   const loadWidget = () => {
     const widget = document.createElement('div');
     widget.style.boxSizing = 'border-box';

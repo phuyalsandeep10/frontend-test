@@ -34,7 +34,7 @@ axiosInstance.interceptors.request.use(
     if (tokens?.accessToken) {
       config.headers.Authorization = `Bearer ${tokens.accessToken}`;
     }
-    console.log(XOrgId);
+    console.log(`x org id in header: ${XOrgId}`);
     if (XOrgId) {
       config.headers['X-Org-Id'] = XOrgId;
     }

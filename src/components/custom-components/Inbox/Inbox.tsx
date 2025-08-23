@@ -12,8 +12,9 @@ import InboxChatInfo from './InboxChatInfo/InboxChatInfo';
 import InboxChatSection from './InboxChatSection/InboxChatSection';
 import InboxSubSidebar from './InboxSidebar/InboxSubSidebar';
 
-import { useConversationStore } from '@/store/inbox/agentConversationStore';
 import { ConversationService } from '@/services/inbox/coversation.service';
+import { useAuthStore } from '@/store/AuthStore/useAuthStore';
+import { useConversationStore } from '@/store/inbox/agentConversationStore';
 
 const Inbox = () => {
   const params = useParams();
@@ -33,11 +34,13 @@ const Inbox = () => {
   const { showChatInfo } = useUiStore();
   const { socket } = useSocket();
   const { playSound } = useMessageAudio();
+  const { authData } = useAuthStore();
 
   const { setConversationData } = useConversationStore();
+  const userId = authData?.data?.user?.id;
 
   useEffect(() => {
-    if (!chatId || !socket) return;
+    if (!chatId || !socket || !userId) return;
 
     const getAgentChatConversationsMessagesById = async () => {
       const data: any =
@@ -62,19 +65,22 @@ const Inbox = () => {
 
     // socket.emit('joinChat', chatId);
     socket.on('receive-message', (data) => {
-      console.log(data);
-      setMessages((prev: any) => {
-        return [...prev, data];
-      });
-      playSound();
+      console.log('Message received:', data);
+      const isSenderMessage = data?.user_id === userId;
+
+      if (!isSenderMessage) {
+        setMessages((prev: any) => {
+          return [...prev, data];
+        });
+        playSound();
+      }
     });
     socket.on('typing', (data) => {
-      console.log('typing ...', data);
+      // console.log('typing ...', data);
       setShowTyping(true);
       setTypingMessage(data?.message);
     });
     socket.on('message_seen', (data) => {
-      console.log('message_seen', data);
       setMessages((prev: any) => {
         return prev.map((item: any) => {
           if (item?.id === data?.message_id)
@@ -87,7 +93,7 @@ const Inbox = () => {
       });
     });
     socket.on('stop-typing', () => {
-      console.log('Stopping...');
+      // console.log('Stopping...');
       setTimeout(() => {
         setShowTyping(false);
       }, 2000);
@@ -96,7 +102,7 @@ const Inbox = () => {
     return () => {
       socket.emit('leave_conversation', { conversation_id: 1 });
     };
-  }, [chatId, socket, playSound]);
+  }, [chatId, socket, playSound, userId, setConversationData]);
 
   const onSend = async (e: any) => {
     e.preventDefault();
