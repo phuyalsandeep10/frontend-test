@@ -80,6 +80,9 @@ export default function ChatBox() {
         console.log({ data });
         setMessages((prev) => [...prev, data]);
       });
+      newSocket.on('message_seen', (data: Message) => {
+        console.log('message_seen', data);
+      });
 
       // typing: listen
       newSocket.on('typing', () => {

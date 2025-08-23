@@ -1,17 +1,16 @@
+'use client';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { MoreVertical } from 'lucide-react';
 import { Icons } from '@/components/ui/Icons';
-import { useState } from 'react';
-import Image from 'next/image';
-import profile from '@/assets/images/profile.jpg';
-import ShowTime from '@/lib/timeFormatUtils';
+import { useSocket } from '@/context/socket.context';
 import { useConversationStore } from '@/store/inbox/agentConversationStore';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { MoreVertical } from 'lucide-react';
+import { useEffect } from 'react';
 
 interface MessageItemProps {
   message: any;
@@ -22,7 +21,17 @@ const MessageItem = ({ message, onReply }: MessageItemProps) => {
   const handleReplyClick = () => {
     onReply(message);
   };
+  const { socket } = useSocket();
   const { customer } = useConversationStore();
+
+  useEffect(() => {
+    if (!socket) return;
+    if (!message?.user_id && !message?.seen) {
+      socket.emit('message_seen', {
+        message_id: message?.id,
+      });
+    }
+  }, [message]);
 
   return (
     <div>
