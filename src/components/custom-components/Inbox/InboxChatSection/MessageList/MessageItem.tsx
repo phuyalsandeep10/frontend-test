@@ -22,7 +22,7 @@ const MessageItem = ({ message, onReply }: MessageItemProps) => {
     onReply(message);
   };
   const { socket } = useSocket();
-  const { customer } = useAgentConversationStore();
+  const { customer }: any = useAgentConversationStore();
 
   useEffect(() => {
     if (!socket) return;
