@@ -12,15 +12,14 @@ import InboxChatInfo from './InboxChatInfo/InboxChatInfo';
 import InboxChatSection from './InboxChatSection/InboxChatSection';
 import InboxSubSidebar from './InboxSidebar/InboxSubSidebar';
 
-import { ConversationService } from '@/services/inbox/coversation.service';
+import { ConversationService } from '@/services/inbox/agentCoversation.service';
 import { useAuthStore } from '@/store/AuthStore/useAuthStore';
-import { useConversationStore } from '@/store/inbox/agentConversationStore';
+import { useAgentConversationStore } from '@/store/inbox/agentConversationStore';
 
 const Inbox = () => {
   const params = useParams();
   const chatId = params?.userId;
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const [messages, setMessages] = useState<any[]>([]);
 
   const [replyingTo, setReplyingTo] = useState<any>(null);
   const [isTyping, setIsTyping] = useState(false);
@@ -36,26 +35,27 @@ const Inbox = () => {
   const { playSound } = useMessageAudio();
   const { authData } = useAuthStore();
 
-  const { setConversationData } = useConversationStore();
+  const {
+    messages,
+    setConversationData,
+    sendMessage,
+    addMessage,
+    updateMessageSeen,
+    fetchMessages,
+    req_loading,
+  }: any = useAgentConversationStore();
+
   const userId = authData?.data?.user?.id;
 
   useEffect(() => {
     if (!chatId || !socket || !userId) return;
 
-    const getAgentChatConversationsMessagesById = async () => {
-      const data: any =
-        await ConversationService.getAgentChatConversationsMessagesById(
-          Number(chatId),
-        );
-      setMessages(data?.data);
-    };
-    getAgentChatConversationsMessagesById();
+    fetchMessages(Number(chatId));
 
     const getAgentChatConversastionDetails = async () => {
-      const data: any =
-        await ConversationService.getAgentChatConversationsDetailsById(
-          Number(chatId),
-        );
+      const data: any = await ConversationService.getConversationDetailsById(
+        Number(chatId),
+      );
       setConversationData(data);
     };
 
@@ -69,9 +69,7 @@ const Inbox = () => {
       const isSenderMessage = data?.user_id === userId;
 
       if (!isSenderMessage) {
-        setMessages((prev: any) => {
-          return [...prev, data];
-        });
+        addMessage(data);
         playSound();
       }
     });
@@ -81,16 +79,7 @@ const Inbox = () => {
       setTypingMessage(data?.message);
     });
     socket.on('message_seen', (data) => {
-      setMessages((prev: any) => {
-        return prev.map((item: any) => {
-          if (item?.id === data?.message_id)
-            return {
-              ...item,
-              seen: true,
-            };
-          return item;
-        });
-      });
+      updateMessageSeen(data?.message_id);
     });
     socket.on('stop-typing', () => {
       // console.log('Stopping...');
@@ -121,18 +110,12 @@ const Inbox = () => {
 
       emitStopTyping();
 
-      const response = await ConversationService.createAgentChatConversastions(
+      await sendMessage(
         Number(chatId),
-        {
-          content: text,
-          reply_to_id: replyingTo ? replyingTo?.id : null,
-        },
+        message.trim(),
+        replyingTo ? replyingTo?.id : null,
       );
-      console.log({ response });
-      setMessages((prev: any) => {
-        console.log({ prev });
-        return [...prev, response?.data];
-      });
+
       setMessage('');
       if (inputRef.current) inputRef.current.value = '';
       setReplyingTo(null);

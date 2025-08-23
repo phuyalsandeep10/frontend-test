@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Icons } from '@/components/ui/Icons';
 import { useSocket } from '@/context/socket.context';
-import { useConversationStore } from '@/store/inbox/agentConversationStore';
+import { useAgentConversationStore } from '@/store/inbox/agentConversationStore';
 import { MoreVertical } from 'lucide-react';
 import { useEffect } from 'react';
 
@@ -22,7 +22,7 @@ const MessageItem = ({ message, onReply }: MessageItemProps) => {
     onReply(message);
   };
   const { socket } = useSocket();
-  const { customer } = useConversationStore();
+  const { customer } = useAgentConversationStore();
 
   useEffect(() => {
     if (!socket) return;

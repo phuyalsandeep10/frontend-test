@@ -1,14 +1,14 @@
 'use client';
 import { Icons } from '@/components/ui/Icons';
-import { ConversationService } from '@/services/inbox/coversation.service';
-import { useConversationStore } from '@/store/inbox/agentConversationStore';
+import { ConversationService } from '@/services/inbox/agentCoversation.service';
+import { useAgentConversationStore } from '@/store/inbox/agentConversationStore';
 import { useUiStore } from '@/store/UiStore/useUiStore';
 import React from 'react';
 
 const InboxChatSectionHeader = () => {
   const { openChatInfo } = useUiStore();
-  const { customer, conversation, setConversationData } =
-    useConversationStore();
+  const { customer, conversation, setConversationData }: any =
+    useAgentConversationStore();
   const resolveConversastion = async () => {
     const res = await ConversationService.resolvedConversation(
       Number(conversation?.id),

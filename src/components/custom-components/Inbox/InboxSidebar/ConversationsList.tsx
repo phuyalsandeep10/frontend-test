@@ -7,7 +7,6 @@ import { Badge } from '@/components/ui/badge';
 import { getStatusColor } from './getColorsHelper';
 import { useGetAgentAllChatConversations } from '@/hooks/inbox/useGetAgentAllChatConversations';
 import ShowTime from '@/lib/timeFormatUtils';
-import { useConversationStore } from '@/store/inbox/agentConversationStore';
 
 const ConversationsList = () => {
   const [activeTab, setActiveTab] = useState<'Unresolved' | 'Resolved'>(
@@ -15,7 +14,6 @@ const ConversationsList = () => {
   );
 
   const { data, isPending } = useGetAgentAllChatConversations();
-  const { conversation } = useConversationStore();
 
   return (
     <>
@@ -46,8 +44,8 @@ const ConversationsList = () => {
         {data?.data?.length > 0 ? (
           data?.data?.map((conversation: any) => (
             <Link
-              href={`/inbox/${conversation?.customer.id}`}
-              key={conversation?.customer.id}
+              href={`/inbox/${conversation?.id}`}
+              key={conversation?.id}
               className=""
             >
               <div className="border-gray-light border-b-theme-text-primary flex items-center border-b py-4">

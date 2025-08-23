@@ -1,7 +1,7 @@
 import axiosInstance from '@/apiConfigs/axiosInstance';
 
 export class ConversationService {
-  static async getAgentAllChatConversations() {
+  static async getAllChatConversations() {
     try {
       const res = await axiosInstance.get('/agent-chat/conversations');
       return res.data;
@@ -9,7 +9,7 @@ export class ConversationService {
       throw error;
     }
   }
-  static async getAgentChatConversationsDetailsById(conversationsId: number) {
+  static async getConversationDetailsById(conversationsId: number) {
     try {
       const res = await axiosInstance.get(
         `/agent-chat/conversations/${conversationsId}`,
@@ -19,7 +19,7 @@ export class ConversationService {
       throw error;
     }
   }
-  static async getAgentChatConversationsMessagesById(conversationsId: number) {
+  static async getAllMessagesById(conversationsId: number) {
     try {
       const res = await axiosInstance.get(
         `/agent-chat/conversations/${conversationsId}/messages`,
@@ -29,10 +29,7 @@ export class ConversationService {
       throw error;
     }
   }
-  static async createAgentChatConversastions(
-    conversationsId: number,
-    data: any,
-  ) {
+  static async createMessage(conversationsId: number, data: any) {
     try {
       const res = await axiosInstance.post(
         `/agent-chat/conversations/${conversationsId}/messages`,
