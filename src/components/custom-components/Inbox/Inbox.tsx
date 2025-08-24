@@ -61,7 +61,7 @@ const Inbox = () => {
 
     getAgentChatConversastionDetails();
 
-    socket.emit('join_conversation', { conversation_id: 1 });
+    socket.emit('join_conversation', { conversation_id: chatId });
 
     // socket.emit('joinChat', chatId);
     socket.on('receive-message', (data) => {
@@ -74,7 +74,7 @@ const Inbox = () => {
       }
     });
     socket.on('typing', (data) => {
-      // console.log('typing ...', data);
+      console.log('typing ...', data);
       setShowTyping(true);
       setTypingMessage(data?.message);
     });
@@ -82,7 +82,7 @@ const Inbox = () => {
       updateMessageSeen(data?.message_id);
     });
     socket.on('stop-typing', () => {
-      // console.log('Stopping...');
+      console.log('Stopping...');
       setTimeout(() => {
         setShowTyping(false);
       }, 2000);
@@ -132,7 +132,12 @@ const Inbox = () => {
 
   const emitTyping = (message: string) => {
     if (!socket) return;
-    socket.emit('typing', { message, mode: 'typing' });
+    socket.emit('typing', {
+      message,
+      mode: 'typing',
+      conversation_id: Number(chatId),
+      organization_id: authData?.data?.user?.attributes?.organization_id,
+    });
     console.log('Hello typing....', isTyping);
   };
   const emitStopTyping = () => {

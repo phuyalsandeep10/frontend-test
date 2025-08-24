@@ -18,24 +18,24 @@ export default function ProtectedDashboardLayout({
   const router = useRouter();
   const authTokens = AuthService.getAuthTokens();
 
-  // useEffect(() => {
-  //   if (!authTokens) {
-  //     router.replace(ROUTES.LOGIN);
-  //   }
-  //   if (!isLoading) {
-  //     const user = authData?.data?.user;
-  //     if (!user) {
-  //       router.replace(ROUTES.LOGIN);
-  //     }
-  //   }
-  // }, [authData, isLoading, router, authTokens]);
+  useEffect(() => {
+    if (!authTokens) {
+      router.replace(ROUTES.LOGIN);
+    }
+    if (!isLoading) {
+      const user = authData?.data?.user;
+      if (!user) {
+        router.replace(ROUTES.LOGIN);
+      }
+    }
+  }, [authData, isLoading, router, authTokens]);
 
-  // if (isLoading || !authData)
-  //   return (
-  //     <div className="flex h-screen w-full items-center justify-center">
-  //       <div>Loading...</div>
-  //     </div>
-  //   );
+  if (isLoading || !authData)
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <div>Loading...</div>
+      </div>
+    );
 
   return (
     <SidebarProvider>

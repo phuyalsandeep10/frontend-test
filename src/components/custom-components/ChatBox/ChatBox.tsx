@@ -26,7 +26,6 @@ interface socketOptions {
 }
 
 export default function ChatBox({ visitor }: { visitor: any }) {
-  console.log({ visitor });
   const [socketUrl, setSocketUrl] = useState('http://127.0.0.1:8000/chat');
   const [authToken, setAuthToken] = useState('');
   const [isConnected, setIsConnected] = useState(false);
@@ -92,10 +91,12 @@ export default function ChatBox({ visitor }: { visitor: any }) {
       });
 
       newSocket.on('typing', () => {
+        console.log('typing ...');
         setOtherTyping(true);
       });
 
       newSocket.on('stop-typing', () => {
+        console.log('stop typing ...');
         setOtherTyping(false);
       });
 
@@ -122,7 +123,7 @@ export default function ChatBox({ visitor }: { visitor: any }) {
     try {
       const res =
         await CustomerConversationService.getCustomerAllChatConversationMessages(
-          1,
+          visitor.conversation.id,
         );
       setMessages(res?.data || []);
     } catch (error) {
@@ -183,12 +184,18 @@ export default function ChatBox({ visitor }: { visitor: any }) {
 
   const emitTyping = () => {
     if (!socket || !isConnected) return;
-    socket.emit('typing');
+    socket.emit('typing', {
+      mode: 'typing',
+      conversation_id: visitor.conversation.id,
+      organization_id: visitor.conversation.organization_id,
+      message: message,
+    });
   };
 
   const emitStopTyping = () => {
     if (!socket || !isConnected) return;
-    socket.emit('stop-typing');
+    console.log('stop typing....');
+    socket.emit('stop_typing');
   };
 
   return (
@@ -196,72 +203,6 @@ export default function ChatBox({ visitor }: { visitor: any }) {
       <h1 className="mb-4 text-center text-2xl font-bold">
         Socket.IO Chat Client
       </h1>
-
-      {/* <div className="mb-4 rounded border border-gray-300 bg-gray-50 p-4">
-        <h2 className="mb-3 text-lg font-semibold">Connection Settings</h2>
-        <div className="mb-3">
-          <label className="mb-1 block text-sm font-medium">
-            Socket Server URL
-          </label>
-          <input
-            type="text"
-            value={socketUrl}
-            onChange={(e) => setSocketUrl(e.target.value)}
-            placeholder="http://localhost:4000"
-            className="w-full rounded border border-gray-300 p-2"
-            disabled={isConnected}
-          />
-        </div>
-        <div className="mb-3">
-          <label className="mb-1 block text-sm font-medium">
-            Authentication Token (Optional)
-          </label>
-          <input
-            type="text"
-            value={authToken}
-            onChange={(e) => setAuthToken(e.target.value)}
-            placeholder="Enter your auth token here..."
-            className="w-full rounded border border-gray-300 p-2"
-            disabled={isConnected}
-          />
-          <p className="mt-1 text-xs text-gray-600">
-            Leave empty if no authentication is required
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <button
-            onClick={connectSocket}
-            disabled={isConnected || !socketUrl.trim()}
-            className={`rounded px-4 py-2 font-medium ${
-              isConnected || !socketUrl.trim()
-                ? 'cursor-not-allowed bg-gray-300 text-gray-500'
-                : 'bg-blue-500 text-white hover:bg-blue-600'
-            }`}
-          >
-            {isConnected ? 'Connected' : 'Connect'}
-          </button>
-          {isConnected && (
-            <button
-              onClick={disconnectSocket}
-              className="rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600"
-            >
-              Disconnect
-            </button>
-          )}
-        </div>
-        <div className="mt-3 flex items-center gap-2">
-          <div
-            className={`h-3 w-3 rounded-full ${
-              isConnected ? 'bg-green-500' : 'bg-red-500'
-            }`}
-          />
-          <span className="text-sm">
-            {isConnected
-              ? `Connected - Socket ID: ${socketId}`
-              : 'Disconnected'}
-          </span>
-        </div>
-      </div> */}
 
       <div className="mb-4 flex-1 space-y-2 overflow-y-auto rounded border border-gray-300 bg-gray-50 p-4">
         {!isConnected && (
@@ -295,11 +236,18 @@ export default function ChatBox({ visitor }: { visitor: any }) {
           value={message}
           onChange={(e) => {
             setMessage(e.target.value);
+            console.log({ socket, isConnected });
             if (!socket || !isConnected) return;
 
-            if (!isTyping && e.target.value.trim()) {
+            if (e.target.value.trim()) {
               setIsTyping(true);
               emitTyping();
+            }
+
+            if (isTyping && !e.target.value.trim()) {
+              console.log('Hello typing....', isTyping);
+              emitStopTyping();
+              setIsTyping(false);
             }
 
             if (typingTimeout) clearTimeout(typingTimeout);
@@ -307,9 +255,12 @@ export default function ChatBox({ visitor }: { visitor: any }) {
             const timeout = setTimeout(() => {
               setIsTyping(false);
               emitStopTyping();
-            }, 2000);
+            }, 1000);
 
             setTypingTimeout(timeout);
+          }}
+          onBlur={() => {
+            emitStopTyping();
           }}
           placeholder="Type your message..."
           className="flex-1 rounded border border-gray-300 p-2"
