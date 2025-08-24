@@ -1,4 +1,5 @@
 'use client';
+import { baseURL } from '@/apiConfigs/axiosInstance';
 import { CustomerConversationService } from '@/services/inbox/customerConversation.service';
 import { useEffect, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
@@ -26,7 +27,7 @@ interface socketOptions {
 }
 
 export default function ChatBox({ visitor }: { visitor: any }) {
-  const [socketUrl, setSocketUrl] = useState('http://127.0.0.1:8000/chat');
+  const [socketUrl, setSocketUrl] = useState(`${baseURL}/chat`);
   const [authToken, setAuthToken] = useState('');
   const [isConnected, setIsConnected] = useState(false);
   const [socket, setSocket] = useState<Socket | null>(null);
@@ -38,6 +39,7 @@ export default function ChatBox({ visitor }: { visitor: any }) {
   const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(
     null,
   );
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
