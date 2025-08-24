@@ -61,7 +61,10 @@ const Inbox = () => {
 
     getAgentChatConversastionDetails();
 
-    socket.emit('join_conversation', { conversation_id: chatId });
+    socket.emit('join_conversation', {
+      conversation_id: chatId,
+      user_id: userId,
+    });
 
     // socket.emit('joinChat', chatId);
     socket.on('receive-message', (data) => {
