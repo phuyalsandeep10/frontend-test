@@ -1,5 +1,6 @@
 'use client';
 
+import { baseURL } from '@/apiConfigs/axiosInstance';
 import { useMessageAudio } from '@/hooks/useMessageAudio.hook';
 import { AuthService } from '@/services/auth/auth';
 import { useAuthStore } from '@/store/AuthStore/useAuthStore';
@@ -44,9 +45,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const [authToken, setAuthToken] = useState('');
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
-  const [socketUrl, setSocketUrl] = useState(
-    'http://localhost:8000/agent-chat',
-  );
+  const [socketUrl, setSocketUrl] = useState(`${baseURL}/agent-chat`);
   const [socketId, setSocketId] = useState<string | undefined>('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [otherTyping, setOtherTyping] = useState(false);
