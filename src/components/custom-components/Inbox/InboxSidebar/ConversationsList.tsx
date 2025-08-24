@@ -1,157 +1,102 @@
-import React from 'react';
+'use client';
+import React, { useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Link from 'next/link';
 import { Icons } from '@/components/ui/Icons';
 import { Badge } from '@/components/ui/badge';
+import { getStatusColor } from './getColorsHelper';
+import { useGetAgentAllChatConversations } from '@/hooks/inbox/useGetAgentAllChatConversations';
+import ShowTime from '@/lib/timeFormatUtils';
 
 const ConversationsList = () => {
-  const conversations = [
-    {
-      id: 1,
-      name: 'Alice Johnson',
-      initials: 'AJ',
-      message: 'Thanks for your help with the recent...',
-      time: '04:15 PM',
-      status: 'Unresolved',
-      agent: 'Agent Sarah',
-    },
-    {
-      id: 2,
-      name: 'Jerome Bell',
-      initials: 'JB',
-      message: 'Thanks for your help with the recent...',
-      time: '04:15 PM',
-      status: 'Unresolved',
-      agent: 'Agent Sarah',
-    },
-    {
-      id: 3,
-      name: 'Robert Fox',
-      initials: 'RF',
-      message: 'Thanks for your help with the recent...',
-      time: '04:15 PM',
-      status: 'Pending',
-      agent: 'Agent Joshua',
-    },
-    {
-      id: 4,
-      name: 'Jane Cooper',
-      initials: 'JC',
-      message: 'Thanks for your help with the recent...',
-      time: '04:15 PM',
-      status: 'Resolved',
-      agent: 'Agent Joshua',
-    },
-    {
-      id: 5,
-      name: 'Eleanor Pena',
-      initials: 'EP',
-      message: 'Thanks for your help with the recent...',
-      time: '04:15 PM',
-      status: 'Unresolved',
-      agent: 'Agent Sarah',
-    },
-    {
-      id: 6,
-      name: 'Eleanor Pena',
-      initials: 'EP',
-      message: 'Thanks for your help with the recent...',
-      time: '04:15 PM',
-      status: 'Unresolved',
-      agent: 'Agent Sarah',
-    },
-    {
-      id: 7,
-      name: 'Eleanor Pena',
-      initials: 'EP',
-      message: 'Thanks for your help with the recent...',
-      time: '04:15 PM',
-      status: 'Unresolved',
-      agent: 'Agent Sarah',
-    },
-    {
-      id: 8,
-      name: 'Eleanor Pena',
-      initials: 'EP',
-      message: 'Thanks for your help with the recent...',
-      time: '04:15 PM',
-      status: 'Unresolved',
-      agent: 'Agent Sarah',
-    },
-    {
-      id: 9,
-      name: 'Eleanor Pena',
-      initials: 'EP',
-      message: 'Thanks for your help with the recent...',
-      time: '04:15 PM',
-      status: 'Unresolved',
-      agent: 'Agent Sarah',
-    },
-  ];
+  const [activeTab, setActiveTab] = useState<'Unresolved' | 'Resolved'>(
+    'Unresolved',
+  );
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'Unresolved':
-        return 'bg-error text-white';
-      case 'Pending':
-        return 'bg-warning text-white';
-      case 'Resolved':
-        return 'bg-success text-white';
-      default:
-        return 'bg-warning text-white';
-    }
-  };
+  const { data, isPending } = useGetAgentAllChatConversations();
 
   return (
-    // <div className="mt-5 max-h-[100vh-]">
-    <div className="mt-5 max-h-[calc(100vh-155px)] min-h-[calc(100vh-155px)] overflow-y-auto">
-      {conversations.map((conversation) => (
-        <Link
-          href={`/inbox/${conversation.id}`}
-          key={conversation.id}
-          className=""
+    <>
+      <div className="mt-5 flex border-b">
+        <button
+          className={`flex-1 pb-1 text-center font-semibold ${
+            activeTab === 'Unresolved'
+              ? 'text-error border-error border-b'
+              : 'text-theme-text-primary'
+          }`}
+          onClick={() => setActiveTab('Unresolved')}
         >
-          <div className="border-gray-light border-b-theme-text-primary flex items-center border-b py-4">
-            <Avatar>
-              <AvatarImage
-                src="https://github.com/shadcn.png"
-                alt="Image"
-                className="h-[30px] w-[30px] rounded-full"
-              />
-              <AvatarFallback className="text-theme-text-primary h-[30px] w-[30px] rounded-full text-base font-semibold">
-                SC
-              </AvatarFallback>
-            </Avatar>
+          Unresolved
+        </button>
+        <button
+          className={`flex-1 pb-1 text-center text-base font-semibold ${
+            activeTab === 'Resolved'
+              ? 'text-error border-error border-b'
+              : 'text-theme-text-primary'
+          }`}
+          onClick={() => setActiveTab('Resolved')}
+        >
+          Resolved
+        </button>
+      </div>
 
-            <div className="min-w-0 flex-1">
-              <div className="mb-1 flex items-center justify-between">
-                <h3 className="text-theme-text-dark truncate text-base font-semibold">
-                  {conversation.name}
-                </h3>
-                <span className="text-theme-text-primary ml-1 text-sm leading-17">
-                  {conversation.time}
-                </span>
-              </div>
+      <div className="max-h-[calc(100vh-185px)] min-h-[calc(100vh-185px)] overflow-y-auto pt-5">
+        {data?.data?.length > 0 ? (
+          data?.data?.map((conversation: any) => (
+            <Link
+              href={`/inbox/${conversation?.id}`}
+              key={conversation?.id}
+              className=""
+            >
+              <div className="border-gray-light border-b-theme-text-primary flex items-center border-b py-4">
+                <Avatar>
+                  <AvatarImage
+                    src="https://github.com/shadcn.png"
+                    alt="Image"
+                    className="h-[30px] w-[30px] rounded-full"
+                  />
+                  <AvatarFallback className="text-theme-text-primary h-[30px] w-[30px] rounded-full text-base font-semibold">
+                    {conversation?.customer.initials}
+                  </AvatarFallback>
+                </Avatar>
 
-              <p className="text-theme-text-primary my-1 truncate text-sm">
-                {conversation.message}
-              </p>
+                <div className="min-w-0 flex-1">
+                  <div className="mb-1 flex items-center justify-between">
+                    <h3 className="text-theme-text-dark truncate text-base font-semibold">
+                      {conversation?.customer.name}
+                    </h3>
+                    <span className="text-theme-text-primary ml-1 text-sm leading-17">
+                      {ShowTime(
+                        conversation?.attributes?.last_message?.updated_at,
+                      )}
+                    </span>
+                  </div>
 
-              <div className="flex items-center gap-3">
-                <div className="flex h-5 w-5 items-center justify-center rounded-full">
-                  <Icons.whatsapp className="fill-success h-5 w-5 text-white" />
+                  <p className="text-theme-text-primary my-1 truncate text-sm">
+                    {conversation.attributes?.last_message?.content}
+                  </p>
+
+                  <div className="flex items-center gap-3">
+                    {/* <div className="flex h-5 w-5 items-center justify-center rounded-full">
+                      <Icons.whatsapp className="fill-success h-5 w-5 text-white" />
+                    </div> */}
+                    {/* <Badge
+                      className={`rounded-2xl px-2 py-1 text-xs font-semibold ${getStatusColor(conversation.status)}`}
+                    >
+                      {conversation?.customer?.resolve || '-'}
+                    </Badge> */}
+                  </div>
                 </div>
-                <Badge
-                  className={`rounded-2xl px-2 py-1 text-xs font-semibold ${getStatusColor(conversation.status)}`}
-                >
-                  {conversation.status}
-                </Badge>
               </div>
-            </div>
-          </div>
-        </Link>
-      ))}
-    </div>
+            </Link>
+          ))
+        ) : (
+          <p className="mt-5 text-center text-gray-500">
+            No {activeTab.toLowerCase()} conversations
+          </p>
+        )}
+      </div>
+    </>
   );
 };
 

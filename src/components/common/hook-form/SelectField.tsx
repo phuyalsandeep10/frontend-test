@@ -81,18 +81,24 @@ export function SelectField<T extends FieldValues>({
                 </SelectTrigger>
 
                 <SelectContent>
-                  {options.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
-                      <span
-                        className={cn(
-                          colorMap?.[option.value],
-                          'font-outfit rounded-md px-3 py-1 text-sm leading-[16px] font-medium',
-                        )}
-                      >
-                        {option.label}
-                      </span>
-                    </SelectItem>
-                  ))}
+                  {options.length > 0 ? (
+                    options.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        <span
+                          className={cn(
+                            colorMap?.[option.value],
+                            'font-outfit rounded-md px-3 py-1 text-sm leading-[16px] font-medium',
+                          )}
+                        >
+                          {option.label}
+                        </span>
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <div className="px-3 py-2 text-sm text-gray-500">
+                      Priorities Not Available
+                    </div>
+                  )}
                 </SelectContent>
               </Select>
 

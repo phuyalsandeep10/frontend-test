@@ -3,13 +3,11 @@ import { AuthService } from '@/services/auth/auth';
 
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
-type FailedRequest = {
+let isRefreshing = false;
+let failedQueue: {
   resolve: (token: string) => void;
   reject: (err: any) => void;
-};
-
-let failedQueue: FailedRequest[] = [];
-let isRefreshing = false;
+}[] = [];
 
 const processQueue = (error: any, token: string | null = null) => {
   failedQueue.forEach((prom) => {
@@ -24,13 +22,17 @@ const processQueue = (error: any, token: string | null = null) => {
 
 const getToken = (): string => {
   if (typeof window !== 'undefined') {
-    return (
-      localStorage.getItem('accessToken') ||
-      process.env.NEXT_PUBLIC_BEARER_TOKEN ||
-      ''
-    );
+    const tokens = localStorage.getItem('authTokens');
+    if (tokens) {
+      try {
+        const parsed = JSON.parse(tokens);
+        return parsed.accessToken || '';
+      } catch {
+        return '';
+      }
+    }
   }
-  return process.env.NEXT_PUBLIC_BEARER_TOKEN || '';
+  return '';
 };
 
 const axiosInstance = axios.create({
@@ -63,6 +65,13 @@ axiosInstance.interceptors.response.use(
 
     originalRequest._retry = true;
 
+    const tokens = AuthService.getAuthTokens();
+    if (!tokens?.refreshToken) {
+      AuthService.clearAuthTokens();
+      window.location.href = '/login';
+      return Promise.reject(new Error('No refresh token available'));
+    }
+
     if (isRefreshing) {
       return new Promise((resolve, reject) => {
         failedQueue.push({
@@ -77,22 +86,13 @@ axiosInstance.interceptors.response.use(
 
     isRefreshing = true;
 
-    const tokens = AuthService.getAuthTokens();
-    if (!tokens?.refreshToken) {
-      AuthService.clearAuthTokens();
-      window.location.href = '/login';
-      return Promise.reject(new Error('No refresh token available'));
-    }
-
     try {
       const newAccessToken = await AuthService.refreshAccessToken(
         tokens.refreshToken,
       );
-
       axiosInstance.defaults.headers.common['Authorization'] =
         `Bearer ${newAccessToken}`;
       processQueue(null, newAccessToken);
-
       originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
       return axiosInstance(originalRequest);
     } catch (err) {
