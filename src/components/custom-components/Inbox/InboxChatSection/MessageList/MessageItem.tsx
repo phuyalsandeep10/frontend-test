@@ -106,12 +106,12 @@ const MessageItem = ({ message, onReply }: MessageItemProps) => {
                 {message?.user && message?.user?.image ? (
                   <AvatarImage
                     src={message?.user?.image}
-                    alt="@shadcn"
+                    alt="user image"
                     className="ml-2 flex h-12 w-12 flex-shrink-0 items-center justify-center overflow-hidden rounded-full"
                   />
                 ) : (
-                  <AvatarFallback>
-                    {message?.name?.substring(0, 2)?.toLocaleUpperCase()}
+                  <AvatarFallback className="text-theme-text-dark text-xs font-medium">
+                    {message?.user?.name?.substring(0, 2)?.toLocaleUpperCase()}
                   </AvatarFallback>
                 )}
               </Avatar>

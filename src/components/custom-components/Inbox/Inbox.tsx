@@ -15,6 +15,18 @@ import InboxSubSidebar from './InboxSidebar/InboxSubSidebar';
 import { ConversationService } from '@/services/inbox/agentCoversation.service';
 import { useAuthStore } from '@/store/AuthStore/useAuthStore';
 import { useAgentConversationStore } from '@/store/inbox/agentConversationStore';
+import axiosInstance from '@/apiConfigs/axiosInstance';
+import { useGetAgentAllChatConversations } from '@/hooks/inbox/useGetAgentAllChatConversations';
+
+const joinConversastion = (conversationId: number) => {
+  const res = axiosInstance
+    .put(`/agent-chat/conversations/${conversationId}/joined`)
+    .then(() => {
+      const conv = ConversationService.getAllChatConversations();
+      console.log('conv', conv);
+    });
+  console.log(res);
+};
 
 const Inbox = () => {
   const params = useParams();
@@ -38,12 +50,14 @@ const Inbox = () => {
   const {
     messages,
     setConversationData,
-    sendMessage,
-    addMessage,
+    sendMessageToDB,
+    addMessageToStore,
     updateMessageSeen,
     fetchMessages,
     req_loading,
-  }: any = useAgentConversationStore();
+  } = useAgentConversationStore();
+
+  console.log(req_loading);
 
   const userId = authData?.data?.user?.id;
 
@@ -59,6 +73,8 @@ const Inbox = () => {
       setConversationData(data);
     };
 
+    joinConversastion(Number(chatId));
+
     getAgentChatConversastionDetails();
 
     socket.emit('join_conversation', {
@@ -72,7 +88,7 @@ const Inbox = () => {
       const isSenderMessage = data?.user_id === userId;
 
       if (!isSenderMessage) {
-        addMessage(data);
+        addMessageToStore(data);
         playSound();
       }
     });
@@ -113,7 +129,7 @@ const Inbox = () => {
 
       emitStopTyping();
 
-      await sendMessage(
+      await sendMessageToDB(
         Number(chatId),
         message.trim(),
         replyingTo ? replyingTo?.id : null,

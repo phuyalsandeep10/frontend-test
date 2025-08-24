@@ -3,14 +3,7 @@ import MessageItem from './MessageList/MessageItem';
 import LanguageSelector from './LanguageSelector';
 import InboxChatSectionHeader from './InboxChatSectionHeader';
 import { useUiStore } from '@/store/UiStore/useUiStore';
-
-export interface Message {
-  id: number;
-  sender: 'agent' | 'customer';
-  message: string;
-  time: string;
-  date?: string;
-}
+import { Message } from '@/store/inbox/types';
 
 interface InboxChatSectionProps {
   messages: Message[];
