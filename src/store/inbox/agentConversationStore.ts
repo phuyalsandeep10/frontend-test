@@ -1,22 +1,28 @@
 import { create } from 'zustand';
 import { ConversationService } from '@/services/inbox/agentCoversation.service';
 import { ConversationResponse, ConversationState } from './types';
+import axiosInstance from '@/apiConfigs/axiosInstance';
 
 export const useAgentConversationStore = create<ConversationState>((set) => ({
   conversation: null,
   customer: null,
   messages: [],
+  all_conversations: [],
+  visitorCount: 0,
+  messageNotificationCount: 0,
   req_loading: {
     fetch_messages: false,
     add_message: false,
     fetch_conversation: false,
     resolve_conversation: false,
+    fetch_all_conversations: false,
   },
   req_success: {
     fetch_messages: false,
     add_message: false,
     fetch_conversation: false,
     resolve_conversation: false,
+    fetch_all_conversations: false,
   },
   setConversationData: (data: ConversationResponse) =>
     set({
@@ -46,6 +52,7 @@ export const useAgentConversationStore = create<ConversationState>((set) => ({
         fetch_messages: true,
         add_message: false,
         fetch_conversation: false,
+        fetch_all_conversations: false,
         resolve_conversation: false,
       },
     });
@@ -57,6 +64,7 @@ export const useAgentConversationStore = create<ConversationState>((set) => ({
           fetch_messages: true,
           add_message: false,
           fetch_conversation: false,
+          fetch_all_conversations: false,
           resolve_conversation: false,
         },
       });
@@ -67,6 +75,7 @@ export const useAgentConversationStore = create<ConversationState>((set) => ({
           fetch_messages: false,
           add_message: false,
           fetch_conversation: false,
+          fetch_all_conversations: false,
           resolve_conversation: false,
         },
       });
@@ -76,6 +85,7 @@ export const useAgentConversationStore = create<ConversationState>((set) => ({
           fetch_messages: false,
           add_message: false,
           fetch_conversation: false,
+          fetch_all_conversations: false,
           resolve_conversation: false,
         },
       });
@@ -91,6 +101,7 @@ export const useAgentConversationStore = create<ConversationState>((set) => ({
         fetch_messages: false,
         add_message: true,
         fetch_conversation: false,
+        fetch_all_conversations: false,
         resolve_conversation: false,
       },
     });
@@ -105,6 +116,7 @@ export const useAgentConversationStore = create<ConversationState>((set) => ({
           fetch_messages: false,
           add_message: true,
           fetch_conversation: false,
+          fetch_all_conversations: false,
           resolve_conversation: false,
         },
       }));
@@ -115,6 +127,7 @@ export const useAgentConversationStore = create<ConversationState>((set) => ({
           fetch_messages: false,
           add_message: false,
           fetch_conversation: false,
+          fetch_all_conversations: false,
           resolve_conversation: false,
         },
       });
@@ -124,6 +137,7 @@ export const useAgentConversationStore = create<ConversationState>((set) => ({
           fetch_messages: false,
           add_message: false,
           fetch_conversation: false,
+          fetch_all_conversations: false,
           resolve_conversation: false,
         },
       });
@@ -135,6 +149,7 @@ export const useAgentConversationStore = create<ConversationState>((set) => ({
         fetch_messages: false,
         add_message: false,
         fetch_conversation: true,
+        fetch_all_conversations: false,
         resolve_conversation: false,
       },
     });
@@ -148,6 +163,7 @@ export const useAgentConversationStore = create<ConversationState>((set) => ({
           fetch_messages: false,
           add_message: false,
           fetch_conversation: true,
+          fetch_all_conversations: false,
           resolve_conversation: false,
         },
       });
@@ -158,6 +174,7 @@ export const useAgentConversationStore = create<ConversationState>((set) => ({
           fetch_messages: false,
           add_message: false,
           fetch_conversation: false,
+          fetch_all_conversations: false,
           resolve_conversation: false,
         },
       });
@@ -167,6 +184,7 @@ export const useAgentConversationStore = create<ConversationState>((set) => ({
           fetch_messages: false,
           add_message: false,
           fetch_conversation: false,
+          fetch_all_conversations: false,
           resolve_conversation: false,
         },
       });
@@ -178,18 +196,32 @@ export const useAgentConversationStore = create<ConversationState>((set) => ({
         fetch_messages: false,
         add_message: false,
         fetch_conversation: false,
+        fetch_all_conversations: false,
         resolve_conversation: true,
       },
     });
     try {
       const response = await ConversationService.resolvedConversation(chatId);
-      console.log('response', response);
+      console.log('Resolve response:', response);
       set({
         conversation: response.data,
         req_success: {
           fetch_messages: false,
           add_message: false,
           fetch_conversation: false,
+          fetch_all_conversations: false,
+          resolve_conversation: true,
+        },
+      });
+      const res = await ConversationService.getAllChatConversations();
+      console.log('Fetched all conversations after resolve:', res);
+      set({
+        all_conversations: [...res?.data],
+        req_success: {
+          fetch_messages: false,
+          add_message: false,
+          fetch_conversation: false,
+          fetch_all_conversations: true,
           resolve_conversation: true,
         },
       });
@@ -200,6 +232,7 @@ export const useAgentConversationStore = create<ConversationState>((set) => ({
           fetch_messages: false,
           add_message: false,
           fetch_conversation: false,
+          fetch_all_conversations: false,
           resolve_conversation: false,
         },
       });
@@ -209,9 +242,89 @@ export const useAgentConversationStore = create<ConversationState>((set) => ({
           fetch_messages: false,
           add_message: false,
           fetch_conversation: false,
+          fetch_all_conversations: false,
           resolve_conversation: false,
         },
       });
     }
+  },
+  joinConversation: async (conversationId: number) => {
+    try {
+      await axiosInstance.put(
+        `/agent-chat/conversations/${conversationId}/joined`,
+      );
+      const res = await ConversationService.getAllChatConversations();
+      console.log('Conversations:', res);
+      set({
+        all_conversations: [...res?.data],
+      });
+    } catch (error) {
+      console.error('Error joining conversation:', error);
+    }
+  },
+
+  fetchAllConversations: async () => {
+    set({
+      req_loading: {
+        fetch_messages: false,
+        add_message: false,
+        fetch_conversation: false,
+        resolve_conversation: false,
+        fetch_all_conversations: true,
+      },
+    });
+    try {
+      const res = await ConversationService.getAllChatConversations();
+      console.log('Fetched all conversations:', res);
+      set({
+        all_conversations: [...res?.data],
+        req_success: {
+          fetch_messages: false,
+          add_message: false,
+          fetch_conversation: false,
+          resolve_conversation: false,
+          fetch_all_conversations: true,
+        },
+      });
+    } catch (error) {
+      console.error('Error fetching all conversations:', error);
+      set({
+        req_success: {
+          fetch_messages: false,
+          add_message: false,
+          fetch_conversation: false,
+          resolve_conversation: false,
+          fetch_all_conversations: false,
+        },
+      });
+    } finally {
+      set({
+        req_loading: {
+          fetch_messages: false,
+          add_message: false,
+          fetch_conversation: false,
+          resolve_conversation: false,
+          fetch_all_conversations: false,
+        },
+      });
+    }
+  },
+
+  incrementVisitorCount: () => {
+    set((state) => ({ visitorCount: state.visitorCount + 1 }));
+  },
+
+  resetVisitorCount: () => {
+    set({ visitorCount: 0 });
+  },
+
+  incrementMessageNotificationCount: () => {
+    set((state) => ({
+      messageNotificationCount: state.messageNotificationCount + 1,
+    }));
+  },
+
+  resetMessageNotificationCount: () => {
+    set({ messageNotificationCount: 0 });
   },
 }));

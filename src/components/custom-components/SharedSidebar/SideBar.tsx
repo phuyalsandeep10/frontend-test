@@ -8,6 +8,8 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from '@/components/ui/tooltip';
+import { useAgentConversationStore } from '@/store/inbox/agentConversationStore';
+import { ROUTES } from '@/routes/routes';
 
 interface SidebarProps {
   label: string;
@@ -31,6 +33,9 @@ const SidebarList: React.FC<SidebarListProps> = ({
   const router = useRouter();
   const pathname = usePathname() ?? '';
 
+  const { visitorCount, messageNotificationCount } =
+    useAgentConversationStore();
+
   // Get first segment from path (e.g., 'settings' from '/settings/workspace-settings')
   const firstSegment = pathname.split('/')[1];
 
@@ -51,6 +56,8 @@ const SidebarList: React.FC<SidebarListProps> = ({
           const routeSegment = route.split('/')[1]; // e.g., 'settings'
           const isActive = firstSegment === routeSegment;
 
+          console.log(pathname);
+
           const buttonContent = (
             <button
               key={label}
@@ -65,6 +72,11 @@ const SidebarList: React.FC<SidebarListProps> = ({
             >
               <Icon className="h-5 w-5" />
               {!collapsed && <span>{label}</span>}
+              {route === ROUTES.TOOLS_FEATURES.VISITORS && (
+                <span className="bg-brand-primary flex h-4 w-4 items-center justify-center rounded-full text-xs text-white">
+                  {visitorCount}
+                </span>
+              )}
             </button>
           );
 

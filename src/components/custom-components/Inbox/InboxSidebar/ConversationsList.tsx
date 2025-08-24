@@ -1,19 +1,35 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Link from 'next/link';
 import { Icons } from '@/components/ui/Icons';
 import { Badge } from '@/components/ui/badge';
 import { getStatusColor } from './getColorsHelper';
-import { useGetAgentAllChatConversations } from '@/hooks/inbox/useGetAgentAllChatConversations';
 import ShowTime from '@/lib/timeFormatUtils';
+import { useAgentConversationStore } from '@/store/inbox/agentConversationStore';
+import { useUiStore } from '@/store/UiStore/useUiStore';
 
 const ConversationsList = () => {
-  const [activeTab, setActiveTab] = useState<'Unresolved' | 'Resolved'>(
-    'Unresolved',
+  const { activeTab, setActiveTab } = useUiStore();
+
+  const { all_conversations, fetchAllConversations, req_loading } =
+    useAgentConversationStore();
+
+  // Fetch all conversations when the component mounts
+  useEffect(() => {
+    console.log('Fetching all conversations');
+    fetchAllConversations();
+  }, [fetchAllConversations]);
+
+  // Filter conversations based on activeTab
+  const filteredConversations = all_conversations?.filter(
+    (conversation: any) =>
+      activeTab === 'Unresolved'
+        ? !conversation.is_resolved
+        : conversation.is_resolved,
   );
 
-  const { data, isPending } = useGetAgentAllChatConversations();
+  console.log(filteredConversations);
 
   return (
     <>
@@ -41,8 +57,12 @@ const ConversationsList = () => {
       </div>
 
       <div className="max-h-[calc(100vh-185px)] min-h-[calc(100vh-185px)] overflow-y-auto pt-5">
-        {data?.data?.length > 0 ? (
-          data?.data?.map((conversation: any) => (
+        {req_loading.fetch_all_conversations ? (
+          <p className="mt-5 text-center text-gray-500">
+            Loading conversations...
+          </p>
+        ) : filteredConversations?.length > 0 ? (
+          filteredConversations.map((conversation: any) => (
             <Link
               href={`/inbox/${conversation?.id}`}
               key={conversation?.id}
@@ -50,20 +70,23 @@ const ConversationsList = () => {
             >
               <div className="border-gray-light border-b-theme-text-primary flex items-center border-b py-4">
                 <Avatar>
-                  <AvatarImage
-                    src="https://github.com/shadcn.png"
-                    alt="Image"
-                    className="h-[30px] w-[30px] rounded-full"
-                  />
-                  <AvatarFallback className="text-theme-text-primary h-[30px] w-[30px] rounded-full text-base font-semibold">
-                    {conversation?.customer.initials}
-                  </AvatarFallback>
+                  {conversation?.customer?.image ? (
+                    <AvatarImage
+                      src={conversation?.customer?.image}
+                      alt="Image"
+                      className="h-[30px] w-[30px] rounded-full"
+                    />
+                  ) : (
+                    <AvatarFallback className="text-theme-text-primary min-h-[30px] min-w-[30px] rounded-full text-xs font-semibold">
+                      {conversation?.customer?.name?.slice(0, 2)?.toUpperCase()}
+                    </AvatarFallback>
+                  )}
                 </Avatar>
 
-                <div className="min-w-0 flex-1">
+                <div className="ml-2 min-w-0 flex-1">
                   <div className="mb-1 flex items-center justify-between">
                     <h3 className="text-theme-text-dark truncate text-base font-semibold">
-                      {conversation?.customer.name}
+                      {conversation?.customer?.name || 'Unknown'}
                     </h3>
                     <span className="text-theme-text-primary ml-1 text-sm leading-17">
                       {ShowTime(
@@ -73,18 +96,21 @@ const ConversationsList = () => {
                   </div>
 
                   <p className="text-theme-text-primary my-1 truncate text-sm">
-                    {conversation.attributes?.last_message?.content}
+                    {conversation.attributes?.last_message?.content ||
+                      'No message'}
                   </p>
 
                   <div className="flex items-center gap-3">
                     {/* <div className="flex h-5 w-5 items-center justify-center rounded-full">
                       <Icons.whatsapp className="fill-success h-5 w-5 text-white" />
                     </div> */}
-                    {/* <Badge
-                      className={`rounded-2xl px-2 py-1 text-xs font-semibold ${getStatusColor(conversation.status)}`}
+                    <Badge
+                      className={`rounded-2xl px-2 py-1 text-xs font-semibold ${getStatusColor(
+                        conversation.is_resolved ? 'Resolved' : 'Unresolved',
+                      )}`}
                     >
-                      {conversation?.customer?.resolve || '-'}
-                    </Badge> */}
+                      {conversation.is_resolved ? 'Resolved' : 'Unresolved'}
+                    </Badge>
                   </div>
                 </div>
               </div>

@@ -61,17 +61,22 @@ export interface ConversationState {
   conversation: Conversation | null;
   customer: Customer | null;
   messages: Message[];
+  all_conversations: any[];
+  visitorCount: number;
+  messageNotificationCount: number;
   req_loading: {
     fetch_messages: boolean;
     add_message: boolean;
     fetch_conversation: boolean;
     resolve_conversation: boolean;
+    fetch_all_conversations: boolean;
   };
   req_success: {
     fetch_messages: boolean;
     add_message: boolean;
     fetch_conversation: boolean;
     resolve_conversation: boolean;
+    fetch_all_conversations: boolean;
   };
   setConversationData: (data: ConversationResponse) => void;
   setMessages: (messages: Message[]) => void;
@@ -87,4 +92,10 @@ export interface ConversationState {
   ) => Promise<void>;
   fetchConversationDetails: (chatId: number) => Promise<void>;
   resolveConversation: (chatId: number) => Promise<void>;
+  joinConversation: (conversationId: number) => Promise<void>;
+  fetchAllConversations: () => Promise<void>;
+  incrementVisitorCount: () => void;
+  resetVisitorCount: () => void;
+  incrementMessageNotificationCount: () => void;
+  resetMessageNotificationCount: () => void;
 }

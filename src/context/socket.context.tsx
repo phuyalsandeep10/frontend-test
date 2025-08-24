@@ -3,6 +3,7 @@
 import { useMessageAudio } from '@/hooks/useMessageAudio.hook';
 import { AuthService } from '@/services/auth/auth';
 import { useAuthStore } from '@/store/AuthStore/useAuthStore';
+import { useAgentConversationStore } from '@/store/inbox/agentConversationStore';
 import {
   createContext,
   useCallback,
@@ -55,6 +56,9 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   // Use the new useAudio hook
   const { playSound } = useMessageAudio();
 
+  const { incrementMessageNotificationCount, incrementVisitorCount } =
+    useAgentConversationStore();
+
   const connectSocket = useCallback(() => {
     if (typeof window === 'undefined') return;
     const authTokens = AuthService.getAuthTokens();
@@ -93,11 +97,13 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
       newSocket.on('customer_land', (data: Message) => {
         console.log('Customer land:', data);
         playSound();
+        incrementVisitorCount();
       });
 
       newSocket.on('message-notification', (data: Message) => {
         console.log('Message notification:', data);
         playSound();
+        incrementMessageNotificationCount();
       });
 
       newSocket.on('disconnect', () => {
