@@ -57,8 +57,6 @@ const Inbox = () => {
     req_loading,
   } = useAgentConversationStore();
 
-  console.log(req_loading);
-
   const userId = authData?.data?.user?.id;
 
   useEffect(() => {
@@ -161,7 +159,7 @@ const Inbox = () => {
   };
   const emitStopTyping = () => {
     if (!socket) return;
-    socket.emit('stop_typing');
+    socket.emit('stop_typing', { conversation_id: Number(chatId) });
   };
 
   return (

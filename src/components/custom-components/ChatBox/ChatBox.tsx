@@ -195,7 +195,7 @@ export default function ChatBox({ visitor }: { visitor: any }) {
   const emitStopTyping = () => {
     if (!socket || !isConnected) return;
     console.log('stop typing....');
-    socket.emit('stop_typing');
+    socket.emit('stop_typing', { conversation_id: visitor.conversation.id });
   };
 
   return (

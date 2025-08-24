@@ -183,9 +183,9 @@ export const useAgentConversationStore = create<ConversationState>((set) => ({
     });
     try {
       const response = await ConversationService.resolvedConversation(chatId);
+      console.log('response', response);
       set({
-        conversation: response.data.conversation,
-        customer: response.data.customer,
+        conversation: response.data,
         req_success: {
           fetch_messages: false,
           add_message: false,
