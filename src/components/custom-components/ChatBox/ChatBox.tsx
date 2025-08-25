@@ -3,6 +3,7 @@ import { baseURL } from '@/apiConfigs/axiosInstance';
 import { CustomerConversationService } from '@/services/inbox/customerConversation.service';
 import { useEffect, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
+import { useChatBox } from './chatbox.provider';
 import CustomerUpdateForm from './customer.update.form';
 
 interface Message {
@@ -27,7 +28,8 @@ interface socketOptions {
   namespace?: string;
 }
 
-export default function ChatBox({ visitor }: { visitor: any }) {
+export default function ChatBox() {
+  const { visitor } = useChatBox();
   const [socketUrl, setSocketUrl] = useState(`${baseURL}/chat`);
   const [authToken, setAuthToken] = useState('');
   const [isConnected, setIsConnected] = useState(false);
@@ -204,7 +206,7 @@ export default function ChatBox({ visitor }: { visitor: any }) {
   if (!visitor?.customer?.email) {
     return (
       <div className="mx-auto flex h-screen max-w-2xl flex-col items-center justify-center p-4">
-        <CustomerUpdateForm visitor={visitor} />
+        <CustomerUpdateForm />
       </div>
     );
   }

@@ -7,14 +7,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { useChatBox } from './chatbox.provider';
 
 const customerUpdateFormSchema = z.object({
   name: z.string().min(1, 'Name is required'),
-  email: z.string().email('Invalid email'),
+  email: z.email('Invalid email'),
   phone: z.string().min(1, 'Phone is required'),
 });
 
-const CustomerUpdateForm = ({ visitor }: { visitor: any }) => {
+const CustomerUpdateForm = () => {
+  const { visitor, setVisitor } = useChatBox();
   const [loading, setLoading] = useState(false);
   const { register, handleSubmit } = useForm<
     z.infer<typeof customerUpdateFormSchema>
@@ -34,10 +36,12 @@ const CustomerUpdateForm = ({ visitor }: { visitor: any }) => {
       data,
     );
     const result = response?.data;
-    localStorage.setItem(
-      'visitor',
-      JSON.stringify({ ...visitor, customer: result?.data }),
-    );
+    const payload = {
+      ...visitor,
+      customer: result?.data,
+    };
+    setVisitor(payload);
+    localStorage.setItem('visitor', JSON.stringify(payload));
     console.log(response);
     setLoading(false);
   };
