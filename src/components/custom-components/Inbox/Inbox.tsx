@@ -15,18 +15,6 @@ import InboxSubSidebar from './InboxSidebar/InboxSubSidebar';
 import { ConversationService } from '@/services/inbox/agentCoversation.service';
 import { useAuthStore } from '@/store/AuthStore/useAuthStore';
 import { useAgentConversationStore } from '@/store/inbox/agentConversationStore';
-import axiosInstance from '@/apiConfigs/axiosInstance';
-import { useGetAgentAllChatConversations } from '@/hooks/inbox/useGetAgentAllChatConversations';
-
-const joinConversastion = (conversationId: number) => {
-  const res = axiosInstance
-    .put(`/agent-chat/conversations/${conversationId}/joined`)
-    .then(() => {
-      const conv = ConversationService.getAllChatConversations();
-      console.log('conv', conv);
-    });
-  console.log(res);
-};
 
 const Inbox = () => {
   const params = useParams();
@@ -54,6 +42,7 @@ const Inbox = () => {
     addMessageToStore,
     updateMessageSeen,
     fetchMessages,
+    joinConversation,
     req_loading,
   } = useAgentConversationStore();
 
@@ -71,7 +60,7 @@ const Inbox = () => {
       setConversationData(data);
     };
 
-    joinConversastion(Number(chatId));
+    joinConversation(Number(chatId));
 
     getAgentChatConversastionDetails();
 
@@ -88,6 +77,7 @@ const Inbox = () => {
       if (!isSenderMessage) {
         addMessageToStore(data);
         playSound();
+      } else {
       }
     });
     socket.on('typing', (data) => {
@@ -115,8 +105,6 @@ const Inbox = () => {
     const text = inputRef.current?.value;
     if (!socket) return;
     if (text) {
-      console.log('Text:', text);
-
       // typing: stop on send
       // socket.emit('stop-typing');
       setIsTyping(false);

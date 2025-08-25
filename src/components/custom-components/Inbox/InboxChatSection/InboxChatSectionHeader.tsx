@@ -1,13 +1,16 @@
 'use client';
 import { Icons } from '@/components/ui/Icons';
+import { ROUTES } from '@/routes/routes';
 import { useAgentConversationStore } from '@/store/inbox/agentConversationStore';
 import { useUiStore } from '@/store/UiStore/useUiStore';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 const InboxChatSectionHeader = () => {
   const { openChatInfo } = useUiStore();
   const { customer, conversation, resolveConversation, req_loading } =
     useAgentConversationStore();
+  const router = useRouter();
 
   return (
     <div className="flex items-center justify-between border-b bg-white p-4">
@@ -27,7 +30,10 @@ const InboxChatSectionHeader = () => {
           <p>Conversation resolved</p>
         ) : (
           <button
-            onClick={() => resolveConversation(Number(conversation?.id))}
+            onClick={() => {
+              resolveConversation(Number(conversation?.id));
+              router.push('/inbox');
+            }}
             disabled={req_loading.resolve_conversation}
             className="cursor-pointer text-sm font-medium text-blue-600 hover:text-blue-800 disabled:opacity-50"
           >

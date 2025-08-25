@@ -112,6 +112,7 @@ import {
   RiBaseStationLine,
   RiStackFill,
   RiPieChart2Fill,
+  RiDragMoveFill,
 } from '@remixicon/react';
 
 // register your icons here as your requirements
@@ -228,4 +229,5 @@ export const Icons = {
   ri_base_station_line: RiBaseStationLine,
   ri_stack_fill: RiStackFill,
   ri_pie_chart_2_fill: RiPieChart2Fill,
+  drag_move_fill: RiDragMoveFill,
 };
