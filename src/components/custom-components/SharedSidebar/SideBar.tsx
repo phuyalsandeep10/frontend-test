@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import {
@@ -33,11 +33,23 @@ const SidebarList: React.FC<SidebarListProps> = ({
   const router = useRouter();
   const pathname = usePathname() ?? '';
 
-  const { visitorCount, messageNotificationCount } =
-    useAgentConversationStore();
+  const {
+    visitorCount,
+    messageNotificationCount,
+    resetVisitorCount,
+    resetMessageNotificationCount,
+  } = useAgentConversationStore();
 
   // Get first segment from path (e.g., 'settings' from '/settings/workspace-settings')
   const firstSegment = pathname.split('/')[1];
+
+  useEffect(() => {
+    if (firstSegment === 'visitors') {
+      resetVisitorCount();
+    } else if (firstSegment === 'inbox') {
+      resetMessageNotificationCount();
+    }
+  }, [firstSegment, resetVisitorCount, resetMessageNotificationCount]);
 
   const handleNavigate = (route: string) => {
     router.push(route);
@@ -56,7 +68,7 @@ const SidebarList: React.FC<SidebarListProps> = ({
           const routeSegment = route.split('/')[1]; // e.g., 'settings'
           const isActive = firstSegment === routeSegment;
 
-          console.log(pathname);
+          // console.log(pathname);
 
           const buttonContent = (
             <button
@@ -75,6 +87,11 @@ const SidebarList: React.FC<SidebarListProps> = ({
               {route === ROUTES.TOOLS_FEATURES.VISITORS && (
                 <span className="bg-brand-primary flex h-4 w-4 items-center justify-center rounded-full text-xs text-white">
                   {visitorCount}
+                </span>
+              )}
+              {route === ROUTES.YOUR_INBOXES.MAIN_INBOX && (
+                <span className="bg-brand-primary flex h-4 w-4 items-center justify-center rounded-full text-xs text-white">
+                  {messageNotificationCount}
                 </span>
               )}
             </button>

@@ -77,6 +77,7 @@ const Inbox = () => {
       if (!isSenderMessage) {
         addMessageToStore(data);
         playSound();
+      } else {
       }
     });
     socket.on('typing', (data) => {
@@ -104,8 +105,6 @@ const Inbox = () => {
     const text = inputRef.current?.value;
     if (!socket) return;
     if (text) {
-      console.log('Text:', text);
-
       // typing: stop on send
       // socket.emit('stop-typing');
       setIsTyping(false);

@@ -17,7 +17,7 @@ const ConversationsList = () => {
 
   // Fetch all conversations when the component mounts
   useEffect(() => {
-    console.log('Fetching all conversations');
+    // console.log('Fetching all conversations');
     fetchAllConversations();
   }, [fetchAllConversations]);
 
@@ -29,7 +29,7 @@ const ConversationsList = () => {
         : conversation.is_resolved,
   );
 
-  console.log(filteredConversations);
+  // console.log(filteredConversations);
 
   return (
     <>

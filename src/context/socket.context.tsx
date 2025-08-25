@@ -55,8 +55,11 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   // Use the new useAudio hook
   const { playSound } = useMessageAudio();
 
-  const { incrementMessageNotificationCount, incrementVisitorCount } =
-    useAgentConversationStore();
+  const {
+    incrementMessageNotificationCount,
+    incrementVisitorCount,
+    fetchAllConversations,
+  } = useAgentConversationStore();
 
   const connectSocket = useCallback(() => {
     if (typeof window === 'undefined') return;
@@ -97,6 +100,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
         console.log('Customer land:', data);
         playSound();
         incrementVisitorCount();
+        fetchAllConversations();
       });
 
       newSocket.on('message-notification', (data: Message) => {

@@ -8,8 +8,14 @@ export const useAgentConversationStore = create<ConversationState>((set) => ({
   customer: null,
   messages: [],
   all_conversations: [],
-  visitorCount: 0,
-  messageNotificationCount: 0,
+  visitorCount:
+    typeof window !== 'undefined'
+      ? Number(localStorage.getItem('visitorCount') || 0)
+      : 0,
+  messageNotificationCount:
+    typeof window !== 'undefined'
+      ? Number(localStorage.getItem('messageNotificationCount') || 0)
+      : 0,
   req_loading: {
     fetch_messages: false,
     add_message: false,
@@ -31,7 +37,38 @@ export const useAgentConversationStore = create<ConversationState>((set) => ({
     }),
   setMessages: (messages) => set({ messages }),
   addMessageToStore: (message) =>
-    set((state) => ({ messages: [...state.messages, message] })),
+    set((state) => {
+      const updatedConversations = state.all_conversations.map((conv) =>
+        conv.id === message.conversation_id
+          ? {
+              ...conv,
+              attributes: {
+                ...conv.attributes,
+                last_message: {
+                  id: message.id,
+                  content: message.content,
+                  created_at: message.created_at,
+                  updated_at: message.updated_at,
+                  conversation_id: message.conversation_id,
+                  seen: message.seen,
+                  user_id: message.user_id,
+                  customer_id: message.customer_id,
+                  reply_to_id: message.reply_to_id,
+                  active: message.active,
+                  created_by_id: message.created_by_id,
+                  updated_by_id: message.updated_by_id,
+                  feedback: message.feedback,
+                  deleted_at: message.deleted_at,
+                },
+              },
+            }
+          : conv,
+      );
+      return {
+        messages: [...state.messages, message],
+        all_conversations: updatedConversations,
+      };
+    }),
   updateMessageSeen: (messageId) =>
     set((state) => ({
       messages: state.messages.map((m) =>
@@ -110,16 +147,45 @@ export const useAgentConversationStore = create<ConversationState>((set) => ({
         content,
         reply_to_id: replyToId,
       });
-      set((state) => ({
-        messages: [...state.messages, response?.data],
-        req_success: {
-          fetch_messages: false,
-          add_message: true,
-          fetch_conversation: false,
-          fetch_all_conversations: false,
-          resolve_conversation: false,
-        },
-      }));
+      set((state) => {
+        const updatedConversations = state.all_conversations.map((conv) =>
+          conv.id === chatId
+            ? {
+                ...conv,
+                attributes: {
+                  ...conv.attributes,
+                  last_message: {
+                    id: response.data.id,
+                    content: response.data.content,
+                    created_at: response.data.created_at,
+                    updated_at: response.data.updated_at,
+                    conversation_id: response.data.conversation_id,
+                    seen: response.data.seen,
+                    user_id: response.data.user_id,
+                    customer_id: response.data.customer_id,
+                    reply_to_id: response.data.reply_to_id,
+                    active: response.data.active,
+                    created_by_id: response.data.created_by_id,
+                    updated_by_id: response.data.updated_by_id,
+                    feedback: response.data.feedback,
+                    deleted_at: response.data.deleted_at,
+                  },
+                },
+              }
+            : conv,
+        );
+        return {
+          messages: [...state.messages, response?.data],
+          all_conversations: updatedConversations,
+          req_success: {
+            fetch_messages: false,
+            add_message: true,
+            fetch_conversation: false,
+            fetch_all_conversations: false,
+            resolve_conversation: false,
+          },
+        };
+      });
     } catch (error) {
       console.error('Error sending message:', error);
       set({
@@ -202,7 +268,7 @@ export const useAgentConversationStore = create<ConversationState>((set) => ({
     });
     try {
       const response = await ConversationService.resolvedConversation(chatId);
-      console.log('Resolve response:', response);
+      // console.log('Resolve response:', response);
       set({
         conversation: response.data,
         req_success: {
@@ -214,7 +280,7 @@ export const useAgentConversationStore = create<ConversationState>((set) => ({
         },
       });
       const res = await ConversationService.getAllChatConversations();
-      console.log('Fetched all conversations after resolve:', res);
+      // console.log('Fetched all conversations after resolve:', res);
       set({
         all_conversations: [...res?.data],
         req_success: {
@@ -254,7 +320,7 @@ export const useAgentConversationStore = create<ConversationState>((set) => ({
         `/agent-chat/conversations/${conversationId}/joined`,
       );
       const res = await ConversationService.getAllChatConversations();
-      console.log('Conversations:', res);
+      // console.log('Conversations:', res);
       set({
         all_conversations: [...res?.data],
       });
@@ -311,20 +377,38 @@ export const useAgentConversationStore = create<ConversationState>((set) => ({
   },
 
   incrementVisitorCount: () => {
-    set((state) => ({ visitorCount: state.visitorCount + 1 }));
+    set((state) => {
+      const newCount = state.visitorCount + 1;
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('visitorCount', String(newCount));
+      }
+      return { visitorCount: newCount };
+    });
   },
-
   resetVisitorCount: () => {
-    set({ visitorCount: 0 });
+    set(() => {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('visitorCount');
+      }
+      return { visitorCount: 0 };
+    });
   },
 
   incrementMessageNotificationCount: () => {
-    set((state) => ({
-      messageNotificationCount: state.messageNotificationCount + 1,
-    }));
+    set((state) => {
+      const newCount = state.messageNotificationCount + 1;
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('messageNotificationCount', String(newCount));
+      }
+      return { messageNotificationCount: newCount };
+    });
   },
-
   resetMessageNotificationCount: () => {
-    set({ messageNotificationCount: 0 });
+    set(() => {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('messageNotificationCount');
+      }
+      return { messageNotificationCount: 0 };
+    });
   },
 }));
