@@ -173,7 +173,10 @@ export default function ChatBox() {
         visitor?.customer?.id,
         data,
       );
-      setVisitor({ ...visitor, conversation: res?.data?.conversation });
+      const payload = { ...visitor, conversation: res?.data?.conversation };
+      setVisitor(payload);
+      localStorage.setItem('visitor', JSON.stringify(payload));
+
       setMessage('');
       setMessages((prev) => [...prev, res?.data?.message]);
     } catch (error) {
@@ -193,16 +196,13 @@ export default function ChatBox() {
       return;
     }
 
-    const messageData: Message = {
-      content: message,
-      mode: 'message',
-      organization_id: 1,
-      conversation_id: 1,
-      customer_id: 1,
-    };
+    if (typingTimeout) {
+      clearTimeout(typingTimeout);
+      setTypingTimeout(null);
+    }
+    emitStopTyping();
 
     try {
-      socket.emit('message', messageData);
       const res =
         await CustomerConversationService.createCustomerConversationWithAgent(
           visitor?.conversation?.id,
@@ -211,19 +211,12 @@ export default function ChatBox() {
 
       setMessages((prev) => [...prev, res?.data]);
       setMessage('');
-      setIsTyping(false);
-
-      if (typingTimeout) {
-        clearTimeout(typingTimeout);
-        setTypingTimeout(null);
-      }
-      emitStopTyping();
     } catch (error) {
       console.error('Failed to send message:', error);
     }
   };
 
-  const emitTyping = () => {
+  const emitTyping = (message: string) => {
     if (!socket || !isConnected || !visitor?.conversation?.id) return;
     socket.emit('typing', {
       mode: 'typing',
@@ -283,14 +276,14 @@ export default function ChatBox() {
         <input
           type="text"
           value={message}
-          onChange={(e) => {
+          onChange={(e: any) => {
             setMessage(e.target.value);
-            console.log({ socket, isConnected });
+
             if (!socket || !isConnected) return;
 
             if (e.target.value.trim()) {
               setIsTyping(true);
-              emitTyping();
+              emitTyping(e.target.value);
             }
 
             if (isTyping && !e.target.value.trim()) {
@@ -304,7 +297,7 @@ export default function ChatBox() {
             const timeout = setTimeout(() => {
               setIsTyping(false);
               emitStopTyping();
-            }, 1000);
+            }, 550);
 
             setTypingTimeout(timeout);
           }}
