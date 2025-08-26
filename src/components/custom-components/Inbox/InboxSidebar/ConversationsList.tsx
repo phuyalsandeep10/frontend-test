@@ -3,13 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Link from 'next/link';
 import { Icons } from '@/components/ui/Icons';
-import { Badge } from '@/components/ui/badge';
-import { getStatusColor } from './getColorsHelper';
+
 import { useAgentConversationStore } from '@/store/inbox/agentConversationStore';
 import { useUiStore } from '@/store/UiStore/useUiStore';
 import { useParams } from 'next/navigation';
 import { Input } from '@/components/ui/input';
-import { ShowTime } from '@/lib/timeFormatUtils';
+import { formatTime } from '@/lib/timeFormatUtils';
+
+import { cn } from '@/lib/utils';
 
 const ConversationsList = () => {
   const { activeTab, setActiveTab } = useUiStore();
@@ -96,53 +97,66 @@ const ConversationsList = () => {
             Loading conversations...
           </p>
         ) : filteredConversations?.length > 0 ? (
-          filteredConversations.map((conversation: any) => (
-            <Link
-              href={`/inbox/${conversation?.id}`}
-              key={conversation?.id}
-              className=""
-            >
-              <div
-                className={`border-gray-light border-b-gray-light hover:bg-secondary-hover flex items-center border-b py-4 pr-2.5 pl-3.5 ${
-                  Number(params?.userId) === conversation?.id
-                    ? 'bg-secondary-hover'
-                    : ''
-                }`}
+          filteredConversations.map((conversation: any) => {
+            const lastMessage = conversation.attributes?.last_message;
+            const hasUnseenMessage = () => {
+              if (!lastMessage || lastMessage?.user_id) return false;
+              return lastMessage?.seen;
+            };
+
+            return (
+              <Link
+                href={`/inbox/${conversation?.id}`}
+                key={conversation?.id}
+                className=""
               >
-                <Avatar className="min-h-[50px] min-w-[50px]">
-                  {conversation?.customer?.image ? (
-                    <AvatarImage
-                      src={conversation?.customer?.image}
-                      alt="Image"
-                      className="rounded-full"
-                    />
-                  ) : (
-                    <AvatarFallback className="text-gra-liborder-b-gray-light rounded-full text-xs font-semibold">
-                      {conversation?.customer?.name?.slice(0, 2)?.toUpperCase()}
-                    </AvatarFallback>
-                  )}
-                </Avatar>
+                <div
+                  className={`border-gray-light border-b-gray-light hover:bg-secondary-hover flex items-center border-b py-4 pr-2.5 pl-3.5 ${
+                    Number(params?.userId) === conversation?.id
+                      ? 'bg-secondary-hover'
+                      : ''
+                  }`}
+                >
+                  <Avatar className="min-h-[50px] min-w-[50px]">
+                    {conversation?.customer?.image ? (
+                      <AvatarImage
+                        src={conversation?.customer?.image}
+                        alt="Image"
+                        className="rounded-full"
+                      />
+                    ) : (
+                      <AvatarFallback className="text-gra-liborder-b-gray-light rounded-full text-xs font-semibold">
+                        {conversation?.customer?.name
+                          ?.slice(0, 2)
+                          ?.toUpperCase()}
+                      </AvatarFallback>
+                    )}
+                  </Avatar>
 
-                <div className="ml-2 min-w-0 flex-1">
-                  <div className="mb-1 flex items-center justify-between">
-                    <h3 className="text-theme-text-dark truncate text-base font-semibold">
-                      {conversation?.customer?.name || 'Unknown'}
-                    </h3>
-                    {/* <span className="text-gra-liborder-b-gray-light ml-1 text-xs">
-                      {ShowTime(
-                        conversation?.attributes?.last_message?.updated_at,
+                  <div className="ml-2 min-w-0 flex-1">
+                    <div className="mb-1 flex items-center justify-between">
+                      <h3 className="text-theme-text-dark truncate text-base font-semibold">
+                        {conversation?.customer?.name || 'Unknown'}
+                      </h3>
+                      <span className="text-gra-liborder-b-gray-light ml-1 text-xs">
+                        {formatTime(lastMessage?.updated_at, undefined, false)}
+                      </span>
+                    </div>
+
+                    <p
+                      className={cn(
+                        'text-gray-primary border-b-gray-light my-1 truncate text-xs',
+                        { 'text-sm font-bold': hasUnseenMessage() },
                       )}
-                    </span> */}
+                    >
+                      {conversation.attributes?.last_message?.content ||
+                        'No message'}
+                    </p>
                   </div>
-
-                  <p className="text-gray-primary border-b-gray-light my-1 truncate text-xs">
-                    {conversation.attributes?.last_message?.content ||
-                      'No message'}
-                  </p>
                 </div>
-              </div>
-            </Link>
-          ))
+              </Link>
+            );
+          })
         ) : (
           <p className="mt-5 text-center text-gray-500">
             No {activeTab.toLowerCase()} conversations

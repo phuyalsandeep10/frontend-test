@@ -38,9 +38,9 @@ export default function ChatBox() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [otherTyping, setOtherTyping] = useState(false);
-  const [typingTimeout, setTypingTimeout] = useState<NodeJS.Timeout | null>(
-    null,
-  );
+  // Use refs for independent timeouts
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const stopTypingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -196,9 +196,9 @@ export default function ChatBox() {
       return;
     }
 
-    if (typingTimeout) {
-      clearTimeout(typingTimeout);
-      setTypingTimeout(null);
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+      typingTimeoutRef.current = null;
     }
     emitStopTyping();
 
@@ -218,6 +218,7 @@ export default function ChatBox() {
 
   const emitTyping = (message: string) => {
     if (!socket || !isConnected || !visitor?.conversation?.id) return;
+    console.log('typing....');
     socket.emit('typing', {
       mode: 'typing',
       conversation_id: visitor.conversation.id,
@@ -281,25 +282,29 @@ export default function ChatBox() {
 
             if (!socket || !isConnected) return;
 
+            // Debounce emitTyping (fires after 400ms of no input)
+            if (typingTimeoutRef.current)
+              clearTimeout(typingTimeoutRef.current);
             if (e.target.value.trim()) {
               setIsTyping(true);
-              emitTyping(e.target.value);
+              typingTimeoutRef.current = setTimeout(() => {
+                emitTyping(e.target.value);
+              }, 200);
             }
 
-            if (isTyping && !e.target.value.trim()) {
-              console.log('Hello typing....', isTyping);
+            // Debounce emitStopTyping (fires after 1000ms of no input)
+            if (stopTypingTimeoutRef.current)
+              clearTimeout(stopTypingTimeoutRef.current);
+            if (e.target.value.trim()) {
+              stopTypingTimeoutRef.current = setTimeout(() => {
+                setIsTyping(false);
+                emitStopTyping();
+              }, 1000);
+            } else {
+              // If input is cleared, stop typing immediately
               emitStopTyping();
               setIsTyping(false);
             }
-
-            if (typingTimeout) clearTimeout(typingTimeout);
-
-            const timeout = setTimeout(() => {
-              setIsTyping(false);
-              emitStopTyping();
-            }, 550);
-
-            setTypingTimeout(timeout);
           }}
           onBlur={() => {
             emitStopTyping();
@@ -334,6 +339,7 @@ const MessageItem = ({ socket, message }: any) => {
   useEffect(() => {
     if (!socket) return;
     if (!!message?.user_id && !message?.seen) {
+      console.log('message seen', message);
       socket.emit('message_seen', {
         message_id: message?.id,
       });

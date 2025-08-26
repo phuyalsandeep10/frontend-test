@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Icons } from '@/components/ui/Icons';
 import { useSocket } from '@/context/socket.context';
-import { ShowTime } from '@/lib/timeFormatUtils';
+import { formatTime } from '@/lib/timeFormatUtils';
 import { useAgentConversationStore } from '@/store/inbox/agentConversationStore';
 import { MoreVertical } from 'lucide-react';
 import { useEffect } from 'react';
@@ -84,7 +84,7 @@ const MessageItem = ({ message, onReply }: MessageItemProps) => {
                   message?.user_id ? 'text-white' : 'text-gray-dark'
                 }`}
               >
-                {ShowTime(message?.updated_at)}
+                {formatTime(message?.updated_at)}
               </span>
             </div>
           </div>
