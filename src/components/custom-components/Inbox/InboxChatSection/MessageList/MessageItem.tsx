@@ -71,7 +71,7 @@ const MessageItem = ({ message, onReply }: MessageItemProps) => {
           <p
             className={`${
               message?.user_id ? 'text-sm font-normal break-all' : 'text-sm'
-            }`}
+            } ${message?.reply_to && message?.reply_to_id && 'mt-1'}`}
           >
             {message?.content}
           </p>

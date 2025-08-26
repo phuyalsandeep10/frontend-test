@@ -109,15 +109,15 @@ const ConversationsList = () => {
                     : ''
                 }`}
               >
-                <Avatar>
+                <Avatar className="min-h-[50px] min-w-[50px]">
                   {conversation?.customer?.image ? (
                     <AvatarImage
                       src={conversation?.customer?.image}
                       alt="Image"
-                      className="h-[30px] w-[30px] rounded-full"
+                      className="rounded-full"
                     />
                   ) : (
-                    <AvatarFallback className="text-gra-liborder-b-gray-light min-h-[30px] min-w-[30px] rounded-full text-xs font-semibold">
+                    <AvatarFallback className="text-gra-liborder-b-gray-light rounded-full text-xs font-semibold">
                       {conversation?.customer?.name?.slice(0, 2)?.toUpperCase()}
                     </AvatarFallback>
                   )}
@@ -128,30 +128,17 @@ const ConversationsList = () => {
                     <h3 className="text-theme-text-dark truncate text-base font-semibold">
                       {conversation?.customer?.name || 'Unknown'}
                     </h3>
-                    <span className="text-gra-liborder-b-gray-light ml-1 text-sm leading-17">
+                    <span className="text-gra-liborder-b-gray-light ml-1 text-xs">
                       {ShowTime(
                         conversation?.attributes?.last_message?.updated_at,
                       )}
                     </span>
                   </div>
 
-                  <p className="text-gra-liborder-b-gray-light my-1 truncate text-sm">
+                  <p className="text-gray-primary border-b-gray-light my-1 truncate text-xs">
                     {conversation.attributes?.last_message?.content ||
                       'No message'}
                   </p>
-
-                  {/* <div className="flex items-center gap-3">
-                  <div className="flex h-5 w-5 items-center justify-center rounded-full">
-                      <Icons.whatsapp className="fill-success h-5 w-5 text-white" />
-                    </div> 
-                    <Badge
-                      className={`rounded-2xl px-2 py-1 text-xs font-semibold ${getStatusColor(
-                        conversation.is_resolved ? 'Resolved' : 'Unresolved',
-                      )}`}
-                    >
-                      {conversation.is_resolved ? 'Resolved' : 'Unresolved'}
-                    </Badge>
-                  </div> */}
                 </div>
               </div>
             </Link>
