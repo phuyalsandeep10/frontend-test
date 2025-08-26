@@ -64,9 +64,15 @@ export const useAgentConversationStore = create<ConversationState>((set) => ({
             }
           : conv,
       );
+      // Sort conversations by last_message.updated_at (newest first)
+      const sortedConversations = [...updatedConversations].sort((a, b) => {
+        const dateA = new Date(a.attributes.last_message.updated_at);
+        const dateB = new Date(b.attributes.last_message.updated_at);
+        return dateB.getTime() - dateA.getTime();
+      });
       return {
         messages: [...state.messages, message],
-        all_conversations: updatedConversations,
+        all_conversations: sortedConversations,
       };
     }),
   updateMessageSeen: (messageId) =>
@@ -174,9 +180,15 @@ export const useAgentConversationStore = create<ConversationState>((set) => ({
               }
             : conv,
         );
+        // Sort conversations by last_message.updated_at (newest first)
+        const sortedConversations = [...updatedConversations].sort((a, b) => {
+          const dateA = new Date(a.attributes.last_message.updated_at);
+          const dateB = new Date(b.attributes.last_message.updated_at);
+          return dateB.getTime() - dateA.getTime();
+        });
         return {
           messages: [...state.messages, response?.data],
-          all_conversations: updatedConversations,
+          all_conversations: sortedConversations,
           req_success: {
             fetch_messages: false,
             add_message: true,
@@ -268,7 +280,6 @@ export const useAgentConversationStore = create<ConversationState>((set) => ({
     });
     try {
       const response = await ConversationService.resolvedConversation(chatId);
-      // console.log('Resolve response:', response);
       set({
         conversation: response.data,
         req_success: {
@@ -280,7 +291,6 @@ export const useAgentConversationStore = create<ConversationState>((set) => ({
         },
       });
       const res = await ConversationService.getAllChatConversations();
-      // console.log('Fetched all conversations after resolve:', res);
       set({
         all_conversations: [...res?.data],
         req_success: {
@@ -320,7 +330,6 @@ export const useAgentConversationStore = create<ConversationState>((set) => ({
         `/agent-chat/conversations/${conversationId}/joined`,
       );
       const res = await ConversationService.getAllChatConversations();
-      // console.log('Conversations:', res);
       set({
         all_conversations: [...res?.data],
       });
@@ -328,7 +337,6 @@ export const useAgentConversationStore = create<ConversationState>((set) => ({
       console.error('Error joining conversation:', error);
     }
   },
-
   fetchAllConversations: async () => {
     set({
       req_loading: {
@@ -342,8 +350,14 @@ export const useAgentConversationStore = create<ConversationState>((set) => ({
     try {
       const res = await ConversationService.getAllChatConversations();
       console.log('Fetched all conversations:', res);
+      // Sort conversations by last_message.updated_at (newest first)
+      const sortedConversations = [...res?.data].sort((a, b) => {
+        const dateA = new Date(a.attributes.last_message.updated_at);
+        const dateB = new Date(b.attributes.last_message.updated_at);
+        return dateB.getTime() - dateA.getTime();
+      });
       set({
-        all_conversations: [...res?.data],
+        all_conversations: sortedConversations,
         req_success: {
           fetch_messages: false,
           add_message: false,
@@ -375,7 +389,6 @@ export const useAgentConversationStore = create<ConversationState>((set) => ({
       });
     }
   },
-
   incrementVisitorCount: () => {
     set((state) => {
       const newCount = state.visitorCount + 1;
@@ -393,7 +406,6 @@ export const useAgentConversationStore = create<ConversationState>((set) => ({
       return { visitorCount: 0 };
     });
   },
-
   incrementMessageNotificationCount: () => {
     set((state) => {
       const newCount = state.messageNotificationCount + 1;

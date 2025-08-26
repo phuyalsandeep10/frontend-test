@@ -153,17 +153,15 @@ export default function ChatBox({ visitor }: { visitor: any }) {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!socket || !isConnected || !message.trim()) return;
+    setIsTyping(false);
 
-    const messageData: Message = {
-      content: message,
-      mode: 'message',
-      organization_id: 1,
-      conversation_id: 1,
-      customer_id: 1,
-    };
+    if (typingTimeout) {
+      clearTimeout(typingTimeout);
+      setTypingTimeout(null);
+    }
+    emitStopTyping();
 
     try {
-      socket.emit('message', messageData);
       const res =
         await CustomerConversationService.createCustomerConversationWithAgent(
           visitor?.conversation?.id,
@@ -172,19 +170,13 @@ export default function ChatBox({ visitor }: { visitor: any }) {
 
       setMessages((prev) => [...prev, res?.data]);
       setMessage('');
-      setIsTyping(false);
-
-      if (typingTimeout) {
-        clearTimeout(typingTimeout);
-        setTypingTimeout(null);
-      }
-      emitStopTyping();
     } catch (error) {
       console.error('Failed to send message:', error);
     }
   };
 
-  const emitTyping = () => {
+  const emitTyping = (message: string) => {
+    console.log({ message });
     if (!socket || !isConnected) return;
     socket.emit('typing', {
       mode: 'typing',
@@ -238,12 +230,12 @@ export default function ChatBox({ visitor }: { visitor: any }) {
           value={message}
           onChange={(e) => {
             setMessage(e.target.value);
-            console.log({ socket, isConnected });
+
             if (!socket || !isConnected) return;
 
             if (e.target.value.trim()) {
               setIsTyping(true);
-              emitTyping();
+              emitTyping(e.target.value);
             }
 
             if (isTyping && !e.target.value.trim()) {
@@ -257,7 +249,7 @@ export default function ChatBox({ visitor }: { visitor: any }) {
             const timeout = setTimeout(() => {
               setIsTyping(false);
               emitStopTyping();
-            }, 1000);
+            }, 550);
 
             setTypingTimeout(timeout);
           }}

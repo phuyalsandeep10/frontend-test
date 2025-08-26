@@ -5,7 +5,7 @@ import { useSocket } from '@/context/socket.context';
 import { useMessageAudio } from '@/hooks/useMessageAudio.hook';
 import { useUiStore } from '@/store/UiStore/useUiStore';
 import { useParams } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import SubSidebarContentWrapper from '../CustomSidebar/SubSidebarContentWrapper';
 import ChatEmptyScreen from './ChatEmptyScreen/ChatEmptyScreen';
 import InboxChatInfo from './InboxChatInfo/InboxChatInfo';
@@ -43,17 +43,47 @@ const Inbox = () => {
     updateMessageSeen,
     fetchMessages,
     joinConversation,
+    incrementMessageNotificationCount,
     req_loading,
   } = useAgentConversationStore();
 
   const userId = authData?.data?.user?.id;
+
+  // Extract listeners with useCallback (empty deps since they don't depend on external vars)
+  const receiveMessageListener = useCallback((data: any) => {
+    console.log('Message received:', data);
+    const isSenderMessage = data?.user_id === userId;
+
+    if (!isSenderMessage) {
+      addMessageToStore(data);
+      playSound();
+      // incrementMessageNotificationCount()
+    }
+  }, []); // Empty deps: this function doesn't close over changing vars
+
+  const typingListener = useCallback((data: any) => {
+    console.log('typing ...', data);
+    setShowTyping(true);
+    setTypingMessage(data?.message);
+  }, []);
+
+  const messageSeenListener = useCallback((data: any) => {
+    updateMessageSeen(data?.message_id);
+  }, []);
+
+  const stopTypingListener = useCallback(() => {
+    console.log('Stopping...');
+    setTimeout(() => {
+      setShowTyping(false);
+    }, 2000);
+  }, []);
 
   useEffect(() => {
     if (!chatId || !socket || !userId) return;
 
     fetchMessages(Number(chatId));
 
-    const getAgentChatConversastionDetails = async () => {
+    const getAgentChatConversationDetails = async () => {
       const data: any = await ConversationService.getConversationDetailsById(
         Number(chatId),
       );
@@ -62,43 +92,30 @@ const Inbox = () => {
 
     joinConversation(Number(chatId));
 
-    getAgentChatConversastionDetails();
+    getAgentChatConversationDetails();
 
     socket.emit('join_conversation', {
       conversation_id: chatId,
       user_id: userId,
     });
 
-    // socket.emit('joinChat', chatId);
-    socket.on('receive-message', (data) => {
-      console.log('Message received:', data);
-      const isSenderMessage = data?.user_id === userId;
-
-      if (!isSenderMessage) {
-        addMessageToStore(data);
-        playSound();
-      } else {
-      }
-    });
-    socket.on('typing', (data) => {
-      console.log('typing ...', data);
-      setShowTyping(true);
-      setTypingMessage(data?.message);
-    });
-    socket.on('message_seen', (data) => {
-      updateMessageSeen(data?.message_id);
-    });
-    socket.on('stop-typing', () => {
-      console.log('Stopping...');
-      setTimeout(() => {
-        setShowTyping(false);
-      }, 2000);
-    });
+    // Attach listeners
+    socket.on('receive-message', receiveMessageListener);
+    socket.on('typing', typingListener);
+    socket.on('message_seen', messageSeenListener);
+    socket.on('stop-typing', stopTypingListener);
 
     return () => {
-      socket.emit('leave_conversation', { conversation_id: 1 });
+      console.log('hello leave conversation');
+      socket.emit('leave_conversation', { conversation_id: Number(chatId) });
+
+      // Properly remove the exact listeners
+      socket.off('receive-message', receiveMessageListener);
+      socket.off('typing', typingListener);
+      socket.off('message_seen', messageSeenListener);
+      socket.off('stop-typing', stopTypingListener);
     };
-  }, [chatId, socket, playSound, userId, setConversationData]);
+  }, [chatId, socket, userId, setConversationData]); // Existing deps are fine
 
   const onSend = async (e: any) => {
     e.preventDefault();
