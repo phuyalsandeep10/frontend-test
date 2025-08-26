@@ -53,7 +53,7 @@ const Inbox = () => {
 
     fetchMessages(Number(chatId));
 
-    const getAgentChatConversastionDetails = async () => {
+    const getAgentChatConversationDetails = async () => {
       const data: any = await ConversationService.getConversationDetailsById(
         Number(chatId),
       );
@@ -61,44 +61,82 @@ const Inbox = () => {
     };
 
     joinConversation(Number(chatId));
+    getAgentChatConversationDetails();
 
-    getAgentChatConversastionDetails();
+    // Clean up any existing listeners first
+    socket.off('receive-message');
+    socket.off('typing');
+    socket.off('message_seen');
+    socket.off('stop-typing');
 
+    // Join the conversation
     socket.emit('join_conversation', {
       conversation_id: chatId,
       user_id: userId,
     });
 
-    // socket.emit('joinChat', chatId);
-    socket.on('receive-message', (data) => {
+    // Message handler
+    const handleReceiveMessage = (data: any) => {
       console.log('Message received:', data);
       const isSenderMessage = data?.user_id === userId;
 
       if (!isSenderMessage) {
         addMessageToStore(data);
         playSound();
-      } else {
       }
-    });
-    socket.on('typing', (data) => {
+    };
+
+    // Typing handler
+    const handleTyping = (data: any) => {
       console.log('typing ...', data);
       setShowTyping(true);
       setTypingMessage(data?.message);
-    });
-    socket.on('message_seen', (data) => {
-      updateMessageSeen(data?.message_id);
-    });
-    socket.on('stop-typing', () => {
+    };
+
+    // Stop typing handler
+    const handleStopTyping = () => {
       console.log('Stopping...');
       setTimeout(() => {
         setShowTyping(false);
       }, 2000);
-    });
-
-    return () => {
-      socket.emit('leave_conversation', { conversation_id: 1 });
     };
-  }, [chatId, socket, playSound, userId, setConversationData]);
+
+    // Message seen handler
+    const handleMessageSeen = (data: any) => {
+      updateMessageSeen(data?.message_id);
+    };
+
+    // Add new event listeners
+    socket.on('receive-message', handleReceiveMessage);
+    socket.on('typing', handleTyping);
+    socket.on('message_seen', handleMessageSeen);
+    socket.on('stop-typing', handleStopTyping);
+
+    // Cleanup function
+    return () => {
+      // Clean up event listeners
+      socket.off('receive-message', handleReceiveMessage);
+      socket.off('typing', handleTyping);
+      socket.off('message_seen', handleMessageSeen);
+      socket.off('stop-typing', handleStopTyping);
+
+      // Leave the conversation
+      socket.emit('leave_conversation', {
+        conversation_id: chatId,
+        user_id: userId,
+      });
+    };
+  }, [
+    chatId,
+    socket,
+    playSound,
+    userId,
+    setConversationData,
+    addMessageToStore,
+    updateMessageSeen,
+    joinConversation,
+    fetchMessages,
+  ]);
 
   const onSend = async (e: any) => {
     e.preventDefault();
