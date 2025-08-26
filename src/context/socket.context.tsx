@@ -102,6 +102,11 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
         // incrementVisitorCount();
         // fetchAllConversations();
       });
+      newSocket.on('resolved-conversation', (data: Message) => {
+        console.log('unresolved conversation:', data);
+        // playSound();
+        // incrementMessageNotificationCount();
+      });
 
       newSocket.on('message-notification', (data: Message) => {
         console.log('Message notification:', data);

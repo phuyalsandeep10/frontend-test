@@ -20,7 +20,7 @@ const InboxChatSectionHeader = () => {
   const { customer, conversation, resolveConversation, req_loading } =
     useAgentConversationStore();
   const router = useRouter();
-  console.log(customer, conversation);
+  // console.log(customer, conversation);
 
   return (
     <div className="flex flex-wrap items-center justify-between gap-4 border-b bg-white p-4 pt-0">
@@ -91,7 +91,13 @@ const InboxChatSectionHeader = () => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="w-32">
-              <DropdownMenuItem className="text-brand-dark hover:bg-gray-50">
+              <DropdownMenuItem
+                onClick={() => {
+                  resolveConversation(Number(conversation?.id));
+                  router.push('/inbox');
+                }}
+                className="text-brand-dark hover:bg-gray-50"
+              >
                 Resolve
               </DropdownMenuItem>
               <DropdownMenuItem className="text-red-600 hover:bg-red-50">

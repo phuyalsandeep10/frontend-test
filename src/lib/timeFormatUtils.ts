@@ -1,16 +1,41 @@
 import {
-  format,
-  isToday,
-  isYesterday,
+  parseISO,
   isWithinInterval,
   subDays,
+  isToday,
+  isYesterday,
+  format,
+  differenceInMinutes,
+  differenceInHours,
 } from 'date-fns';
+import { toZonedTime } from 'date-fns-tz';
 
-// Existing ShowTime for ConversationsList
-export const ShowTime = (dateString: string) => {
-  const date = new Date(dateString);
-  return format(date, 'h:mm a'); // e.g., "10:46 PM"
-};
+export function formatTime(
+  iso: string,
+  userTimeZone?: string,
+  isTimeOnly: boolean = true,
+): string {
+  if (!iso) return '';
+  const date = parseISO(iso);
+  const timeZone =
+    userTimeZone || Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const zonedDate = toZonedTime(date, timeZone);
+  const timeFormat = 'hh:mm a';
+  if (isTimeOnly) return format(zonedDate, timeFormat);
+  if (isToday(zonedDate)) {
+    // Show relative time in minutes/hours like "28m", "5h"
+    const diffMinutes = differenceInMinutes(new Date(), zonedDate);
+    if (diffMinutes < 1) return 'now';
+    if (diffMinutes < 60) return `${diffMinutes}m`;
+    const diffHours = differenceInHours(new Date(), zonedDate);
+    return `${diffHours}h`;
+  } else if (isYesterday(zonedDate)) {
+    return 'Yesterday';
+  } else {
+    // Older → show date only "24 Aug"
+    return format(zonedDate, 'dd MMM');
+  }
+}
 
 // New function for message grouping headers
 export const getMessageDateHeader = (dateString: string) => {

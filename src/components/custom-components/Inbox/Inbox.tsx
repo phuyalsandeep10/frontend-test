@@ -257,7 +257,7 @@ const Inbox = () => {
       ) : (
         <ChatEmptyScreen />
       )}
-      <button onClick={() => editMessage()}>Edit message</button>
+      {/* <button onClick={() => editMessage()}>Edit message</button> */}
     </div>
   );
 };
