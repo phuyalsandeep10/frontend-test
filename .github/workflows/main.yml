@@ -30,8 +30,7 @@ jobs:
           sleep 10   # give the server time to boot
 
       - name: Check if site is running (health check)
-        run: |
-          curl -f http://localhost:3000 || exit 1
+        run: curl -f http://localhost:3000 || exit 1
 
   deploy:
     runs-on: ubuntu-latest
@@ -47,16 +46,18 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
-
           script: |
             cd /home/ubuntu/chatboq-web
-            git pull origin main
+            # Force sync with GitHub
+            git fetch origin main
             git reset --hard origin/main
+            # Remove old dependencies and build
             rm -rf node_modules .next
             npm install
             npm run build
+            # Restart PM2 properly
             pm2 delete chatboq-web || true
-            pm2 start npm --name "chatboq-web" -- run start
+            PORT=3002 pm2 start npm --name "chatboq-web" -- run start
             pm2 list
             echo "✅ Deployment completed successfully"
 
