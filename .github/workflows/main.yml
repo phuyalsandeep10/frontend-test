@@ -26,7 +26,7 @@ jobs:
 
       - name: Start the app in background
         run: |
-          npm start &
+          npm run start &
           sleep 10   # give the server time to boot
 
       - name: Check if site is running (health check)
@@ -46,8 +46,10 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+
           script: |
-            cd /var/www/chatboq_portal/chatboq-web
+            cd /home/ubuntu/chatboq-web
             git pull origin main
             pm2 stop chatboq-web
             npm install
