@@ -56,7 +56,7 @@ jobs:
             npm run build
             pm2 start npm --name "chatboq-web" -- run start
             pm2 list
-            echo "✅ Deployment completed successfully!"
+            echo "✅ Deployment completed successfully"
 
       - name: Verify production site
         run: curl -f https://portal.chatboq.com || exit 1
