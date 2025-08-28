@@ -48,9 +48,6 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             cd /home/ubuntu/chatboq-web
-            # Force sync with GitHub
-            git fetch origin main
-            git reset --hard origin/main
             # Remove old dependencies and build
             rm -rf node_modules .next
             npm install
