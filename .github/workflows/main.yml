@@ -57,9 +57,9 @@ jobs:
             npm run build
             # Restart PM2 properly
             pm2 delete chatboq-web || true
-            PORT=3002 pm2 start npm --name "chatboq-web" -- run start
+            pm2 start npm --name "chatboq-web" -- run start
             pm2 list
-            echo "✅ Deployment completed successfully!!!!!!!"
+            echo "✅ Deployment completed successfully"
 
       - name: Verify production site
         run: curl -f https://portal.chatboq.com || exit 1
